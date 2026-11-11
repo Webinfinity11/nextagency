@@ -13,9 +13,3 @@ export function afterLoader(callback: () => void) {
   else window.addEventListener("loader:done", callback, { once: true });
   return () => window.removeEventListener("loader:done", callback);
 }
-// Cut directions shared by assembly animations; SVG units, not screen pixels.
-export function cutOffset(piece: Element, magnitude = 24) {
-  const id = piece.getAttribute("data-piece") || "";
-  const sign = id.endsWith("p2") ? 1 : -1;
-  return { x: sign * magnitude, y: /l-(n|x)/.test(id) ? -sign * magnitude : 0 };
-}
