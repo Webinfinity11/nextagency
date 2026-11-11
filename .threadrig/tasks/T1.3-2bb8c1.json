@@ -1,0 +1,19 @@
+{
+  "acceptance" : [
+    "pnpm build და lint გადის",
+    "Playwright: loader/session/reduced-motion/scroll/mobile შემოწმებები"
+  ],
+  "createdAt" : "2026-11-11T11:49:00Z",
+  "detail" : "Implementation and validation complete in isolated worker 9FDECF69-DFD8-491B-9752-9AADC41CFC59; pending owner integration. Build/lint passed; Chrome loader 4871.6ms, CLS0, scales1/.65, mobile/session/reduced-motion clean. See worker docs/verify and docs/PLAN.md.",
+  "files" : [
+    "src/",
+    "docs/PLAN.md",
+    "docs/verify/"
+  ],
+  "id" : "T1.3",
+  "phase" : "P1",
+  "rank" : 30,
+  "status" : "doing",
+  "title" : "Loader/Hero-ის პირველი ნაწილის აწყობა და შემოწმება",
+  "updatedAt" : "2026-11-11T12:04:08Z"
+}

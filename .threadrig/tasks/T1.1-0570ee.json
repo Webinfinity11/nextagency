@@ -1,0 +1,19 @@
+{
+  "acceptance" : [
+    "ზომები და შეზღუდვები დოკუმენტირებულია; 8–12 საკვანძო კადრი შენახულია"
+  ],
+  "createdAt" : "2026-11-11T11:37:08Z",
+  "detail" : "დასრულებულია live საიტის კვლევა: 11-კადრიანი raster loader, გაზომილი GSAP timeline, hero entrance/sticky scroll, typography ratios, footer canvas-ის JS ანალიზი; 10 ვიზუალურად შემოწმებული 720px JPEG. 137 sample; scrollY 2693px და ცალკე 2700px probe; syntax/diff/artifact checks passed. ინტეგრაციას ასრულებს owner.",
+  "files" : [
+    "docs/research/tinywins-motion.md",
+    "docs/research/frames/",
+    "docs/research/scripts/",
+    ".gitignore"
+  ],
+  "id" : "T1.1",
+  "phase" : "P1",
+  "rank" : 10,
+  "status" : "done",
+  "title" : "TinyWins-ის loader/hero მოძრაობის გაზომვა",
+  "updatedAt" : "2026-11-11T11:46:43Z"
+}

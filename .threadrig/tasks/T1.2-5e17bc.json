@@ -1,0 +1,17 @@
+{
+  "acceptance" : [
+    "Source-mask IoU >= 0.97; inspect red/cyan overlay; unique piece IDs and documented internal seams."
+  ],
+  "createdAt" : "2026-11-11T11:38:13Z",
+  "detail" : "Created logo.svg and logo-pieces.md in isolated worktree. 20 pieces, 10 letters, documented E/X and X/T hidden seams. Final CairoSVG/Pillow IoU 0.98168830 after making N ribbon diagonals exactly parallel; inspected final red/cyan overlay; structural checks and git diff --check passed. Ready for owner integration; no commit.",
+  "files" : [
+    "public/brand/logo.svg",
+    "public/brand/logo-pieces.md"
+  ],
+  "id" : "T1.2",
+  "phase" : "P1",
+  "rank" : 20,
+  "status" : "done",
+  "title" : "ლოგოს ნაწილებად დაყოფილი SVG-ის შექმნა",
+  "updatedAt" : "2026-11-11T11:42:54Z"
+}

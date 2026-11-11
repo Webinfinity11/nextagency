@@ -1,0 +1,204 @@
+{
+  "completion": {
+    "duration": 4871.5999999996275,
+    "removed": true,
+    "overflow": "visible",
+    "cls": 0
+  },
+  "scaleChecks": [
+    {
+      "scroll": 900,
+      "scale": 1,
+      "radius": "0px"
+    },
+    {
+      "scroll": 1980,
+      "scale": 0.65,
+      "radius": "24px"
+    }
+  ],
+  "returning": {
+    "state": "done",
+    "display": "removed"
+  },
+  "focus": {
+    "text": "Skip to content",
+    "outline": "solid"
+  },
+  "responsive": [
+    {
+      "width": 1024,
+      "scrollWidth": 1024,
+      "nav": "visible"
+    },
+    {
+      "width": 390,
+      "scrollWidth": 390,
+      "nav": "visible"
+    }
+  ],
+  "reduction": {
+    "loader": false,
+    "word": "none",
+    "frame": "none",
+    "marks": [
+      {
+        "name": "loader:start",
+        "time": 49.09999999962747
+      },
+      {
+        "name": "loader:done",
+        "time": 462.30000000074506
+      }
+    ],
+    "overflow": "visible"
+  },
+  "errors": [],
+  "keyframes": [
+    {
+      "file": "01-sequence-solid.jpg",
+      "name": "load-002",
+      "time": 277.30000000074506,
+      "authored": 211.19999999925494,
+      "scrollY": 0,
+      "state": "running",
+      "flicker": "1",
+      "clean": "hidden",
+      "wipe": "none",
+      "word": "matrix(1, 0, 0, 1, 0, 70.7438)",
+      "frame": "matrix(1, 0, 0, 1, 0, 900)",
+      "radius": "0px",
+      "loader": true,
+      "cls": 0
+    },
+    {
+      "file": "02-sequence-distorted.jpg",
+      "name": "load-011",
+      "time": 1520.5,
+      "authored": 1454.3999999985099,
+      "scrollY": 0,
+      "state": "running",
+      "flicker": "1",
+      "clean": "hidden",
+      "wipe": "none",
+      "word": "matrix(1, 0, 0, 1, 0, 70.7438)",
+      "frame": "matrix(1, 0, 0, 1, 0, 900)",
+      "radius": "0px",
+      "loader": true,
+      "cls": 0
+    },
+    {
+      "file": "03-clean-mark.jpg",
+      "name": "load-024",
+      "time": 3244.300000000745,
+      "authored": 3178.199999999255,
+      "scrollY": 0,
+      "state": "running",
+      "flicker": "0",
+      "clean": "visible",
+      "wipe": "none",
+      "word": "matrix(1, 0, 0, 1, 0, 70.7438)",
+      "frame": "matrix(1, 0, 0, 1, 0, 900)",
+      "radius": "0px",
+      "loader": true,
+      "cls": 0
+    },
+    {
+      "file": "04-white-wipe.jpg",
+      "name": "load-027",
+      "time": 3682.60000000149,
+      "authored": 3616.5,
+      "scrollY": 0,
+      "state": "running",
+      "flicker": "0",
+      "clean": "visible",
+      "wipe": "matrix(1, 0, 0, 1, 0, 613.775)",
+      "word": "matrix(1, 0, 0, 1, 0, 70.7438)",
+      "frame": "matrix(1, 0, 0, 1, 0, 900)",
+      "radius": "0px",
+      "loader": true,
+      "cls": 0
+    },
+    {
+      "file": "05-nav-handoff.jpg",
+      "name": "load-033",
+      "time": 4477.9000000003725,
+      "authored": 4411.799999998882,
+      "scrollY": 0,
+      "state": "running",
+      "flicker": "0",
+      "clean": "visible",
+      "wipe": "matrix(1, 0, 0, 1, 0, 900)",
+      "word": "matrix(1, 0, 0, 1, 0, 70.7438)",
+      "frame": "matrix(1, 0, 0, 1, 0, 900)",
+      "radius": "0px",
+      "loader": true,
+      "cls": 0
+    },
+    {
+      "file": "06-words-enter.jpg",
+      "name": "load-041",
+      "time": 5502.200000001118,
+      "authored": 5436.0999999996275,
+      "scrollY": 0,
+      "state": "done",
+      "word": "matrix(1, 0, 0, 1, 0, 14.1345)",
+      "frame": "matrix(1, 0, 0, 1, 0, 86.4216)",
+      "radius": "0px",
+      "loader": false,
+      "cls": 0
+    },
+    {
+      "file": "07-hero-settled.jpg",
+      "name": "settled",
+      "time": 8730.900000000373,
+      "authored": 8664.799999998882,
+      "scrollY": 0,
+      "state": "done",
+      "word": "matrix(1, 0, 0, 1, 0, 0)",
+      "frame": "matrix(1, 0, 0, 1, 0, 0)",
+      "radius": "0px",
+      "loader": false,
+      "cls": 0
+    },
+    {
+      "file": "08-scroll-876.jpg",
+      "name": "scroll-014",
+      "time": 13700.60000000149,
+      "authored": 13634.5,
+      "scrollY": 877,
+      "state": "done",
+      "word": "matrix(1, 0, 0, 1, 0, -70.7438)",
+      "frame": "matrix(1, 0, 0, 1, 0, 0)",
+      "radius": "0px",
+      "loader": false,
+      "cls": 0
+    },
+    {
+      "file": "09-scroll-1777.jpg",
+      "name": "scroll-029",
+      "time": 18864.5,
+      "authored": 18798.39999999851,
+      "scrollY": 1776,
+      "state": "done",
+      "word": "matrix(1, 0, 0, 1, 0, -70.7438)",
+      "frame": "matrix(0.6623, 0, 0, 0.6623, 0, 0)",
+      "radius": "23px",
+      "loader": false,
+      "cls": 0
+    },
+    {
+      "file": "10-scroll-2693.jpg",
+      "name": "scroll-044",
+      "time": 24415.900000000373,
+      "authored": 24349.799999998882,
+      "scrollY": 2697,
+      "state": "done",
+      "word": "matrix(1, 0, 0, 1, 0, -70.7438)",
+      "frame": "matrix(0.65, 0, 0, 0.65, 0, 0)",
+      "radius": "24px",
+      "loader": false,
+      "cls": 0
+    }
+  ]
+}
