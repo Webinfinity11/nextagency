@@ -1,22 +1,32 @@
+import Link from "next/link";
 import { Logo } from "@/components/brand/Logo";
-import { copy } from "@/content/hero";
-export function Nav() {
+import type { HeroContent } from "@/content";
+import type { Locale } from "@/content/locales";
+import { LocaleSwitch } from "./LocaleSwitch";
+export function Nav({ copy, locale }: { copy: HeroContent; locale: Locale }) {
   return (
     <header className="nav">
-      <a className="nav-brand" href="#top" aria-label={copy.home}>
+      <Link className="nav-brand" href={`/${locale}`} aria-label={copy.home}>
         <Logo className="nav-logo" />
-      </a>
+      </Link>
       <nav className="nav-links" aria-label={copy.navLabel}>
-        {copy.nav.map((label) => (
-          <a key={label} href="#next">
+        {copy.nav.map((label, index) => (
+          <Link key={label} href={index === 0 ? `/${locale}/work` : `/${locale}#next`}>
             {label}
-          </a>
+          </Link>
         ))}
       </nav>
-      <a className="nav-cta" href="#contact">
-        {copy.cta}
-        <span aria-hidden="true">↗</span>
-      </a>
+      <div className="nav-end">
+        <LocaleSwitch
+          locale={locale}
+          label={copy.langLabel}
+          short={copy.langShort}
+        />
+        <Link className="nav-cta" href={`/${locale}#contact`}>
+          {copy.cta}
+          <span aria-hidden="true">↗</span>
+        </Link>
+      </div>
     </header>
   );
 }

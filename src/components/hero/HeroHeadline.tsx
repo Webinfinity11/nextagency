@@ -1,8 +1,16 @@
 "use client";
 import { useRef } from "react";
 import { gsap, useGSAP, afterLoader, reducedMotion } from "@/lib/gsap";
-import { copy } from "@/content/hero";
-export function HeroHeadline() {
+import type { HeroContent } from "@/content";
+import type { Locale } from "@/content/locales";
+import { display } from "@/lib/mtavruli";
+export function HeroHeadline({
+  copy,
+  locale,
+}: {
+  copy: HeroContent;
+  locale: Locale;
+}) {
   const scope = useRef<HTMLDivElement>(null);
   useGSAP(
     (_context, contextSafe) => {
@@ -102,7 +110,7 @@ export function HeroHeadline() {
                   <span className="headline-line" key={line}>
                     {line.split(" ").map((word, i) => (
                       <span className="word-mask" key={i}>
-                        <span className="word">{word}</span>
+                        <span className="word">{display(word, locale)}</span>
                       </span>
                     ))}
                   </span>

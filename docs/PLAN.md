@@ -31,7 +31,7 @@ Reduced motion: no flicker, no logo travel, no smooth scrolling, no phrase loop,
 
 ## Hero specification
 
-Manrope (Latin, weight 800 headings) and Noto Sans Georgian via `next/font`; original English and Georgian placeholder text in `src/content/hero.ts`, `ACTIVE_LOCALE = 'en'`. All numeric claims are visibly labelled illustrative. Georgian text uses CSS uppercase/Mtavruli-capable font coverage.
+Manrope (Latin, weight 800 headings) and Noto Sans Georgian via `next/font`, one stack `var(--font-latin), var(--font-georgian)` for both locales so Latin and digits always render in Manrope; original English and Georgian placeholder text in `src/content/{en,ka}/hero.ts`. All numeric claims are visibly labelled illustrative. Georgian headings stay in Mkhedruli: browsers do not map `text-transform: uppercase` to Mtavruli, so `html[lang=ka]` headings set `text-transform: none` and a 1.2 line height so ascenders/descenders fit the reveal masks.
 
 - Header: full wordmark travel target, four placeholder links, CTA; visible keyboard focus.
 - Two independently aligned two-line headline groups, 5.2vw clamped desktop, 9vw stacked mobile. Semantic h1 label; animated words hidden from screen readers.
@@ -42,6 +42,10 @@ Manrope (Latin, weight 800 headings) and Noto Sans Georgian via `next/font`; ori
 - Inner parallax: yPercent −20 → 0 over the first 70vh document scroll, linear, scrub .5.
 - Supporting section: 100vh minimum, SplitText line masks scrub from section top at viewport bottom to top at viewport top. Closing heading: two masked lines, 110 → 0 yPercent, 900ms `power3.out`, 120ms stagger, once at 80% viewport.
 - Lenis lerp .125 and smoothWheel, driven by GSAP ticker; scroll updates ScrollTrigger; lag smoothing disabled. Stopped during loader, absent for reduced motion.
+
+## Locale routing
+
+Two locales, Georgian default: `/ka` and `/en` (`src/content/locales.ts`). `src/proxy.ts` redirects any path without a locale prefix to `/ka` + path (`/` → `/ka`); its matcher skips `_next`, `api` and any path with a file extension, so `public/` assets are never redirected. The root layout lives in `src/app/[locale]/layout.tsx` (`generateStaticParams` for both, `dynamicParams = false`, unknown locale → `notFound()`), sets `<html lang>`, per-locale metadata, canonical and `hreflang` alternates (`x-default` → `/ka`; origin from `NEXT_PUBLIC_SITE_URL`). Skip link, smooth scroll, nav and loader sit in the layout so future pages share them; server components pass `getContent(locale)` copy down as props, so content can later come from Prisma with the same `HeroContent` shape. The nav switcher keeps the current path under the other locale. Switching is a client navigation that remounts the root layout (React resets `data-loader` to `running`), so the loader remembers in module state that it already ran and finishes without showing the overlay; the hero entrance replays normally.
 
 ## Reference technique → our logo-based version
 
@@ -70,3 +74,7 @@ The permitted `mix-blend-mode: difference` option keeps the wordmark white on bl
 2. Choose real showreel footage and poster, or keep a refined logo motion piece.
 3. Choose the next section (work/cases, services, approach, team, contact or footer) before further implementation.
 4. Decide navigation destinations and whether the compact mobile header needs a menu as real sections arrive.
+
+## Work
+
+The home Work section is a server-rendered child slot between HeroMedia and support. `src/content/projects.ts` is the async repository boundary for six bilingual placeholder projects and two categories (future Prisma replacement); components receive records through props. Shared cards power the featured 2–1–2 grid, native-scroll-enhanced drag categories, `/[locale]/work`, and static `/[locale]/work/[slug]` case-study stubs. Scoped GSAP/Flip/SplitText handle promotion, reserved row heights, parallax and reveals; reduced motion keeps content visible with native horizontal scrolling. Work metadata includes canonical and ka/en/x-default alternatives. Run `scripts/verify-work.mjs` against the production server for interaction assertions and reference comparisons.

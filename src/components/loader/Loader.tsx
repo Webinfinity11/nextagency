@@ -87,6 +87,9 @@ const POSES: Pose[] = [
     [-105, 0, 0, 1, 1],
   ],
 ];
+// Module state survives client navigations. A locale switch remounts the root layout and React
+// resets <html data-loader> to "running", so the dataset alone cannot tell the loader already ran.
+let shown = false;
 export function Loader() {
   const scope = useRef<HTMLDivElement>(null);
   const [done, setDone] = useState(false);
@@ -98,20 +101,27 @@ export function Loader() {
       let timer: ReturnType<typeof setTimeout> | undefined;
       let ticking = false;
       const finish = () => {
+        shown = true;
         html.dataset.loader = "done";
         try {
           sessionStorage.setItem("next-agency:loaded", "1");
         } catch {
           /* Storage may be unavailable. */
         }
-        gsap.set(document.querySelectorAll(".nav-logo,.nav-links,.nav-cta"), {
-          autoAlpha: 1,
-        });
+        gsap.set(
+          document.querySelectorAll(".nav-logo,.nav-links,.nav-locale,.nav-cta"),
+          { autoAlpha: 1 },
+        );
         window.dispatchEvent(new CustomEvent("loader:done"));
         performance.mark("loader:done");
         setDone(true);
       };
-      if (html.dataset.loader === "skip") {
+      // Already played in this document (e.g. after a locale switch): finish without the overlay.
+      if (
+        shown ||
+        html.dataset.loader === "skip" ||
+        html.dataset.loader === "done"
+      ) {
         finish();
         return;
       }
@@ -233,7 +243,7 @@ export function Loader() {
           3.87,
         )
         .to(
-          document.querySelectorAll(".nav-links,.nav-cta"),
+          document.querySelectorAll(".nav-links,.nav-locale,.nav-cta"),
           { autoAlpha: 1, duration: 0.6, ease: "power2.out" },
           3.87,
         )
@@ -244,6 +254,8 @@ export function Loader() {
             duration: 1,
             ease: "power3.inOut",
             onUpdate: () => {
+              // Reverting on unmount (locale switch) replays this after the overlay is gone.
+              if (!clean.isConnected) return;
               gsap.set(clean, {
                 x: destination.x * travel.progress,
                 y: destination.y * travel.progress,

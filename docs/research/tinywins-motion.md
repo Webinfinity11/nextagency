@@ -161,3 +161,178 @@ Times are **M-DOM** screenshot-call start/end bounds in milliseconds from naviga
 | [08 scroll](frames/key/08-scroll-876.jpg) | 19755–19805 | 876 | Sticky media near full size |
 | [09 scroll](frames/key/09-scroll-1777.jpg) | 23665–23718 | 1777 | Smaller rounded media frame |
 | [10 scroll](frames/key/10-scroll-2693.jpg) | 28133–28306 | 2693 | Supporting sentence and closing heading |
+
+## Work section
+
+Reference: the same live homepage, inspected 2026-11-11 in headless Google Chrome (Playwright 1.65, SwiftShader). Viewports were 1440×900 desktop and 390×844 mobile (`isMobile`, `hasTouch`), each with ordinary motion and with `reducedMotion: 'reduce'`. Scope: the **Selected Work** block (featured cards and the All Work link) and the two **category groups** after the Shipyard banner (`Feeling Vital`, light; `Feeling Future-proof`, black). Project and category names appear only to identify structure. The earlier sticky "Emotional spectrum" section also lists projects, but it was not part of this pass.
+
+Evidence labels match the sections above. **M-JS** means read from the delivered, prettified client chunk. **M-DOM** means measured from the DOM, computed style or live GSAP objects at runtime. **E-frame** means estimated visually. Runtime ScrollTrigger values come from `ScrollTrigger.getAll()` and are counted as M-DOM. All `px` values are CSS px at the stated viewport.
+
+### Capture and reproducibility
+
+Scripts: [work-capture.cjs](scripts/work-capture.cjs) (desktop and mobile: structure, scroll steps, reveal timing, hover and drag), [work-reduced.cjs](scripts/work-reduced.cjs) (reduced-motion pass) and [work-keyframes.cjs](scripts/work-keyframes.cjs) (exports the key frames). Install the dependencies in a scratch directory outside the repository, then run from the repository root:
+
+```sh
+mkdir -p /tmp/tw-scratch && (cd /tmp/tw-scratch && npm init -y && npm i playwright sharp)
+CHROME_CHANNEL=chrome NODE_PATH=/tmp/tw-scratch/node_modules node docs/research/scripts/work-capture.cjs          # desktop + mobile, ~4 min
+CHROME_CHANNEL=chrome NODE_PATH=/tmp/tw-scratch/node_modules node docs/research/scripts/work-reduced.cjs
+NODE_PATH=/tmp/tw-scratch/node_modules node docs/research/scripts/work-keyframes.cjs
+```
+
+Raw screenshots and the `work.json` / `reduced.json` measurement files go to `frames/raw/work/` (git-ignored). Only the 14 `frames/work-*.jpg` files are committed (q70, ≤1440 px wide).
+
+**Method notes (M-DOM):**
+- The site bundles GSAP 3.14.2 through Turbopack and exposes neither `gsap` nor `ScrollTrigger` globally. `window.lenis` holds only `{version}`; the Lenis instance is private. The capture script defines a setter on `globalThis.TURBOPACK` before any chunk runs and wraps each module factory. When a module exports `ScrollTrigger`, `gsap` or `getFlip`, the wrapper keeps a reference, so `ScrollTrigger.getAll()` can be read without changing behavior.
+- Scrolling uses native `scrollTo({behavior:'instant'})` followed by a 1 s settle, so scrubs (0.5 s) finish.
+- **Gotcha:** the loader mounts about 2–3 s after `domcontentloaded`. Waiting only for "no loader element" can pass before the loader appears, and the loader then locks the body with `position: fixed`. The scripts wait for `__tinywinsHomeLoaderCompleteFired` and then for a scroll that actually lands. In the final desktop run, the first three settled steps still read `scrollY` 0 and were discarded; key frames use only later steps.
+- React hydration error #418 occurred in every run, as in the hero pass.
+
+### Page position (desktop 1440×900, M-DOM)
+
+| Block | Document top px | Height px | Position |
+|---|---:|---:|---|
+| Brand statement (preceding) | 9360 | 900 (in 3330 wrapper) | sticky |
+| Selected Work | 12690 | 2179.3 | relative |
+| Shipyard banner | 14869.3 | 501.8 | relative |
+| Feeling Vital | 15371.1 | 900 | relative |
+| Feeling Future-proof | 16271.1 | 900 | relative, black |
+| About (following) | 17171.1 | 900 (in 2970 wrapper) | sticky |
+
+Mobile (M-DOM): Selected Work 10277.8 / 1735.5, Feeling Vital 12390.1 / 579, Feeling Future-proof 12969 / 648.8. Document height is 23505 px desktop and 20463 px mobile.
+
+### (a) Structure and sizes
+
+**No pin, no sticky (M-DOM):** `.pin-spacer` count is 0 in every configuration. Neither Selected Work nor the category sections are sticky or contain sticky children. The sticky elements on the page are the neighboring brand-statement and About sections and the footer. The Work area scrolls at a normal 1 px per px.
+
+**Selected Work container (M-DOM):** horizontal padding is 80 px desktop and 24 px mobile; bottom padding is 96 / 64 px. The inner column has max-width 1920 px and uses `flex-direction: column` with a 120 px gap desktop / 24 px mobile. **M-JS:** the component is `HomeWorkGridMotionWithData`, fed five featured projects, a client-logo list and an All Work count. The live count is **56**; a stale static fallback in the same chunk says 87.
+
+Desktop rows (M-DOM unless noted):
+
+| Row | Layout | Card media px (w×h) | Aspect ratio (data-driven) |
+|---|---|---|---|
+| 1 · pair, large left | two columns, `flex-basis:0`, flex-grow **1020 : 724**, 16 px gap; row `min-height` 569.86 px | 739.3×547.9 · 524.7×295.2 | 1599/1185 · 3840/2160 (video) |
+| 2 · single wide | 24% empty spacer + 76% column (972.8 px) | 972.8×597.7 | 2075/1275 |
+| 3 · pair, large right | flex-grow **724 : 1020**, `items-stretch`; the All Work link sits at the bottom of the narrow left column (`mt-auto`); row min-height 618.92 px | 524.7×309 · 739.3×596.9 | 2031/1196 · 966/780 |
+
+- **M-JS:** row min-height = `((rowWidth − 16) × 1020 / 1744) / min(aspectL, aspectR) + max(metaHeight)`. The row therefore keeps its height when hover swaps which column is large.
+- **Card media (M-DOM):** 8 px radius, `#3f3f3f` placeholder background, `overflow: hidden`.
+- **Meta line under each card (M-DOM):** 12 px top margin, then title and tagline on one baseline with a 24 px gap. Both are 18 px (0.0125 × vw), line-height 1.2, letter-spacing −0.36 px (−0.02 em), weight 600. The tagline is 40% black.
+- **All Work link (M-DOM):** label 32 px (0.0222 × vw), line-height 1, −1.6 px (−0.05 em), weight 600. The count is a 10 px / 12 px superscript-style span. A bent-arrow icon sits in a 21.59 px-wide box (0.9 × line box).
+
+Category groups (M-DOM at 1440×900; **M-JS** formulas in brackets):
+- **Section:** `100vh` (900 px), not sticky. Top padding is 108 px [`clamp(72px, 12vh, 136px)`], followed by a full-viewport 1 px hairline at black/10 (white/10 on the dark group).
+- **Heading row:** the h2 is 66.24 px [`clamp(32px, 4.6vw, 88px)`, so 0.046 × vw], line-height 0.9, −0.05 em, uppercase, weight 600. A serif description sits to the right: 20 px / 26 px, −0.6 px, fixed width 408 px.
+- **Card track:** starts 81 px below [`clamp(40px, 9vh, 110px)`]. It is a single `w-max` flex row with a 22 px gap, 80 px side padding and 143 px bottom padding. Track width is 3270 px (6 cards) or 3562 px (8 cards), against a 1440 px viewport.
+- **Card media height:** **M-JS** default is `max(240px, calc(69svh − 119px))` (502 px here). JS then refits it as section height − header − margins − padding − 40, measured at **531 px** in the light group and 422 px in the dark group. Card width is `designWidth × (height / 592)`, so cards vary from about 410 to 799 px wide. Radius is 8 px.
+- **Card name:** 18 px / 21.6, −0.36 px, weight 400, 18 px above. Light and dark groups differ only in background and text color.
+
+Mobile (M-DOM): featured cards stack in one column at full width 342 px with a 24 px gap. Order is the same; the wide card becomes full width. Title and tagline stack (16 px each). A 3-slot client-logo strip (114×48 px per slot) sits above the cards, and the All Work label shrinks to 20 px. Category sections size to their content (579 / 648.8 px), with the h2 at the 32 px clamp minimum (0.082 × vw) and the description at 14 / 18.2 px. Category cards are a fixed 208 px wide, aspect 208/270, radius 3.2 px, 22 px gap.
+
+### (b) Scroll-driven motion
+
+Every trigger in the Work area is either a scrubbed parallax or a play-once / play-reverse reveal. There is no pin, no horizontal scroll-jacking and no scrubbed card reveal. All rows in the table below are **M-JS** for the authored values and **M-DOM** for the runtime trigger positions.
+
+| Element | Trigger (start → end) | Mode | From → to | Duration / ease / stagger |
+|---|---|---|---|---|
+| Featured image inside each card frame | frame `top bottom` → `bottom top` (card 1: scroll 11790 → 13238) | scrub 0.5 | inner layer y −30 px → +30 px | ease `none` (linear) |
+| All Work link (masked span) | `top 85%` (scroll 14012) | once | yPercent 110 → 0 (measured 38.5 px → 0) | 0.85 s, `power3.out` |
+| Category h2 and description | `top 80%` (Feeling Vital: 14678) | once | SplitText lines with line masks, yPercent 110 → 0 | 0.85 s, `power3.out`, stagger 0.09 s |
+| Category cards (all media in the track) | track `top 50%` desktop / `top 86%` mobile (Feeling Vital: 15107; Future-proof: 16116) | `toggleActions: play none none reverse` | autoAlpha 0 + scale 0.96 → 1 + scale 1 | 0.85 s each, `power3.out`, stagger each 0.1 s from start; total 1.35 s (6 cards) / 1.55 s (8 cards) |
+| Category card names (h3) | own `top 80%` | once | line yPercent 110 → 0 | 0.85 s, `power3.out` |
+
+**Parallax mechanics (M-JS / M-DOM):**
+- Each `[data-parallax-image]` layer is absolutely positioned with inset −34 px vertically and −ceil(34 × w/h) px horizontally (30 px + 4 px safety, scaled by the frame's aspect ratio). It is pre-set to y −30 px; with `reverse: true` the image moves down as the page moves up.
+- Speed is 60 px of travel over the trigger distance, e.g. 1448 px for card 1 = 0.0414 px per scroll px.
+- Settled samples for card 1: −30.00 at scroll 11790, −11.35 at 12240, +7.29 at 12690, +25.94 at 13140, +30.00 from 13365.
+- The same hook runs on mobile (+10.97 → +30 between 10263 and 10700 for card 1). Desktop-only duplicate cards are `display: none` on mobile and the reverse is also true; their triggers compute to 0-height ranges (−900 → 0) and are inert.
+
+**Reveal timing measured per frame (M-DOM, desktop, Feeling Vital, t = 0 at the scroll that crossed the start):**
+- Card 1 opacity is 0.26 at 58 ms, 0.74 at 238 ms, 0.94 at 433 ms and 1.00 by about 900 ms. Its scale reads 0.9622 → 0.9843 → 0.9982 → 1.
+- Card 6 starts at about 500 ms, is 0.63 at 683 ms and finishes at about 1330 ms.
+- The dark group measured the same within sampling error.
+- Scrolling back above the start reverses the tween (verified: the script resets above the start and the cards return to 0 / 0.96 before each replay).
+
+### (c) Hover and interaction (desktop, pointer)
+
+There is **no custom cursor or floating label** (no cursor-follower nodes in the DOM). There is **no image scale** on featured cards and **no title underline** on cards. The video card is not hover-driven: it is muted, looping and `preload="none"`, and it plays or pauses through an IntersectionObserver with a 100 px rootMargin (**M-JS**; M-DOM: paused while out of view).
+
+| Interaction | What moves | Values | Evidence |
+|---|---|---|---|
+| Pointer enters the smaller card of a pair | The two columns swap flex-grow (1020 ↔ 724), so the hovered card becomes the large one. GSAP Flip animates from the pre-change state (`nested`, `prune`, `overwrite`). Leaving the whole row returns to the default. | 0.58 s, `power4.out`. Media heights 547.9 → 388.9 and 295.2 → 415.8 px: 494 at 83 ms, 433 at 170 ms, 401 at 271 ms, settled by about 480 ms | M-JS + M-DOM |
+| Pointer on the single wide card | Its 76% column slides left by 16% of row width; plus a CSS inset "press" on the frame | x 0 → −204.8 px (0.16 × 1280), 0.58 s `power4.out`, `overwrite: auto`; leave returns to 0 the same way. clip-path `inset(0 round 8px)` → `inset(6px round 8px)`, 0.5 s `cubic-bezier(0.33,1,0.68,1)` | M-JS + M-DOM (x −179.8 at 172 ms, −204.3 at 378 ms) |
+| All Work link | Arrow box widens; a 1 px underline (`::after`, 4 px below the label) scales in | width 0.9 → 1.45 line boxes (21.59 → 34.8 px); `scale` 0 → 1 on the x axis. Origin is right at rest and left on hover, so the line draws in left→right and exits toward the right. Both 0.5 s `cubic-bezier(0.33,1,0.68,1)` (Tailwind `ease-out-cubic`) | M-JS + M-DOM (scaleX 0.42 at 104 ms, 0.82 at 242 ms, 1 at about 500 ms) |
+| Category card (pointerenter/focus) | Media grows taller and moves to z-index 20; width unchanged | height 531 → 577 px (+46), CSS 600 ms `cubic-bezier(0.22,1,0.36,1)`; 555 at 132 ms, 574 at 322 ms | M-JS + M-DOM |
+| Category track drag | Custom pointer drag (not GSAP Draggable, not scroll). 6 px threshold, axis lock, ×1.6 sensitivity, rAF lerp with damping 0.1 per 60 fps frame (`1 − 0.9^(60·dt)`), clamped to `[0, scrollWidth − clientWidth]`. Cursor `grab`/`grabbing`, `touch-action: pan-y`, click suppressed after a drag | pointer −400 px → track −640 px; −183 at 462 ms, −446 at 843 ms, −609 at 1127 ms, −640 at about 2.0 s | M-JS + M-DOM |
+| Images inside dragged cards | Horizontal parallax relative to viewport center; the image layer is widened by 12% each side | translateX = clamp(±8%, −(cardCenter − viewportCenter) / (viewportWidth/2) × 8%); e.g. a card moving from 3.13% to 8% while the track travels 640 px | M-JS + M-DOM |
+
+The category groups are horizontally draggable card rows. **There are no text-list rows with hover previews** in the homepage Work area, so that pattern was not measured.
+
+### (d) Mobile differences (390×844)
+
+- **Same scroll motion, earlier start.** Parallax stays on for featured cards. The category reveal starts at `top 86%` instead of `top 50%` (M-DOM: Feeling Vital track trigger at 11844). Line reveals keep `top 80%` / `top 85%`.
+- **Desktop hover systems are removed.** The Flip pair and the 16% slide components are `display: none` (M-JS: `hidden md:flex`). Mobile cards carry only the CSS clip-path inset, which is effectively hover-only.
+- **Logo strip.** All three slots crossfade together every 2500 ms (`setInterval`): opacity 500 ms `cubic-bezier(0.4,0,0.2,1)` to 0, swap the logo, then back to 1 (M-DOM: 0.63 at 1234 ms, 0.02 at 1487 ms, 1.00 at 2159 ms, then the next fall at about 3600 ms). The shuffle avoids repeating a logo in the same slot (M-JS).
+- **Category cards.** Fixed 208 px with aspect 208/270, so the computed card heights are bypassed. Touch drag uses the same pointer code with `pan-y`; touch drag itself was **not** gesture-tested.
+
+### (e) prefers-reduced-motion (M-DOM unless noted)
+
+- **Loader and layout.** The loader still runs and completed at about 13.7 s desktop / 8.5 s mobile in this run. Document height drops to 16068 px desktop and 15302 px mobile because neighboring sticky scroll sequences collapse.
+- **Category groups switch components.** They render a different branch: a native `overflow-x: auto` scroller with fixed 355 px-high cards, width 0.6 × designWidth, no GSAP reveal and no custom drag. Hover becomes an image `scale(1.03)` with a 600 ms `cubic-bezier(0.22,1,0.36,1)` transition (M-JS + M-DOM). E-frame: in this branch the description renders as small serif text.
+- **Line reveals.** `[data-fx-y]` reveals are skipped, and the category text is visible immediately.
+- **Defect: All Work stays invisible.** The All Work link remained `opacity: 0; visibility: hidden` in both viewports after the loader completed. Its reveal never ran, so a reduced-motion user cannot see that link. Our implementation must not copy this.
+- **Parallax is not disabled.** Featured-image parallax still changed with scroll (y 0, +6.35, +30 px at different positions). The hook checks the preference, but the live result still moved; the cause was not isolated.
+- **Pair hover and wide-card slide.** These switch to instant `gsap.set` (M-JS). The CSS clip-path and All Work transitions have no reduced-motion override (M-JS).
+- **Logo strip.** No fade: opacity stays 1 while logos swap (M-JS reduced flag; M-DOM opacity constant).
+
+### (f) Typography ratios (Work area, M-DOM)
+
+| Element | Font size / viewport width | Line-height / font size | Tracking / font size |
+|---|---:|---:|---|
+| Category heading (desktop) | .046 (clamped 32–88 px) | .9 | −.05 |
+| Category heading (mobile) | .082 (clamp minimum) | .9 | −.05 |
+| All Work label (desktop) | .0222 | 1.0 | −.05 |
+| Card title / tagline (desktop) | .0125 | 1.2 | −.02 |
+| Category description (desktop, serif) | .0139 | 1.3 | −.03 |
+
+### Key reference frames
+
+Times are **M-DOM** screenshot-call bounds in ms from navigation start of that run. Descriptions are **E-frame**. These are internal references only: their images, copy and design are not reused.
+
+| Frame | Time ms | Scroll px | Observation |
+|---|---:|---:|---|
+| [01 section entry](frames/work-01-section-entry.jpg) | 9430–9596 | 12465 | Logo strip, then the first pair entering |
+| [02 featured pair](frames/work-02-featured-pair.jpg) | 10598–10732 | 12690 | Large/small pair at rest, meta lines |
+| [03 wide card](frames/work-03-wide-card.jpg) | 13984–14049 | 13365 | Offset 76% card on its 24% spacer |
+| [04 hover Flip mid](frames/work-04-hover-flip-mid.jpg) | 47932–48095 | 12570 | Pair mid-swap back to the large left card (~120 ms after pointer move) |
+| [05 hover Flip settled](frames/work-05-hover-flip-settled.jpg) | 47733–47795 | 12570 | Right card promoted to large |
+| [06 hover wide card](frames/work-06-hover-wide-card.jpg) | 51313–51397 | 13241 | Card slid left 16%, 6 px inset frame |
+| [07 hover All Work](frames/work-07-hover-all-work.jpg) | 54389–54466 | 14288 | Longer arrow, underline drawn |
+| [08 category before reveal](frames/work-08-category-pre-reveal.jpg) | 33163–33298 | 14567 | Heading visible, cards hidden (autoAlpha 0) |
+| [09 category reveal mid](frames/work-09-category-reveal-mid.jpg) | 36900–36941 | 15147 | Staggered fade/scale in progress (scroll crossed start at 36650) |
+| [10 category reveal end](frames/work-10-category-reveal-end.jpg) | 38243–38338 | 15147 | All cards at scale 1 |
+| [11 dark group reveal mid](frames/work-11-category-dark-reveal-mid.jpg) | 43566–43651 | 16156 | Same reveal on the black group |
+| [12 category hover + drag](frames/work-12-category-hover-drag.jpg) | 60053–60215 | 15371 | Track dragged −640 px, hovered card +46 px taller |
+| [13 mobile featured stack](frames/work-13-mobile-featured-stack.jpg) | 9741–9782 | 10278 | Single-column cards, stacked meta |
+| [14 mobile category carousel](frames/work-14-mobile-category-carousel.jpg) | 20490–20625 | 12388 | 208 px cards, 32 px heading |
+
+### Limits and undetermined items
+
+- **Flip internals.** The hover swap is a GSAP Flip: column bounding widths read their final value from the first sampled frame (about 39 ms), so the visible interpolation was measured on media height only. Whether Flip scales or resizes the columns internally was not isolated.
+- **Untested gestures.** Touch drag on mobile, keyboard focus states (focus also triggers the category card hover, per M-JS) and momentum after a fast fling were not tested. The drag has no inertia beyond the lerp catching up.
+- **Reduced-motion causes.** The reasons the All Work link stays hidden and parallax keeps running were not isolated; only the outcomes are measured.
+- **Timing precision.** Timings come from requestAnimationFrame sampling (about 16–60 ms resolution under SwiftShader). Screenshots are bounded by their call windows, not exact frames.
+
+### Techniques to reuse
+
+These recommendations are derived from the measurements above. Build them with our own content, imagery and layout.
+
+1. **Weighted pair with hover promotion.** Two columns with `flex-basis: 0` and flex-grow in about a 1.4 : 1 ratio (1020 : 724), 16 px gap. On pointerenter, swap the ratio and run `Flip.from(state, {duration: .58, ease: 'power4.out', nested: true})`; restore on leaving the row. Reserve the row's `min-height` from the larger card's aspect ratio so the page below never jumps.
+2. **Offset single card with nudge and inset.** Use a 24/76 spacer/card split. On hover, translate the card by −16% of row width (0.58 s `power4.out`) and animate clip-path `inset(0 round R)` → `inset(6px round R)` over 0.5 s `cubic-bezier(.33,1,.68,1)` for a "pressed frame" without scaling the image.
+3. **Linear parallax per frame.** Make the image layer 34 px taller on each side (horizontal overscan scaled by aspect) and scrub y −30 → +30 px, `ease: 'none'`, `scrub: .5`, from `top bottom` to `bottom top`. Use one trigger per frame and keep it running on mobile; it is cheap and subtle (about 0.04 px per scroll px).
+4. **Masked line reveals for headings and links.** SplitText `lines` with `mask: 'lines'`, yPercent 110 → 0, 0.85 s `power3.out`, stagger 0.09, `once`, start `top 80%` (short links `top 85%`). This matches our hero idiom.
+5. **Group entrance for card rows.** `fromTo` autoAlpha 0 / scale .96 → 1, 0.85 s `power3.out`, stagger 0.1 s from the start. Start at `top 50%` on desktop and `top 86%` on mobile, with `toggleActions: 'play none none reverse'` so it replays when re-entered from above.
+6. **Drag row instead of scroll-jacking.** Use pointer events with a 6 px threshold and axis lock, ×1.6 sensitivity, frame-rate-independent lerp `1 − (1 − .1)^(60·dt)`, clamping, `touch-action: pan-y`, click suppression after a drag, and grab/grabbing cursors. Add an inner ±8% horizontal image parallax keyed to distance from viewport center, with 12% overscan.
+7. **Card hover grow.** Grow height by about 46 px (raise z-index, keep width) over 600 ms `cubic-bezier(.22,1,.36,1)`, top-aligned so neighbors don't move.
+8. **Link affordance.** Widen an arrow box from 0.9 to 1.45 line boxes and draw a 1 px underline with `scaleX` 0 → 1, switching transform-origin (right at rest, left on hover) so it enters left and exits right. Both 0.5 s ease-out-cubic.
+9. **Mobile.** One column at full width with stacked meta; fixed-width (about 208 px, aspect 208/270) draggable rows; an earlier reveal start; a 3-slot logo crossfade every 2.5 s with 500 ms fades. Drop hover-only systems entirely.
+10. **Reduced motion done properly.** Swap the drag row for native `overflow-x: auto` and render reveal targets in their final state. Also disable parallax and slide transforms, which the reference does not fully do. Make sure nothing that JS reveals can stay hidden; the reference's All Work link does.

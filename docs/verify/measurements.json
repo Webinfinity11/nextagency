@@ -1,6 +1,236 @@
 {
+  "i18n": {
+    "layouts": {
+      "ka-1440": {
+        "lang": "ka",
+        "hreflang": [
+          "ka",
+          "en",
+          "x-default"
+        ],
+        "overflow": 0,
+        "lineOverflow": [],
+        "switcher": true,
+        "wordsOutside": [],
+        "lineOverlap": false,
+        "closingWrapped": [],
+        "heroClip": 0,
+        "supportAt40": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "supportSettled": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "supportClip": 0,
+        "closingClip": 0,
+        "hiddenLeak": 0
+      },
+      "ka-1024": {
+        "lang": "ka",
+        "hreflang": [
+          "ka",
+          "en",
+          "x-default"
+        ],
+        "overflow": 0,
+        "lineOverflow": [],
+        "switcher": true,
+        "wordsOutside": [],
+        "lineOverlap": false,
+        "closingWrapped": [],
+        "heroClip": 0,
+        "supportAt40": [
+          0,
+          0,
+          0
+        ],
+        "supportSettled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "supportClip": 0,
+        "hiddenLeak": 0
+      },
+      "ka-390": {
+        "lang": "ka",
+        "hreflang": [
+          "ka",
+          "en",
+          "x-default"
+        ],
+        "overflow": 0,
+        "lineOverflow": [],
+        "switcher": true,
+        "wordsOutside": [],
+        "lineOverlap": false,
+        "closingWrapped": [],
+        "heroClip": 0,
+        "supportAt40": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "supportSettled": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "supportClip": 0,
+        "hiddenLeak": 0
+      },
+      "en-1440": {
+        "lang": "en",
+        "hreflang": [
+          "ka",
+          "en",
+          "x-default"
+        ],
+        "overflow": 0,
+        "lineOverflow": [],
+        "switcher": true,
+        "wordsOutside": [],
+        "lineOverlap": false,
+        "closingWrapped": [],
+        "heroClip": 35,
+        "supportAt40": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "supportSettled": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "supportClip": 0,
+        "hiddenLeak": 0
+      },
+      "en-1024": {
+        "lang": "en",
+        "hreflang": [
+          "ka",
+          "en",
+          "x-default"
+        ],
+        "overflow": 0,
+        "lineOverflow": [],
+        "switcher": true,
+        "wordsOutside": [],
+        "lineOverlap": false,
+        "closingWrapped": [],
+        "heroClip": 22,
+        "supportAt40": [
+          0,
+          0,
+          0
+        ],
+        "supportSettled": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "supportClip": 0,
+        "hiddenLeak": 0
+      },
+      "en-390": {
+        "lang": "en",
+        "hreflang": [
+          "ka",
+          "en",
+          "x-default"
+        ],
+        "overflow": 0,
+        "lineOverflow": [],
+        "switcher": true,
+        "wordsOutside": [],
+        "lineOverlap": false,
+        "closingWrapped": [],
+        "heroClip": 11,
+        "supportAt40": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "supportSettled": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "supportClip": 0,
+        "hiddenLeak": 0
+      }
+    },
+    "fonts": {
+      ".phrase-0 .word": [
+        "Noto Sans Georgian"
+      ],
+      ".closing-line": [
+        "Manrope ExtraLight",
+        "Noto Sans Georgian"
+      ],
+      ".stat-word": [
+        "Manrope ExtraLight"
+      ],
+      ".nav-locale span": [
+        "Manrope ExtraLight"
+      ]
+    },
+    "mtavruli": {
+      "text": "ᲔᲠᲗᲘ ᲜᲐᲑᲘᲯᲘᲗ ᲬᲘᲜ. ᲨᲔᲜᲘ ᲨᲔᲛᲓᲔᲒᲘ ᲐᲥ ᲘᲬᲧᲔᲑᲐ.",
+      "allMtavruli": true,
+      "unicodeRange": "U+589, U+10A0-10FF, U+1C90-1CBA, U+1CBD-1CBF, U+205A, U+2D00-2D2F, U+2E31",
+      "noto": 2487.640625,
+      "fallback": 2397.71875,
+      "ariaLabel": "ერთი ნაბიჯით წინ. შენი შემდეგი აქ იწყება."
+    },
+    "switch": {
+      "url": "/en",
+      "lang": "en",
+      "state": "done",
+      "softNavigation": true,
+      "overlayFrames": 0,
+      "overlayPresent": false,
+      "heroWord": 0
+    }
+  },
+  "warnings": [],
   "completion": {
-    "duration": 4871.5999999996275,
+    "duration": 4888,
     "removed": true,
     "overflow": "visible",
     "cls": 0
@@ -22,7 +252,7 @@
     "display": "removed"
   },
   "focus": {
-    "text": "Skip to content",
+    "text": "მთავარ შინაარსზე გადასვლა",
     "outline": "solid"
   },
   "responsive": [
@@ -44,11 +274,11 @@
     "marks": [
       {
         "name": "loader:start",
-        "time": 49.09999999962747
+        "time": 56.30000000074506
       },
       {
         "name": "loader:done",
-        "time": 462.30000000074506
+        "time": 499.69999999925494
       }
     ],
     "overflow": "visible"
@@ -58,14 +288,14 @@
     {
       "file": "01-sequence-solid.jpg",
       "name": "load-002",
-      "time": 277.30000000074506,
-      "authored": 211.19999999925494,
+      "time": 266.30000000074506,
+      "authored": 197.90000000223517,
       "scrollY": 0,
       "state": "running",
       "flicker": "1",
       "clean": "hidden",
       "wipe": "none",
-      "word": "matrix(1, 0, 0, 1, 0, 70.7438)",
+      "word": "matrix(1, 0, 0, 1, 0, 54.4195)",
       "frame": "matrix(1, 0, 0, 1, 0, 900)",
       "radius": "0px",
       "loader": true,
@@ -74,14 +304,14 @@
     {
       "file": "02-sequence-distorted.jpg",
       "name": "load-011",
-      "time": 1520.5,
-      "authored": 1454.3999999985099,
+      "time": 1427,
+      "authored": 1358.6000000014901,
       "scrollY": 0,
       "state": "running",
       "flicker": "1",
       "clean": "hidden",
       "wipe": "none",
-      "word": "matrix(1, 0, 0, 1, 0, 70.7438)",
+      "word": "matrix(1, 0, 0, 1, 0, 54.4195)",
       "frame": "matrix(1, 0, 0, 1, 0, 900)",
       "radius": "0px",
       "loader": true,
@@ -89,15 +319,15 @@
     },
     {
       "file": "03-clean-mark.jpg",
-      "name": "load-024",
-      "time": 3244.300000000745,
-      "authored": 3178.199999999255,
+      "name": "load-025",
+      "time": 3219.5,
+      "authored": 3151.10000000149,
       "scrollY": 0,
       "state": "running",
       "flicker": "0",
       "clean": "visible",
       "wipe": "none",
-      "word": "matrix(1, 0, 0, 1, 0, 70.7438)",
+      "word": "matrix(1, 0, 0, 1, 0, 54.4195)",
       "frame": "matrix(1, 0, 0, 1, 0, 900)",
       "radius": "0px",
       "loader": true,
@@ -105,15 +335,15 @@
     },
     {
       "file": "04-white-wipe.jpg",
-      "name": "load-027",
-      "time": 3682.60000000149,
-      "authored": 3616.5,
+      "name": "load-029",
+      "time": 3722.099999997765,
+      "authored": 3653.699999999255,
       "scrollY": 0,
       "state": "running",
       "flicker": "0",
       "clean": "visible",
-      "wipe": "matrix(1, 0, 0, 1, 0, 613.775)",
-      "word": "matrix(1, 0, 0, 1, 0, 70.7438)",
+      "wipe": "matrix(1, 0, 0, 1, 0, 697.216)",
+      "word": "matrix(1, 0, 0, 1, 0, 54.4195)",
       "frame": "matrix(1, 0, 0, 1, 0, 900)",
       "radius": "0px",
       "loader": true,
@@ -121,15 +351,15 @@
     },
     {
       "file": "05-nav-handoff.jpg",
-      "name": "load-033",
-      "time": 4477.9000000003725,
-      "authored": 4411.799999998882,
+      "name": "load-035",
+      "time": 4482.599999997765,
+      "authored": 4414.199999999255,
       "scrollY": 0,
       "state": "running",
       "flicker": "0",
       "clean": "visible",
       "wipe": "matrix(1, 0, 0, 1, 0, 900)",
-      "word": "matrix(1, 0, 0, 1, 0, 70.7438)",
+      "word": "matrix(1, 0, 0, 1, 0, 54.4195)",
       "frame": "matrix(1, 0, 0, 1, 0, 900)",
       "radius": "0px",
       "loader": true,
@@ -137,13 +367,13 @@
     },
     {
       "file": "06-words-enter.jpg",
-      "name": "load-041",
-      "time": 5502.200000001118,
-      "authored": 5436.0999999996275,
+      "name": "load-043",
+      "time": 5505.5,
+      "authored": 5437.10000000149,
       "scrollY": 0,
       "state": "done",
-      "word": "matrix(1, 0, 0, 1, 0, 14.1345)",
-      "frame": "matrix(1, 0, 0, 1, 0, 86.4216)",
+      "word": "matrix(1, 0, 0, 1, 0, 9.97297)",
+      "frame": "matrix(1, 0, 0, 1, 0, 81.3618)",
       "radius": "0px",
       "loader": false,
       "cls": 0
@@ -151,8 +381,8 @@
     {
       "file": "07-hero-settled.jpg",
       "name": "settled",
-      "time": 8730.900000000373,
-      "authored": 8664.799999998882,
+      "time": 8524.599999997765,
+      "authored": 8456.199999999255,
       "scrollY": 0,
       "state": "done",
       "word": "matrix(1, 0, 0, 1, 0, 0)",
@@ -164,11 +394,11 @@
     {
       "file": "08-scroll-876.jpg",
       "name": "scroll-014",
-      "time": 13700.60000000149,
-      "authored": 13634.5,
-      "scrollY": 877,
+      "time": 13379.699999999255,
+      "authored": 13311.300000000745,
+      "scrollY": 869,
       "state": "done",
-      "word": "matrix(1, 0, 0, 1, 0, -70.7438)",
+      "word": "matrix(1, 0, 0, 1, 0, -54.4195)",
       "frame": "matrix(1, 0, 0, 1, 0, 0)",
       "radius": "0px",
       "loader": false,
@@ -177,12 +407,12 @@
     {
       "file": "09-scroll-1777.jpg",
       "name": "scroll-029",
-      "time": 18864.5,
-      "authored": 18798.39999999851,
-      "scrollY": 1776,
+      "time": 18794.199999999255,
+      "authored": 18725.800000000745,
+      "scrollY": 1772,
       "state": "done",
-      "word": "matrix(1, 0, 0, 1, 0, -70.7438)",
-      "frame": "matrix(0.6623, 0, 0, 0.6623, 0, 0)",
+      "word": "matrix(1, 0, 0, 1, 0, -54.4195)",
+      "frame": "matrix(0.6631, 0, 0, 0.6631, 0, 0)",
       "radius": "23px",
       "loader": false,
       "cls": 0
@@ -190,11 +420,11 @@
     {
       "file": "10-scroll-2693.jpg",
       "name": "scroll-044",
-      "time": 24415.900000000373,
-      "authored": 24349.799999998882,
+      "time": 23925,
+      "authored": 23856.60000000149,
       "scrollY": 2697,
       "state": "done",
-      "word": "matrix(1, 0, 0, 1, 0, -70.7438)",
+      "word": "matrix(1, 0, 0, 1, 0, -54.4195)",
       "frame": "matrix(0.65, 0, 0, 0.65, 0, 0)",
       "radius": "24px",
       "loader": false,

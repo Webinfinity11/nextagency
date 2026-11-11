@@ -8,8 +8,8 @@ import {
   reducedMotion,
   cutOffset,
 } from "@/lib/gsap";
-import { copy } from "@/content/hero";
-export function HeroMedia() {
+import type { HeroContent } from "@/content";
+export function HeroMedia({ copy }: { copy: HeroContent }) {
   const scope = useRef<HTMLDivElement>(null);
   useGSAP(
     (_context, contextSafe) => {

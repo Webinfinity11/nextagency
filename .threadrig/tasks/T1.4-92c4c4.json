@@ -1,0 +1,20 @@
+{
+  "acceptance" : [
+    "pnpm build && pnpm lint",
+    "Production Chromium screenshots and interaction assertions"
+  ],
+  "createdAt" : "2026-11-11T12:57:09Z",
+  "detail" : "Work worker completed implementation and clean production verification (build/lint, 16 frames, viewport/locale/interaction and Georgian mask checks). Ready for orchestrator integration of FE7D0B10-650F-42BA-95D7-00CC3D2BCBC6; owner validation remains.",
+  "files" : [
+    "src/components/work",
+    "src/content/projects.ts",
+    "src/app/[locale]/work",
+    "scripts/verify-work.mjs"
+  ],
+  "id" : "T1.4",
+  "phase" : "P1",
+  "rank" : 40,
+  "status" : "doing",
+  "title" : "Work სექციის, ინდექსისა და stub გვერდების აწყობა",
+  "updatedAt" : "2026-11-11T13:10:50Z"
+}

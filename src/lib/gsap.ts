@@ -1,10 +1,11 @@
 "use client";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Flip } from "gsap/Flip";
 import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
-gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
-export { gsap, ScrollTrigger, SplitText, useGSAP };
+gsap.registerPlugin(ScrollTrigger, SplitText, Flip, useGSAP);
+export { gsap, ScrollTrigger, SplitText, Flip, useGSAP };
 export const reducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 export function afterLoader(callback: () => void) {

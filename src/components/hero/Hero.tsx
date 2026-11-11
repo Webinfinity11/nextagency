@@ -1,10 +1,20 @@
 "use client";
-import { useRef } from "react";
+import { type ReactNode, useRef } from "react";
 import { HeroHeadline } from "./HeroHeadline";
 import { HeroMedia } from "./HeroMedia";
-import { copy } from "@/content/hero";
+import type { HeroContent } from "@/content";
+import type { Locale } from "@/content/locales";
+import { display } from "@/lib/mtavruli";
 import { gsap, SplitText, useGSAP, reducedMotion } from "@/lib/gsap";
-export function Hero() {
+export function Hero({
+  copy,
+  locale,
+  children,
+}: {
+  copy: HeroContent;
+  locale: Locale;
+  children?: ReactNode;
+}) {
   const scope = useRef<HTMLElement>(null);
   useGSAP(
     () => {
@@ -26,7 +36,7 @@ export function Hero() {
               scrollTrigger: {
                 trigger: root,
                 start: "top bottom",
-                end: "top top",
+                end: "top 40%",
                 scrub: 0.3,
               },
             },
@@ -53,14 +63,15 @@ export function Hero() {
   );
   return (
     <>
-      <HeroHeadline />
-      <HeroMedia />
+      <HeroHeadline copy={copy} locale={locale} />
+      <HeroMedia copy={copy} />
+      {children}
       <section className="support" id="next" ref={scope}>
         <p className="support-copy">{copy.support}</p>
         <h2>
           {copy.closing.map((line) => (
             <span className="closing-mask" key={line}>
-              <span className="closing-line">{line}</span>
+              <span className="closing-line">{display(line, locale)}</span>
             </span>
           ))}
         </h2>
