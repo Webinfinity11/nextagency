@@ -17,7 +17,7 @@ export function Loader() {
     const next = logo.querySelector<SVGGElement>('[data-wordmark="w-next"]')!;
     const agency = logo.querySelector('[data-wordmark="w-agency"]')!;
     const links = document.querySelectorAll(".nav-links a,.nav-menu");
-    const nav = document.querySelectorAll(".nav-logo,.nav-links,.nav-locale,.nav-cta");
+    const nav = document.querySelectorAll(".nav-logo,.nav-links,.nav-locale");
     let released = false;
     // Release the page at the box slide; the header tail continues independently.
     const release = () => {
@@ -55,7 +55,7 @@ export function Loader() {
     const travel = { progress: 0 };
     const slide = { progress: 0 };
     const position = () => {
-      gsap.set(box, { x: offset * (1 - slide.progress) });
+      gsap.set(box, { x: offset * (1 - slide.progress), force3D: true });
       gsap.set(clean, {
         x: destination.x * travel.progress,
         y: destination.y * travel.progress,
@@ -68,8 +68,9 @@ export function Loader() {
       return { left: parseFloat(c.left), top: parseFloat(c.top), width: parseFloat(c.width), height: parseFloat(c.height) };
     };
     const measure = () => {
-      // Measure the final DOM, never the transformed intermediate box.
-      gsap.set(box, { x: 0 });
+      // Measure the final DOM, never the transformed intermediate box (x and the entry scale).
+      const boxScale = gsap.getProperty(box, "scale") as number;
+      gsap.set(box, { x: 0, scale: 1 });
       const bounds = box.getBoundingClientRect();
       offset = innerWidth >= 768 ? (innerWidth - bounds.width) / 2 - bounds.left : 0;
       const target = next.getBoundingClientRect();
@@ -91,12 +92,13 @@ export function Loader() {
       const centre = { x: flickerLayout.left + w / 2, y: flickerLayout.top + h / 2 };
       const scale = ratio / k;
       resolve = { scale, x: to.x - centre.x - (from.x - centre.x) * scale, y: to.y - centre.y - (from.y - centre.y) * scale };
+      gsap.set(box, { scale: boxScale });
       position();
     };
     gsap.set([box, end, ...links], { autoAlpha: 0 });
     gsap.set(document.querySelector(".nav-links"), { visibility: "visible" });
     gsap.set(agency, { yPercent: 105 });
-    gsap.set(links, { y: 4 });
+    gsap.set(links, { y: 8 });
     // x is in SVG user units: 24 CSS px at the clean logo's rendered width.
     letters.forEach((letter) => gsap.set(letter, { x: 24 * 506.5 / layout(white).width, autoAlpha: 0, clipPath: "inset(0% 100% 0% 0%)" }));
     measure();
@@ -129,19 +131,26 @@ export function Loader() {
     timeline.to(white, { opacity: .72, duration: .14 }, 3.28 + shift)
       // Two identical screen-space clips give a hard edge and exact colour flip.
       .to([wipe, ink], { clipPath: "inset(0 0 0% 0)", duration: .25, ease: "power2.inOut" }, 3.42 + shift)
-      .set([wipe, root.querySelector(".loader-backdrop"), white], { autoAlpha: 0 }, 3.97 + shift)
-      .to(box, { autoAlpha: 1, duration: .25 }, 3.97 + shift)
-      .to(travel, { progress: 1, duration: .6, ease: "power3.inOut", onUpdate: position }, 3.97 + shift)
-      .to(links, { autoAlpha: 1, y: 0, duration: .24, stagger: .06 }, 4.5 + shift)
+      .set([wipe, root.querySelector(".loader-backdrop"), white], { autoAlpha: 0 }, 3.97 + shift);
+    // Header tail: each step overlaps the previous one, so there is no idle beat.
+    const start = 3.97 + shift;
+    const travelTime = .9;
+    const linksAt = start + travelTime * .7;
+    const linksEnd = linksAt + .05 * (links.length - 1) + .5;
+    const slideAt = Math.max(start + travelTime, linksEnd - .18);
+    const slideTime = .95;
+    timeline.fromTo(box, { autoAlpha: 0, scale: .98 }, { autoAlpha: 1, scale: 1, transformOrigin: "50% 50%", force3D: true, duration: .45, ease: "power2.out" }, start)
+      .to(travel, { progress: 1, duration: travelTime, ease: "expo.inOut", onUpdate: position }, start)
+      .to(links, { autoAlpha: 1, y: 0, duration: .5, stagger: .05, ease: "power3.out" }, linksAt)
       // Same NEXT paths, same ink bounds; switch only after the travel has ended.
-      .set(logo, { autoAlpha: 1 }, 4.57 + shift)
-      .set(ink, { autoAlpha: 0 }, 4.57 + shift)
-      .call(() => performance.mark("loader:handoff"), [], 4.57 + shift)
-      .call(release, [], 4.9 + shift)
-      .to(slide, { progress: 1, duration: .6, ease: "power3.out", onUpdate: position }, 4.9 + shift)
-      .set(document.querySelectorAll(".nav-locale,.nav-cta"), { autoAlpha: 1 }, 4.9 + shift)
-      .to(end, { autoAlpha: 1, duration: .4 }, 4.9 + shift)
-      .to(agency, { yPercent: 0, duration: .4, ease: "power3.out" }, 5.5 + shift);
+      .set(logo, { autoAlpha: 1 }, start + travelTime)
+      .set(ink, { autoAlpha: 0 }, start + travelTime)
+      .call(() => performance.mark("loader:handoff"), [], start + travelTime)
+      .call(release, [], slideAt)
+      .to(slide, { progress: 1, duration: slideTime, ease: "expo.out", onUpdate: position }, slideAt)
+      .set(document.querySelector(".nav-locale"), { autoAlpha: 1 }, slideAt)
+      .fromTo(end, { autoAlpha: 0, x: 12 }, { autoAlpha: 1, x: 0, force3D: true, duration: .6, ease: "power3.out" }, slideAt)
+      .to(agency, { yPercent: 0, duration: .6, ease: "power3.out" }, slideAt + slideTime * .6);
     return () => {
       active = false;
       window.removeEventListener("resize", measure);

@@ -5,7 +5,6 @@ export type HeroContent = {
   description: string;
   navLabel: string;
   nav: string[];
-  cta: string;
   home: string;
   skip: string;
   /** aria-label of the language switcher link, in this locale's language. */

@@ -55,7 +55,7 @@ export default async function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: bootstrap }} />
         <noscript>
-          <style>{`.loader{display:none!important}html,body{overflow:auto!important}.nav-logo,.nav-links,.nav-locale,.nav-cta{visibility:visible!important}html .word,html .stat-word{transform:none!important}`}</style>
+          <style>{`.loader{display:none!important}html,body{overflow:auto!important}.nav-logo,.nav-links,.nav-locale{visibility:visible!important}html .word,html .stat-word{transform:none!important}`}</style>
         </noscript>
       </head>
       <body className={`${latin.variable} ${georgian.variable}`}>

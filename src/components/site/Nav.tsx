@@ -43,10 +43,6 @@ export function Nav({ copy, locale }: { copy: HeroContent; locale: Locale }) {
           label={copy.langLabel}
           short={copy.langShort}
         />
-        <Link className="nav-cta" href={`/${locale}#contact`}>
-          {copy.cta}
-          <span aria-hidden="true">↗</span>
-        </Link>
       </div>
     </header>
   );

@@ -39,8 +39,7 @@ html[data-loader="done"] .loader {
 }
 html[data-loader="running"] .nav-logo,
 html[data-loader="running"] .nav-links,
-html[data-loader="running"] .nav-locale,
-html[data-loader="running"] .nav-cta {
+html[data-loader="running"] .nav-locale {
   visibility: hidden;
 }
 .skip-link {
@@ -76,9 +75,8 @@ html[data-loader="running"] .nav-cta {
 .nav-brand { width: 66px; flex-shrink: 0; }
 .nav-links { display: flex; align-items: center; gap: 28px; font-size: 12px; font-weight: 600; }
 .nav-links a { padding: 14px 0; }
-.nav-end { gap: 20px; }
+.nav-end { padding: 0 14px; }
 .nav-locale { padding: 14px 0; font-size: 11px; letter-spacing: .04em; }
-.nav-cta { display: flex; align-items: center; gap: 24px; padding: 14px 0; font-size: 12px; font-weight: 600; }
 .nav-menu { display: none; }
 .nav-menu summary { cursor: pointer; list-style: none; width: 24px; padding: 12px 2px; }
 .nav-menu summary::-webkit-details-marker { display: none; }
@@ -308,9 +306,8 @@ html[data-loader="skip"] .stat-word {
   .nav-brand { width: 60px; }
   .nav-links { display: none; }
   .nav-menu { display: block; }
-  .nav-end { gap: 12px; padding: 0 12px; }
+  .nav-end { padding: 0 12px; }
   .nav-locale { font-size: 10px; }
-  .nav-cta { font-size: 10px; gap: 8px; }
   .hero-intro {
     height: auto;
     min-height: calc(70svh - 80px);
@@ -376,8 +373,7 @@ html[data-loader="skip"] .stat-word {
   html[data-loader="running"], html[data-loader="running"] body { overflow: auto; }
   html[data-loader="running"] .nav-logo,
   html[data-loader="running"] .nav-links,
-  html[data-loader="running"] .nav-locale,
-  html[data-loader="running"] .nav-cta { visibility: visible; }
+  html[data-loader="running"] .nav-locale { visibility: visible; }
   .loader-flicker {
     display: none;
   }

@@ -6,7 +6,6 @@ export const hero: HeroContent = {
     "Independent thinking. Clear direction. We build what comes next.",
   navLabel: "Main navigation",
   nav: ["Work", "Services", "Approach", "Team"],
-  cta: "Start a conversation",
   home: "NEXT AGENCY home",
   skip: "Skip to content",
   langLabel: "Switch to Georgian",
