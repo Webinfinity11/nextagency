@@ -1,0 +1,369 @@
+{
+  "timing": {
+    "start": 0,
+    "resolved": 2907.60000000149,
+    "handoff": 5057,
+    "done": 5381.5,
+    "settled": 6380.699999999255
+  },
+  "seam": {
+    "lastBoil": {
+      "t": 2906.199999999255,
+      "boilVisible": true,
+      "cleanVisible": false,
+      "boil": {
+        "x": 480.0003967285156,
+        "y": 388.7313537597656,
+        "width": 116.56381225585938,
+        "height": 123.00799560546875
+      },
+      "clean": {
+        "x": 480.0223388671875,
+        "y": 388.7303771972656,
+        "width": 116.5538330078125,
+        "height": 122.99740600585938
+      },
+      "src": {
+        "x": 480.0223388671875,
+        "y": 388.7303771972656,
+        "width": 503.953125,
+        "height": 122.99740600585938
+      },
+      "dst": {
+        "x": 508.0653381347656,
+        "y": 24.74225616455078,
+        "width": 65.96316528320312,
+        "height": 16.904273986816406
+      },
+      "logoVisible": false
+    },
+    "firstClean": {
+      "t": 2961.5,
+      "boilVisible": false,
+      "cleanVisible": true,
+      "boil": {
+        "x": 480.0003967285156,
+        "y": 388.7313537597656,
+        "width": 116.56381225585938,
+        "height": 123.00799560546875
+      },
+      "clean": {
+        "x": 480.0223388671875,
+        "y": 388.7303771972656,
+        "width": 116.5538330078125,
+        "height": 122.99740600585938
+      },
+      "src": {
+        "x": 480.0223388671875,
+        "y": 388.7303771972656,
+        "width": 503.953125,
+        "height": 122.99740600585938
+      },
+      "dst": {
+        "x": 508.0653381347656,
+        "y": 24.74225616455078,
+        "width": 65.96316528320312,
+        "height": 16.904273986816406
+      },
+      "logoVisible": false
+    },
+    "rectDeltaPx": 0.021942138671875,
+    "frameBefore": 2851.31689453125,
+    "frameAfter": 2917.98095703125,
+    "inkBefore": {
+      "x0": 12,
+      "y0": 13,
+      "x1": 128,
+      "y1": 135
+    },
+    "inkAfter": {
+      "x0": 12,
+      "y0": 12,
+      "x1": 128,
+      "y1": 135
+    },
+    "inkDeltaPx": 1,
+    "pixelsChangedOver64": 213,
+    "cleanNWidth": 116.5538330078125
+  },
+  "handoffDeltaPx": 0.017303466796875,
+  "travelMaxStepPx": 66.30703735351562,
+  "mobile": {
+    "left": 31.209692001342773,
+    "right": 31.240930557250977,
+    "width": 327.54937744140625
+  },
+  "frames": [
+    {
+      "file": "docs/verify/loader-v4-001.jpg",
+      "t": 0,
+      "capturedAt": -15.2490234375
+    },
+    {
+      "file": "docs/verify/loader-v4-002.jpg",
+      "t": 83.33333333333333,
+      "capturedAt": 18.0830078125
+    },
+    {
+      "file": "docs/verify/loader-v4-003.jpg",
+      "t": 166.66666666666666,
+      "capturedAt": 118.080078125
+    },
+    {
+      "file": "docs/verify/loader-v4-004.jpg",
+      "t": 250,
+      "capturedAt": 234.741943359375
+    },
+    {
+      "file": "docs/verify/loader-v4-005.jpg",
+      "t": 333.3333333333333,
+      "capturedAt": 318.073974609375
+    },
+    {
+      "file": "docs/verify/loader-v4-006.jpg",
+      "t": 416.6666666666667,
+      "capturedAt": 318.073974609375
+    },
+    {
+      "file": "docs/verify/loader-v4-007.jpg",
+      "t": 500,
+      "capturedAt": 434.736083984375
+    },
+    {
+      "file": "docs/verify/loader-v4-008.jpg",
+      "t": 583.3333333333334,
+      "capturedAt": 568.06494140625
+    },
+    {
+      "file": "docs/verify/loader-v4-009.jpg",
+      "t": 666.6666666666666,
+      "capturedAt": 568.06494140625
+    },
+    {
+      "file": "docs/verify/loader-v4-010.jpg",
+      "t": 750,
+      "capturedAt": 701.39208984375
+    },
+    {
+      "file": "docs/verify/loader-v4-011.jpg",
+      "t": 833.3333333333334,
+      "capturedAt": 784.721923828125
+    },
+    {
+      "file": "docs/verify/loader-v4-012.jpg",
+      "t": 916.6666666666666,
+      "capturedAt": 868.052978515625
+    },
+    {
+      "file": "docs/verify/loader-v4-013.jpg",
+      "t": 1000,
+      "capturedAt": 984.716064453125
+    },
+    {
+      "file": "docs/verify/loader-v4-014.jpg",
+      "t": 1083.3333333333333,
+      "capturedAt": 984.716064453125
+    },
+    {
+      "file": "docs/verify/loader-v4-015.jpg",
+      "t": 1166.6666666666667,
+      "capturedAt": 1101.37890625
+    },
+    {
+      "file": "docs/verify/loader-v4-016.jpg",
+      "t": 1250,
+      "capturedAt": 1201.375
+    },
+    {
+      "file": "docs/verify/loader-v4-017.jpg",
+      "t": 1333.3333333333333,
+      "capturedAt": 1318.037109375
+    },
+    {
+      "file": "docs/verify/loader-v4-018.jpg",
+      "t": 1416.6666666666667,
+      "capturedAt": 1318.037109375
+    },
+    {
+      "file": "docs/verify/loader-v4-019.jpg",
+      "t": 1500,
+      "capturedAt": 1418.03515625
+    },
+    {
+      "file": "docs/verify/loader-v4-020.jpg",
+      "t": 1583.3333333333333,
+      "capturedAt": 1534.697021484375
+    },
+    {
+      "file": "docs/verify/loader-v4-021.jpg",
+      "t": 1666.6666666666667,
+      "capturedAt": 1534.697021484375
+    },
+    {
+      "file": "docs/verify/loader-v4-022.jpg",
+      "t": 1750,
+      "capturedAt": 1684.69189453125
+    },
+    {
+      "file": "docs/verify/loader-v4-023.jpg",
+      "t": 1833.3333333333333,
+      "capturedAt": 1751.35595703125
+    },
+    {
+      "file": "docs/verify/loader-v4-024.jpg",
+      "t": 1916.6666666666667,
+      "capturedAt": 1751.35595703125
+    },
+    {
+      "file": "docs/verify/loader-v4-025.jpg",
+      "t": 2000,
+      "capturedAt": 1984.679931640625
+    },
+    {
+      "file": "docs/verify/loader-v4-026.jpg",
+      "t": 2083.3333333333335,
+      "capturedAt": 1984.679931640625
+    },
+    {
+      "file": "docs/verify/loader-v4-027.jpg",
+      "t": 2166.6666666666665,
+      "capturedAt": 2101.343994140625
+    },
+    {
+      "file": "docs/verify/loader-v4-028.jpg",
+      "t": 2250,
+      "capturedAt": 2218.005859375
+    },
+    {
+      "file": "docs/verify/loader-v4-029.jpg",
+      "t": 2333.3333333333335,
+      "capturedAt": 2218.005859375
+    },
+    {
+      "file": "docs/verify/loader-v4-030.jpg",
+      "t": 2416.6666666666665,
+      "capturedAt": 2368
+    },
+    {
+      "file": "docs/verify/loader-v4-031.jpg",
+      "t": 2500,
+      "capturedAt": 2434.6650390625
+    },
+    {
+      "file": "docs/verify/loader-v4-032.jpg",
+      "t": 2583.3333333333335,
+      "capturedAt": 2517.994873046875
+    },
+    {
+      "file": "docs/verify/loader-v4-033.jpg",
+      "t": 2666.6666666666665,
+      "capturedAt": 2651.323974609375
+    },
+    {
+      "file": "docs/verify/loader-v4-034.jpg",
+      "t": 2750,
+      "capturedAt": 2717.988037109375
+    },
+    {
+      "file": "docs/verify/loader-v4-035.jpg",
+      "t": 2833.3333333333335,
+      "capturedAt": 2784.653076171875
+    },
+    {
+      "file": "docs/verify/loader-v4-036.jpg",
+      "t": 2916.6666666666665,
+      "capturedAt": 2851.31689453125
+    },
+    {
+      "file": "docs/verify/loader-v4-037.jpg",
+      "t": 3000,
+      "capturedAt": 2984.64501953125
+    },
+    {
+      "file": "docs/verify/loader-v4-038.jpg",
+      "t": 3083.3333333333335,
+      "capturedAt": 3051.30810546875
+    },
+    {
+      "file": "docs/verify/loader-v4-039.jpg",
+      "t": 3166.6666666666665,
+      "capturedAt": 3117.973876953125
+    },
+    {
+      "file": "docs/verify/loader-v4-040.jpg",
+      "t": 3250,
+      "capturedAt": 3184.63916015625
+    },
+    {
+      "file": "docs/verify/loader-v4-041.jpg",
+      "t": 3333.3333333333335,
+      "capturedAt": 3317.967041015625
+    },
+    {
+      "file": "docs/verify/loader-v4-042.jpg",
+      "t": 3416.6666666666665,
+      "capturedAt": 3367.966064453125
+    },
+    {
+      "file": "docs/verify/loader-v4-043.jpg",
+      "t": 3500,
+      "capturedAt": 3451.2958984375
+    },
+    {
+      "file": "docs/verify/loader-v4-044.jpg",
+      "t": 3583.3333333333335,
+      "capturedAt": 3451.2958984375
+    },
+    {
+      "file": "docs/verify/loader-v4-045.jpg",
+      "t": 3666.6666666666665,
+      "capturedAt": 3451.2958984375
+    },
+    {
+      "file": "docs/verify/loader-v4-046.jpg",
+      "t": 3750,
+      "capturedAt": 3451.2958984375
+    },
+    {
+      "file": "docs/verify/loader-v4-047.jpg",
+      "t": 3833.3333333333335,
+      "capturedAt": 3784.617919921875
+    },
+    {
+      "file": "docs/verify/loader-v4-048.jpg",
+      "t": 3916.6666666666665,
+      "capturedAt": 3901.280029296875
+    },
+    {
+      "file": "docs/verify/loader-v4-049.jpg",
+      "t": 4000,
+      "capturedAt": 3984.60986328125
+    },
+    {
+      "file": "docs/verify/loader-v4-050.jpg",
+      "t": 4083.3333333333335,
+      "capturedAt": 4051.27392578125
+    },
+    {
+      "file": "docs/verify/loader-v4-051.jpg",
+      "t": 4166.666666666667,
+      "capturedAt": 4117.93896484375
+    },
+    {
+      "file": "docs/verify/loader-v4-052.jpg",
+      "t": 4250,
+      "capturedAt": 4184.60302734375
+    },
+    {
+      "file": "docs/verify/loader-v4-053.jpg",
+      "t": 4333.333333333333,
+      "capturedAt": 4184.60302734375
+    },
+    {
+      "file": "docs/verify/loader-v4-054.jpg",
+      "t": 4416.666666666667,
+      "capturedAt": 4184.60302734375
+    }
+  ],
+  "errors": []
+}

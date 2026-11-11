@@ -46,8 +46,12 @@ export function Loader() {
     const white = clean[0];
     const wipe = root.querySelector(".loader-wipe");
     const ink = root.querySelector(".loader-ink");
+    const flickerBox = flicker as HTMLElement;
+    const letters = ["l-e1", "l-x", "l-t"].map((id) => root.querySelectorAll(`.loader-clean [data-letter="${id}"]`));
     let offset = 0;
     let destination = { x: 0, y: 0, scale: 1 };
+    // Where the boiling N must land: exactly on the N of the centred clean NEXT.
+    let resolve = { x: 0, y: 0, scale: 1 };
     const travel = { progress: 0 };
     const slide = { progress: 0 };
     const position = () => {
@@ -56,10 +60,12 @@ export function Loader() {
         x: destination.x * travel.progress,
         y: destination.y * travel.progress,
         scale: 1 + (destination.scale - 1) * travel.progress,
-        rotationX: 9 * (1 - travel.progress),
-        rotationY: -10 * (1 - travel.progress),
-        transformPerspective: 600,
       });
+    };
+    // Unrounded layout box (offset* rounds to whole px); ignores running transforms.
+    const layout = (el: HTMLElement) => {
+      const c = getComputedStyle(el);
+      return { left: parseFloat(c.left), top: parseFloat(c.top), width: parseFloat(c.width), height: parseFloat(c.height) };
     };
     const measure = () => {
       // Measure the final DOM, never the transformed intermediate box.
@@ -67,20 +73,32 @@ export function Loader() {
       const bounds = box.getBoundingClientRect();
       offset = innerWidth >= 768 ? (innerWidth - bounds.width) / 2 - bounds.left : 0;
       const target = next.getBoundingClientRect();
-      const source = white.querySelector<SVGGElement>('[data-wordmark="w-next"]')!.getBBox();
-      const ratio = white.offsetWidth / 506.5;
+      // NEXT's ink box in SVG units. Not getBBox(): it would include E/X/T's pre-reveal offset.
+      const source = { x: 0, y: 2.7, width: 506.5, height: 129.8 };
+      const cleanBox = layout(white), flickerLayout = layout(flickerBox);
+      const ratio = cleanBox.width / 506.5;
       destination = {
         x: target.left + target.width / 2 + offset - innerWidth / 2,
         // NEXT's ink bounds differ slightly from its SVG viewport; align ink to ink.
         y: target.top + target.height / 2 - innerHeight / 2 - (source.y + source.height / 2 - 134.7 / 2) * ratio * target.width / (source.width * ratio),
         scale: target.width / (source.width * ratio),
       };
+      // Both SVGs draw the same N (units 0–123 × 2.7–132.5); BoilingMark's viewBox is -10 -10 143 155.
+      const w = flickerLayout.width, h = flickerLayout.height;
+      const k = Math.min(w / 143, h / 155);
+      const from = { x: flickerLayout.left + (w - 143 * k) / 2 + (61.5 + 10) * k, y: flickerLayout.top + (h - 155 * k) / 2 + (67.6 + 10) * k };
+      const to = { x: cleanBox.left + 61.5 * ratio, y: cleanBox.top + 67.6 * ratio };
+      const centre = { x: flickerLayout.left + w / 2, y: flickerLayout.top + h / 2 };
+      const scale = ratio / k;
+      resolve = { scale, x: to.x - centre.x - (from.x - centre.x) * scale, y: to.y - centre.y - (from.y - centre.y) * scale };
       position();
     };
     gsap.set([box, end, ...links], { autoAlpha: 0 });
     gsap.set(document.querySelector(".nav-links"), { visibility: "visible" });
     gsap.set(agency, { yPercent: 105 });
     gsap.set(links, { y: 4 });
+    // x is in SVG user units: 24 CSS px at the clean logo's rendered width.
+    letters.forEach((letter) => gsap.set(letter, { x: 24 * 506.5 / layout(white).width, autoAlpha: 0, clipPath: "inset(0% 100% 0% 0%)" }));
     measure();
     window.addEventListener("resize", measure);
     // Fonts can finish loading during the boil and change the centred box width.
@@ -94,24 +112,36 @@ export function Loader() {
         .set(styles[index], { opacity: 1 }, frame * .11)
         .set(flicker, { rotationX: 9 + Math.sin(frame * 2.4) * 8, rotationY: -17 + Math.cos(frame * 1.7) * 10, rotation: Math.sin(frame * 2.1) * 5, scale: .98 + Math.sin(frame * 3.1) * .035, transformPerspective: 600 }, frame * .11);
     }
-    timeline.to(flicker, { autoAlpha: 0, duration: .28 }, 2.48)
-      .to(clean, { autoAlpha: 1, duration: .4, ease: "none" }, 2.48)
-      .to(white, { opacity: .72, duration: .14 }, 3.28)
+    // Resolve: the boiling N settles flat and solid onto the N of the centred NEXT,
+    // then E, X, T write in from its right. Everything after is the v3 sequence + `shift`.
+    const settled = 2.92;
+    const shift = .48;
+    timeline.set(styles, { opacity: 0 }, 2.48)
+      .set(styles[markStyles.indexOf("white")], { opacity: 1 }, 2.48)
+      .to(flicker, { x: () => resolve.x, y: () => resolve.y, scale: () => resolve.scale, rotationX: 0, rotationY: 0, rotation: 0, duration: settled - 2.48 - .08, ease: "power3.inOut" }, 2.48)
+      // Swapped after a short still beat; identical geometry, so the swap is invisible.
+      .set(flicker, { autoAlpha: 0 }, settled)
+      .set(clean, { autoAlpha: 1 }, settled)
+      .call(() => performance.mark("loader:resolved"), [], settled);
+    letters.forEach((letter, i) => timeline.to(letter, {
+      x: 0, autoAlpha: 1, clipPath: "inset(0% 0% 0% 0%)", duration: .32, ease: "power3.out",
+    }, settled + .04 + i * .09));
+    timeline.to(white, { opacity: .72, duration: .14 }, 3.28 + shift)
       // Two identical screen-space clips give a hard edge and exact colour flip.
-      .to([wipe, ink], { clipPath: "inset(0 0 0% 0)", duration: .25, ease: "power2.inOut" }, 3.42)
-      .set([wipe, root.querySelector(".loader-backdrop"), white], { autoAlpha: 0 }, 3.97)
-      .to(box, { autoAlpha: 1, duration: .25 }, 3.97)
-      .to(travel, { progress: 1, duration: .6, ease: "power3.inOut", onUpdate: position }, 3.97)
-      .to(links, { autoAlpha: 1, y: 0, duration: .24, stagger: .06 }, 4.5)
+      .to([wipe, ink], { clipPath: "inset(0 0 0% 0)", duration: .25, ease: "power2.inOut" }, 3.42 + shift)
+      .set([wipe, root.querySelector(".loader-backdrop"), white], { autoAlpha: 0 }, 3.97 + shift)
+      .to(box, { autoAlpha: 1, duration: .25 }, 3.97 + shift)
+      .to(travel, { progress: 1, duration: .6, ease: "power3.inOut", onUpdate: position }, 3.97 + shift)
+      .to(links, { autoAlpha: 1, y: 0, duration: .24, stagger: .06 }, 4.5 + shift)
       // Same NEXT paths, same ink bounds; switch only after the travel has ended.
-      .set(logo, { autoAlpha: 1 }, 4.57)
-      .set(ink, { autoAlpha: 0 }, 4.57)
-      .call(() => performance.mark("loader:handoff"), [], 4.57)
-      .call(release, [], 4.9)
-      .to(slide, { progress: 1, duration: .6, ease: "power3.out", onUpdate: position }, 4.9)
-      .set(document.querySelectorAll(".nav-locale,.nav-cta"), { autoAlpha: 1 }, 4.9)
-      .to(end, { autoAlpha: 1, duration: .4 }, 4.9)
-      .to(agency, { yPercent: 0, duration: .4, ease: "power3.out" }, 5.5);
+      .set(logo, { autoAlpha: 1 }, 4.57 + shift)
+      .set(ink, { autoAlpha: 0 }, 4.57 + shift)
+      .call(() => performance.mark("loader:handoff"), [], 4.57 + shift)
+      .call(release, [], 4.9 + shift)
+      .to(slide, { progress: 1, duration: .6, ease: "power3.out", onUpdate: position }, 4.9 + shift)
+      .set(document.querySelectorAll(".nav-locale,.nav-cta"), { autoAlpha: 1 }, 4.9 + shift)
+      .to(end, { autoAlpha: 1, duration: .4 }, 4.9 + shift)
+      .to(agency, { yPercent: 0, duration: .4, ease: "power3.out" }, 5.5 + shift);
     return () => {
       active = false;
       window.removeEventListener("resize", measure);

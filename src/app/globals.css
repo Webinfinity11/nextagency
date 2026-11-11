@@ -283,9 +283,10 @@ html[data-loader="skip"] .stat-word {
 .loader-wipe { background: #fff; }
 .loader-clean {
   position: absolute;
-  left: calc(50% - 120px);
-  top: calc(50% - 31.9131px);
-  width: 240px;
+  /* 480px wide, capped to 84vw on phones; top keeps it centred (134.7 / 506.5 aspect). */
+  left: calc(50% - min(240px, 42vw));
+  top: calc(50% - min(240px, 42vw) * 0.265943);
+  width: min(480px, 84vw);
   aspect-ratio: 506.5 / 134.7;
   visibility: hidden;
   transform-origin: center;
