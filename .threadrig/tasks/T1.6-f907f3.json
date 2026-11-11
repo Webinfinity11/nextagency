@@ -1,0 +1,20 @@
+{
+  "acceptance" : [
+    "pnpm build && pnpm lint",
+    "12fps კადრები; ka/en 1440/390; საბოლოო header-ის გეომეტრია reload/reduced-motion რეჟიმებთან იდენტურია"
+  ],
+  "createdAt" : "2026-11-11T13:53:01Z",
+  "files" : [
+    "src/components/loader/Loader.tsx",
+    "src/components/brand/Logo.tsx",
+    "src/components/site/Nav.tsx",
+    "src/app/globals.css",
+    "docs/verify/loader-v3-*"
+  ],
+  "id" : "T1.6",
+  "phase" : "P1",
+  "rank" : 60,
+  "status" : "done",
+  "title" : "Loader-ის ფინალისა და header-ის თანმიმდევრობის გასწორება",
+  "updatedAt" : "2026-11-11T14:03:48Z"
+}
