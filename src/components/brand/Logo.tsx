@@ -91,7 +91,7 @@ export function Logo({ className, variant = "wordmark" }: LogoProps) {
           </g>
           {variant !== "next" && <svg
             data-agency-mask=""
-            x={variant === "stacked" ? 75 : 558.6}
+            x={variant === "stacked" ? 0 : 558.6}
             y={variant === "stacked" ? 151 : 0}
             width={variant === "stacked" ? 356.341 : 828.7}
             height={variant === "stacked" ? 57.921 : 134.7}
