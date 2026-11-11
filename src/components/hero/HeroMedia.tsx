@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Logo } from "@/components/brand/Logo";
 import {
   gsap,
@@ -19,7 +19,8 @@ export function HeroMedia({ copy }: { copy: HeroContent }) {
       const inner = root.querySelector(".media-inner");
       const pieces = root.querySelectorAll("[data-piece]");
       gsap.set(frame, { yPercent: 100 });
-      pieces.forEach((piece) => gsap.set(piece, cutOffset(piece, 65)));
+      // 45 SVG units keeps the left N's cut piece inside the 3.3vw / 16px gutter at rest.
+      pieces.forEach((piece) => gsap.set(piece, cutOffset(piece, 45)));
       const start = contextSafe!(() => {
         gsap.to(frame, { yPercent: 0, duration: 1.2, ease: "power3.out" });
         gsap
@@ -63,11 +64,44 @@ export function HeroMedia({ copy }: { copy: HeroContent }) {
     },
     { scope },
   );
+  // Blurred background reel: plays only while the panel is on screen; reduced motion keeps the poster.
+  // A missing file hides the element so the panel stays plain black.
+  useEffect(() => {
+    const video = scope.current?.querySelector<HTMLVideoElement>(".media-video");
+    if (!video) return;
+    const fail = () => video.setAttribute("data-failed", "");
+    // error may have fired before hydration; NETWORK_NO_SOURCE also covers a 404 src.
+    if (video.error || video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) fail();
+    video.addEventListener("error", fail);
+    if (reducedMotion()) return () => video.removeEventListener("error", fail);
+    video.muted = true;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (video.hasAttribute("data-failed")) return;
+      if (entry.isIntersecting) video.play().catch(() => {});
+      else video.pause();
+    });
+    observer.observe(video);
+    return () => {
+      observer.disconnect();
+      video.removeEventListener("error", fail);
+    };
+  }, []);
   return (
     <div className="media-region" ref={scope} aria-label={copy.mediaLabel}>
       <div className="media-sticky">
         {/* Future showreel/video slot. Keep entrance, frame and parallax as independent layers. */}
         <div className="media-frame">
+          <video
+            className="media-video"
+            src="/media/showreel-bg.mp4"
+            poster="/media/showreel-bg-poster.jpg"
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-hidden="true"
+            tabIndex={-1}
+          />
           <span className="media-index">{copy.mediaIndex}</span>
           <div className="media-inner">
             <Logo className="media-wordmark" />
