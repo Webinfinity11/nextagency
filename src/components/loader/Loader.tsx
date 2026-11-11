@@ -138,7 +138,7 @@ export function Loader() {
     const linksAt = start + travelTime * .7;
     const linksEnd = linksAt + .05 * (links.length - 1) + .5;
     const slideAt = Math.max(start + travelTime, linksEnd - .18);
-    const slideTime = .95;
+    const slideTime = 1.1;
     timeline.fromTo(box, { autoAlpha: 0, scale: .98 }, { autoAlpha: 1, scale: 1, transformOrigin: "50% 50%", force3D: true, duration: .45, ease: "power2.out" }, start)
       .to(travel, { progress: 1, duration: travelTime, ease: "expo.inOut", onUpdate: position }, start)
       .to(links, { autoAlpha: 1, y: 0, duration: .5, stagger: .05, ease: "power3.out" }, linksAt)
@@ -147,9 +147,10 @@ export function Loader() {
       .set(ink, { autoAlpha: 0 }, start + travelTime)
       .call(() => performance.mark("loader:handoff"), [], start + travelTime)
       .call(release, [], slideAt)
-      .to(slide, { progress: 1, duration: slideTime, ease: "expo.out", onUpdate: position }, slideAt)
+      .to(slide, { progress: 1, duration: slideTime, ease: "power3.inOut", onUpdate: position }, slideAt)
       .set(document.querySelector(".nav-locale"), { autoAlpha: 1 }, slideAt)
-      .fromTo(end, { autoAlpha: 0, x: 12 }, { autoAlpha: 1, x: 0, force3D: true, duration: .6, ease: "power3.out" }, slideAt)
+      .fromTo(end, { autoAlpha: 0 }, { autoAlpha: 1, duration: .6, ease: "power3.out" }, slideAt)
+      .fromTo(end, { x: 12 }, { x: 0, force3D: true, duration: slideTime, ease: "power3.inOut" }, slideAt)
       .to(agency, { yPercent: 0, duration: .6, ease: "power3.out" }, slideAt + slideTime * .6);
     return () => {
       active = false;

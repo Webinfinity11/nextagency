@@ -131,10 +131,24 @@ const moving = xs.map((x, i) => (i ? xs[i - 1] - x : 0));
 const first = moving.findIndex((d) => d > 0.01);
 const last = moving.findLastIndex((d) => d > 0.01);
 const inside = raf.slice(first, last + 1);
+// Resample x onto a 30fps grid from the last still sample; share of the distance moved per frame.
+const total = xs[0];
+const t0s = raf[first - 1].t;
+const at = (t) => {
+  const j = raf.findIndex((f) => f.t >= t);
+  if (j <= 0) return raf[Math.max(j, 0)].x;
+  const a = raf[j - 1], b = raf[j];
+  return a.x + (b.x - a.x) * (t - a.t) / (b.t - a.t);
+};
+const grid30 = Array.from({ length: 6 }, (_, i) => at(t0s + i / 30));
+const firstFrameShares = grid30.slice(1).map((x, i) => +((grid30[i] - x) / total * 100).toFixed(2));
+const firstSampleShares = raf.slice(first, first + 3).map((f, i) => +((raf[first - 1 + i].x - f.x) / total * 100).toFixed(2));
 result.check = {
   monotonic: moving.every((d) => d >= -1e-6),
   slideStart: raf[first - 1]?.t, slideEnd: raf[last]?.t,
   slideFrames: inside.length,
+  firstFramesPercent30fps: firstFrameShares,
+  firstRenderedFramesPercent: firstSampleShares,
   plateausInsideSlide: moving.slice(first, last + 1).filter((d) => d <= 0.01).length,
   maxFrameGapMs: Math.max(...inside.map((f, i) => (i ? (f.t - inside[i - 1].t) * 1000 : 0))),
   fractionalSamples: inside.filter((f) => Math.abs(f.x - Math.round(f.x)) > 0.01).length,
