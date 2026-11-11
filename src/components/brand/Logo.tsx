@@ -1,10 +1,10 @@
 // Geometry generated verbatim from public/brand/logo.svg; data attributes avoid duplicate IDs.
-type LogoProps = { className?: string; variant?: "wordmark" | "mark" };
+type LogoProps = { className?: string; variant?: "wordmark" | "mark" | "stacked" };
 export function Logo({ className, variant = "wordmark" }: LogoProps) {
   return (
     <svg
       className={className}
-      viewBox={variant === "mark" ? "0 2.7 123 129.8" : "0 0 1387.3 134.7"}
+      viewBox={variant === "mark" ? "0 2.7 123 129.8" : variant === "stacked" ? "0 0 506.5 209" : "0 0 1387.3 134.7"}
       fill="currentColor"
       aria-hidden="true"
       focusable="false"
@@ -89,7 +89,7 @@ export function Logo({ className, variant = "wordmark" }: LogoProps) {
               />
             </g>
           </g>
-          <g data-wordmark="w-agency">
+          <g data-wordmark="w-agency" transform={variant === "stacked" ? "translate(75 151) scale(.43) translate(-558.6 0)" : undefined}>
             <g data-letter="l-a">
               <polygon
                 data-piece="l-a-p1"

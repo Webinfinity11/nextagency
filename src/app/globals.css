@@ -56,43 +56,36 @@ html[data-loader="running"] .nav-cta {
   transform: none;
 }
 .nav {
-  height: 100px;
-  padding: 0 3.3vw;
+  height: 76px;
+  padding: 16px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 2rem;
+  gap: 16px;
+  position: relative;
+  z-index: 20;
 }
-.nav-brand {
-  width: clamp(160px, 16vw, 245px);
-  flex-shrink: 0;
-}
-.nav-links {
-  display: flex;
-  gap: 2vw;
-  font-size: 12px;
-}
-.nav-links a {
-  padding: 0.6rem 0;
-}
-.nav-end {
+.nav-start, .nav-end {
   display: flex;
   align-items: center;
-  gap: 2vw;
+  height: 44px;
+  padding: 0 16px;
+  background: #ececec;
 }
-.nav-locale {
-  padding: 0.7rem 0;
-  font-size: 12px;
-  letter-spacing: 0.04em;
-}
-.nav-cta {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  padding: 0.7rem 0;
-  border-bottom: 1px solid;
-  font-size: 12px;
-}
+.nav-start { gap: 28px; }
+.nav-brand { width: 66px; flex-shrink: 0; }
+.nav-links { display: flex; align-items: center; gap: 28px; font-size: 12px; font-weight: 600; }
+.nav-links a { padding: 14px 0; }
+.nav-end { gap: 20px; }
+.nav-locale { padding: 14px 0; font-size: 11px; letter-spacing: .04em; }
+.nav-cta { display: flex; align-items: center; gap: 24px; padding: 14px 0; font-size: 12px; font-weight: 600; }
+.nav-menu { display: none; }
+.nav-menu summary { cursor: pointer; list-style: none; width: 24px; padding: 12px 2px; }
+.nav-menu summary::-webkit-details-marker { display: none; }
+.nav-menu summary span { display: block; height: 1px; margin: 5px 0; background: currentColor; }
+.nav-menu summary:focus-visible { outline: 2px solid; outline-offset: 3px; }
+.nav-menu[open] nav { position: absolute; top: 64px; left: 16px; right: 16px; padding: 16px; background: #ececec; display: grid; gap: 4px; }
+.nav-menu nav a { padding: 12px 0; font-size: 14px; }
 .hero-intro {
   height: calc(70vh - 100px);
   min-height: 380px;
@@ -289,71 +282,34 @@ html[data-loader="skip"] .stat-word {
 }
 .loader-clean {
   position: absolute;
-  left: 25%;
-  top: 50%;
-  width: 50%;
-  aspect-ratio: 1387.3 / 134.7;
-  margin-top: calc(-50vw * 134.7 / 1387.3 / 2);
+  left: calc(50% - 105px);
+  top: calc(50% - 43.3268px);
+  width: 210px;
+  aspect-ratio: 506.5 / 209;
   visibility: hidden;
   transform-origin: center;
 }
-.loader-white-logo {
+.loader-white-logo { color: #fff; }
+.loader-dark-logo { position: absolute; inset: 0; color: #000; opacity: 0; }
+.loader-flicker, .loader-solid {
+  position: absolute;
+  width: 150px;
+  height: 162.59px;
+  top: calc(50% - 81.295px);
+  left: calc(50% - 75px);
   color: #fff;
 }
-.loader-dark-logo {
-  position: absolute;
-  inset: 0;
-  color: #000;
-  opacity: 0;
-}
-.loader-flicker {
-  position: absolute;
-  width: 300px;
-  height: 230px;
-  top: calc(50% - 115px);
-  left: calc(50% - 150px);
-  color: #bdbdbd;
-}
-.flicker-layer {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-}
-.flicker-layer svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-.flicker-layer
-  [data-letter]:not([data-letter="l-n1"]):not([data-letter="l-x"]) {
-  display: none;
-}
-.filter-def {
-  position: absolute;
-}
+.loader-flicker svg { width: 100%; height: 100%; overflow: visible; }
+.loader-solid { visibility: hidden; width: 129px; height: 136.13px; left: calc(50% - 64.5px); top: calc(50% - 68.065px); }
 @media (max-width: 767px) {
-  .nav {
-    height: 80px;
-    padding: 0 6vw;
-    gap: 1rem;
-  }
-  .nav-brand {
-    width: 145px;
-  }
-  .nav-links {
-    display: none;
-  }
-  .nav-end {
-    gap: 1rem;
-  }
-  .nav-locale {
-    font-size: 11px;
-  }
-  .nav-cta {
-    font-size: 10px;
-    gap: 0.8rem;
-    max-width: 130px;
-  }
+  .nav { height: 76px; padding: 16px; gap: 8px; }
+  .nav-start { gap: 16px; padding: 0 12px; }
+  .nav-brand { width: 60px; }
+  .nav-links { display: none; }
+  .nav-menu { display: block; }
+  .nav-end { gap: 12px; padding: 0 12px; }
+  .nav-locale { font-size: 10px; }
+  .nav-cta { font-size: 10px; gap: 8px; }
   .hero-intro {
     height: auto;
     min-height: calc(70svh - 80px);
@@ -390,11 +346,6 @@ html[data-loader="skip"] .stat-word {
   .stat-note {
     text-align: left;
     font-size: 9px;
-  }
-  .loader-clean {
-    width: 80%;
-    left: 10%;
-    margin-top: calc(-80vw * 134.7 / 1387.3 / 2);
   }
   .media-wordmark {
     width: 180%;

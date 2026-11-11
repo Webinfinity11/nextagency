@@ -1,0 +1,345 @@
+{
+  "duration": 4854.20000000298,
+  "samples": [
+    {
+      "time": 11.200000002980232,
+      "state": "running",
+      "style": "charcoal"
+    },
+    {
+      "time": 136,
+      "state": "running",
+      "style": "charcoal"
+    },
+    {
+      "time": 261.5,
+      "state": "running",
+      "style": "wireframe"
+    },
+    {
+      "time": 386.80000000074506,
+      "state": "running",
+      "style": "circles"
+    },
+    {
+      "time": 512.3000000007451,
+      "state": "running",
+      "style": "white"
+    },
+    {
+      "time": 635.2000000029802,
+      "state": "running",
+      "style": "sketch"
+    },
+    {
+      "time": 762,
+      "state": "running",
+      "style": "grey"
+    },
+    {
+      "time": 892.9000000022352,
+      "state": "running",
+      "style": "horizontal"
+    },
+    {
+      "time": 1012.3000000007451,
+      "state": "running",
+      "style": "horizontal"
+    },
+    {
+      "time": 1137.7000000029802,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 1262.4000000022352,
+      "state": "running",
+      "style": "dither"
+    },
+    {
+      "time": 1386.4000000022352,
+      "state": "running",
+      "style": "charcoal"
+    },
+    {
+      "time": 1512.1000000014901,
+      "state": "running",
+      "style": "hatch"
+    },
+    {
+      "time": 1637.1000000014901,
+      "state": "running",
+      "style": "wireframe"
+    },
+    {
+      "time": 1761,
+      "state": "running",
+      "style": "circles"
+    },
+    {
+      "time": 1886.2000000029802,
+      "state": "running",
+      "style": "sketch"
+    },
+    {
+      "time": 2011.6000000014901,
+      "state": "running",
+      "style": "grey"
+    },
+    {
+      "time": 2136.2000000029802,
+      "state": "running",
+      "style": "noise"
+    },
+    {
+      "time": 2260.800000000745,
+      "state": "running",
+      "style": "horizontal"
+    },
+    {
+      "time": 2386.7000000029802,
+      "state": "running",
+      "style": "halftone"
+    },
+    {
+      "time": 2512.7000000029802,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 2677.300000000745,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 2760.800000000745,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 2886.5,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 3011.300000000745,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 3136.7000000029802,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 3260.900000002235,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 3387.60000000149,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 3512.60000000149,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 3636.2000000029802,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 3761.5,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 3886.900000002235,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 4011.60000000149,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 4136.70000000298,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 4262.300000000745,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 4390,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 4511.400000002235,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 4636.60000000149,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 4761.5,
+      "state": "running",
+      "style": "double"
+    },
+    {
+      "time": 4886.300000000745,
+      "state": "done"
+    },
+    {
+      "time": 5011.400000002235,
+      "state": "done"
+    },
+    {
+      "time": 5136.70000000298,
+      "state": "done"
+    },
+    {
+      "time": 5261.60000000149,
+      "state": "done"
+    },
+    {
+      "time": 5386.10000000149,
+      "state": "done"
+    },
+    {
+      "time": 5563,
+      "state": "done"
+    },
+    {
+      "time": 5678.10000000149,
+      "state": "done"
+    },
+    {
+      "time": 5768.70000000298,
+      "state": "done"
+    },
+    {
+      "time": 5886.20000000298,
+      "state": "done"
+    }
+  ],
+  "headers": [
+    {
+      "locale": "ka",
+      "width": 1440,
+      "overflow": false,
+      "boxes": [
+        {
+          "class": "nav-start",
+          "x": 16,
+          "width": 455.90625,
+          "height": 44
+        },
+        {
+          "class": {},
+          "x": 32,
+          "width": 66,
+          "height": 27.21875
+        },
+        {
+          "class": "nav-end",
+          "x": 1198.828125,
+          "width": 225.171875,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "locale": "en",
+      "width": 1440,
+      "overflow": false,
+      "boxes": [
+        {
+          "class": "nav-start",
+          "x": 16,
+          "width": 374.5625,
+          "height": 44
+        },
+        {
+          "class": {},
+          "x": 32,
+          "width": 66,
+          "height": 27.21875
+        },
+        {
+          "class": "nav-end",
+          "x": 1205.34375,
+          "width": 218.65625,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "locale": "ka",
+      "width": 390,
+      "overflow": false,
+      "boxes": [
+        {
+          "class": "nav-start",
+          "x": 16,
+          "width": 124,
+          "height": 44
+        },
+        {
+          "class": {},
+          "x": 28,
+          "width": 60,
+          "height": 24.75
+        },
+        {
+          "class": "nav-end",
+          "x": 204.578125,
+          "width": 169.421875,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "locale": "en",
+      "width": 390,
+      "overflow": false,
+      "boxes": [
+        {
+          "class": "nav-start",
+          "x": 16,
+          "width": 124,
+          "height": 44
+        },
+        {
+          "class": {},
+          "x": 28,
+          "width": 60,
+          "height": 24.75
+        },
+        {
+          "class": "nav-end",
+          "x": 210.03125,
+          "width": 163.96875,
+          "height": 44
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "checks": [
+    "session reload skip",
+    "mobile menu opens and navigates to Work in ka/en",
+    "reduced-motion skips immediately",
+    "no horizontal overflow"
+  ]
+}

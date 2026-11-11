@@ -10,7 +10,7 @@ export const hero: HeroContent = {
   home: "NEXT AGENCY home",
   skip: "Skip to content",
   langLabel: "Switch to Georgian",
-  langShort: "ქარ",
+  langShort: "KA",
   phrases: [
     [
       ["ONE STEP", "BEYOND."],

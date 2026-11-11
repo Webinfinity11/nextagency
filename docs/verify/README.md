@@ -88,3 +88,14 @@ Production `PORT=3031 HOSTNAME=127.0.0.1 pnpm start`; `VERIFY_URL=http://127.0.0
 - Results: Georgian hero, closing and Work/category/index/detail heading masks clip **0 px** at 1440/1024/390; no hero word outside its column, no line overlap, no wrapped closing line, horizontal overflow 0. English unchanged (hero clip 35/22/11 px as before; `i18n-en-hero-1440`, `work-12-detail-en-1440` byte-identical; `i18n-en-support-1440` differs only by a sub-pixel scrub position).
 - Noto's Mtavruli has flat-cut round terminals on the baseline — that is the glyph design (same with masks removed), not clipping.
 - Frames: `mtavruli-ka-hero-1440.jpg`, `mtavruli-ka-hero-390.jpg`, `mtavruli-ka-closing-1440.jpg`, `mtavruli-ka-work-1440.jpg`, `mtavruli-ka-work-index-1440.jpg`.
+
+## Loader v2 / compact header — 2026-11-11
+
+`loader-v2-capture.mjs` captures 48 JPEG frames at a target cadence of 125ms over six seconds in headless Chrome, at 1440 × 780. Run with `VERIFY_DEPS=/tmp/nextagency-verify VERIFY_URL=http://127.0.0.1:3026 node docs/verify/loader-v2-capture.mjs`. Dependencies are external to the app. Actual sample timestamps are in `loader-v2-measurements.json`; browser screenshot latency can shift an individual frame from the target time.
+
+- `loader-v2-contact-sheet.jpg`: all 48 frames, left-to-right then top-to-bottom.
+- `loader-v2-mark-sheet.jpg`: central crops of the first 24 frames, showing the original stencil N with 12 SVG treatments and discrete whole-mark tilt changes. Compared visually with the supplied `/tmp/rec1/sheet2.jpg`; no reference bitmap assets are shipped.
+- `loader-v2-header-{ka,en}-{1440,390}.jpg`: separate 44px grey header boxes, 16px viewport inset, stacked NEXT with smaller AGENCY. Compared with `/tmp/rec1/header3.jpg`. The brand geometry and four localized labels remain ours.
+- `loader-v2-menu-{ka,en}-390.jpg`: expanded mobile navigation.
+
+Latest production capture measured 4854ms for the loader (authored 4830ms). Checks passed: session reload skips the sequence; reduced motion skips immediately; mobile menu opens, closes with Escape, and closes on Work navigation in both locales; all four headers fit without horizontal overflow; no browser page errors. `pnpm build` and `pnpm lint` passed after the final UI change. The ThreadRig browser was also opened and its language switch exercised; its frozen GSAP clock is why motion evidence comes from headless Chrome.
