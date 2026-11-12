@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, type CSSProperties, type ReactNode } from "react";
+import { useRef, type CSSProperties } from "react";
 import { gsap, useGSAP, afterLoader, ScrollTrigger } from "@/lib/gsap";
 
 export type RailItem = {
@@ -9,16 +9,16 @@ export type RailItem = {
   aspect: number; kind: "gradient" | "image" | "video"; src?: string; poster?: string;
 };
 
-const STEP = 0.65; // each slot to the right of the focus is 65% of the previous one
+const STEP = 0.65; // each slot away from the focus (either side) is 65% of the previous one
 const GAP = 24;
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
 
 /**
- * Pinned project rail: vertical scroll drives the row right→left; a card's scale follows its
- * distance from the focus slot. Without JS or with reduced motion it stays a plain overflow-x list.
+ * Pinned project rail: vertical scroll drives the row right→left while the focus slot itself travels
+ * from the left edge to the right edge; a card's scale follows its distance from the focus on both sides. Without JS or with reduced motion it stays a plain overflow-x list.
  */
-export function WorkRail({ items, heading, prefix, all }: {
-  items: RailItem[]; heading: ReactNode; prefix: string; all: { href: string; label: string };
+export function WorkRail({ items, prefix, all }: {
+  items: RailItem[]; prefix: string; all: { href: string; label: string };
 }) {
   const scope = useRef<HTMLDivElement>(null);
   useGSAP(() => {
@@ -38,13 +38,14 @@ export function WorkRail({ items, heading, prefix, all }: {
 
       let size: { w: number; h: number }[] = [];
       let labelW: number[] = [];
-      let focusX = 0;
+      let vw = 0, margin = 0;
       const measure = () => {
-        const vw = root.clientWidth, vh = window.innerHeight;
-        focusX = vw * (mobile ? 0.06 : 0.083);
-        const side = Math.min(vh * 0.46, vw * 0.29);
+        vw = root.clientWidth;
+        const vh = window.innerHeight;
+        margin = vw * 0.04;
+        const h = Math.min(vh * 0.5, 480);
         size = items.map(({ aspect }) => {
-          const w = mobile ? Math.min(vw * 0.7, vh * 0.42 * aspect) : Math.min(side * Math.sqrt(aspect), vw * 0.42);
+          const w = mobile ? Math.min(vw * 0.62, vh * 0.5 * aspect) : Math.min(h * aspect, vw * 0.42);
           return { w, h: w / aspect };
         });
         frames.forEach((f, i) => { f.style.width = `${size[i].w}px`; f.style.height = `${size[i].h}px`; f.style.top = `${-size[i].h / 2}px`; });
@@ -67,20 +68,25 @@ export function WorkRail({ items, heading, prefix, all }: {
       };
 
       const render = (p: number) => {
-        const k = Math.min(Math.floor(p), n - 1);
+        const k = Math.min(Math.floor(p), n - 2);
+        const t = p - k;
         const x: number[] = new Array(n);
         const width: number[] = new Array(n);
-        x[k] = focusX - (p - k) * (size[k].w + GAP);
         for (let i = 0; i < n; i++) {
-          const d = i - p;
-          const s = d <= 0 ? 1 : STEP ** d;
-          const far = clamp01((d - 4.2) / .8); // beyond ~5 slots only the name remains
+          const d = Math.abs(i - p);
+          const s = STEP ** d;
+          const far = clamp01((d - 4.2) / .8); // beyond ~5 slots on either side only the name remains
           width[i] = size[i].w * s * (1 - far) + labelW[i] * far;
           frames[i].style.transform = `scale(${s})`;
-          frames[i].style.opacity = captions[i].style.opacity = String(1 - far);
+          frames[i].style.opacity = String(1 - far);
+          captions[i].style.opacity = String(clamp01(1 - d)); // like the reference, only the active card is captioned
           labels[i].style.opacity = String(far);
           captions[i].style.transform = `translateY(${size[i].h * s / 2 + 12}px)`;
         }
+        // The focus slot travels left margin → right margin, keeping the active card fully in view.
+        const activeW = size[k].w + (size[k + 1].w - size[k].w) * t;
+        const focusX = margin + (vw - 2 * margin - activeW) * (p / (n - 1));
+        x[k] = focusX - t * (width[k] + GAP);
         for (let i = k + 1; i < n; i++) x[i] = x[i - 1] + width[i - 1] + GAP;
         for (let i = k - 1; i >= 0; i--) x[i] = x[i + 1] - GAP - width[i];
         cards.forEach((c, i) => { c.style.transform = `translate3d(${x[i]}px,0,0)`; });
@@ -125,8 +131,7 @@ export function WorkRail({ items, heading, prefix, all }: {
   }, { scope });
 
   return <div ref={scope} className="work-rail">
-    <h2 id="work-title" className="work-heading work-rail-heading" data-work-reveal>{heading}</h2>
-    <p className="work-rail-sentence"><span>{prefix}</span> <span className="work-rail-mask"><span className="work-rail-word">{items[0]?.feeling}</span></span></p>
+    <h2 id="work-title" className="work-rail-sentence"><span>{prefix}</span> <span className="work-rail-mask"><span className="work-rail-word">{items[0]?.feeling}</span></span></h2>
     <div className="work-rail-track">
       {items.map((item, i) => <Link className="work-rail-item" href={item.href} key={item.slug} draggable={false} aria-label={item.title}>
         <span className="work-rail-frame" style={{ "--aspect": item.aspect } as CSSProperties} data-tone={i % 3}>
