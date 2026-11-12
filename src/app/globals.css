@@ -364,8 +364,11 @@ html .work-page-heading h1 { height: auto; }
 .work-rail-caption span { color: #a0a0a0; margin-left: .6em; }
 html[lang="ka"] .work-rail-caption { text-transform: none; }
 .work-rail-label { display: none; font-size: 15px; white-space: nowrap; }
-.work-rail .work-rail-end { align-self: center; padding: 0; margin: 0; white-space: nowrap; }
-.work-rail-progress { display: none; }
+.work-rail-footer { display: flex; justify-content: center; }
+.work-rail-all { display: inline-flex; align-items: center; gap: 14px; height: 55px; padding: 0 24px; background: #ececec; font-size: 15px; font-weight: 600; white-space: nowrap; transition: background-color .3s ease, color .3s ease; }
+.work-rail-all i { font-style: normal; transition: transform .4s cubic-bezier(.33,1,.68,1); }
+.work-rail-all:hover, .work-rail-all:focus-visible { background: #000; color: #fff; }
+.work-rail-all:hover i, .work-rail-all:focus-visible i { transform: translate(3px, -3px); }
 .work-rail-item:focus-visible { outline: none; }
 .work-rail-item:focus-visible .work-rail-frame { outline: 2px solid currentColor; outline-offset: 4px; }
 /* Enhanced (JS + motion): a pinned stage; WorkRail.tsx positions every item with transforms. */
@@ -375,9 +378,6 @@ html[lang="ka"] .work-rail-caption { text-transform: none; }
 .work-rail[data-rail] .work-rail-frame { position: absolute; left: 0; aspect-ratio: auto; transform-origin: 0 50%; will-change: transform; }
 .work-rail[data-rail] .work-rail-caption { position: absolute; left: 0; top: 0; }
 .work-rail[data-rail] .work-rail-label { display: block; position: absolute; left: 0; top: 0; transform: translateY(-50%); opacity: 0; }
-.work-rail[data-rail] .work-rail-end { position: absolute; top: 50%; left: 0; }
-.work-rail[data-rail] .work-rail-progress { display: flex; justify-content: center; align-items: center; gap: 6px; height: 36px; }
-.work-rail-bar { width: 1px; height: 100%; background: currentColor; transform-origin: 50% 50%; }
 .work-card { display: block; min-width: 0; }
 .work-frame { position: relative; overflow: hidden; background: #aaa; border-radius: 4px; isolation: isolate; }
 .work-parallax { position: absolute; inset: -34px -50px; }
@@ -448,7 +448,7 @@ html[lang="ka"] .work-rail-caption { text-transform: none; }
   .work-rail-track { padding: 16px 6vw 12px; }
   .work-rail-frame { height: 220px; }
   .work-rail-caption { font-size: 10px; }
-  .work-rail[data-rail] .work-rail-progress { gap: 5px; height: 28px; }
+  .work-rail-all { height: 50px; padding: 0 20px; font-size: 14px; }
   .work-meta { gap: 4px 12px; flex-wrap: wrap; font-size: 14px; }
   .work-meta p { order: 3; width: 100%; }
   .work-all { margin-top: 28px; padding-top: 0; }

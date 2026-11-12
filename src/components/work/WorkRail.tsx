@@ -11,7 +11,6 @@ export type RailItem = {
 
 const STEP = 0.65; // each slot to the right of the focus is 65% of the previous one
 const GAP = 24;
-const BARS = 28;
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
 
 /**
@@ -19,7 +18,7 @@ const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
  * distance from the focus slot. Without JS or with reduced motion it stays a plain overflow-x list.
  */
 export function WorkRail({ items, heading, prefix, all }: {
-  items: RailItem[]; heading: ReactNode; prefix: string; all: { href: string; label: string; count: string };
+  items: RailItem[]; heading: ReactNode; prefix: string; all: { href: string; label: string };
 }) {
   const scope = useRef<HTMLDivElement>(null);
   useGSAP(() => {
@@ -33,10 +32,8 @@ export function WorkRail({ items, heading, prefix, all }: {
       const frames = cards.map(c => c.querySelector<HTMLElement>(".work-rail-frame")!);
       const captions = cards.map(c => c.querySelector<HTMLElement>(".work-rail-caption")!);
       const labels = cards.map(c => c.querySelector<HTMLElement>(".work-rail-label")!);
-      const end = root.querySelector<HTMLElement>(".work-rail-end")!;
       const word = root.querySelector<HTMLElement>(".work-rail-word")!;
-      const bars = Array.from(root.querySelectorAll<HTMLElement>(".work-rail-bar"));
-      const touched = [...cards, ...frames, ...captions, ...labels, end, ...bars];
+      const touched = [...cards, ...frames, ...captions, ...labels];
       root.dataset.rail = "on";
 
       let size: { w: number; h: number }[] = [];
@@ -87,12 +84,6 @@ export function WorkRail({ items, heading, prefix, all }: {
         for (let i = k + 1; i < n; i++) x[i] = x[i - 1] + width[i - 1] + GAP;
         for (let i = k - 1; i >= 0; i--) x[i] = x[i + 1] - GAP - width[i];
         cards.forEach((c, i) => { c.style.transform = `translate3d(${x[i]}px,0,0)`; });
-        end.style.transform = `translate3d(${x[n - 1] + width[n - 1] + GAP * 2}px,-50%,0)`;
-        const c = (p / (n - 1)) * (BARS - 1);
-        bars.forEach((b, i) => {
-          b.style.transform = `scaleY(${i <= c ? 1 : Math.max(.12, 1 - (i - c) / 4)})`;
-          b.style.opacity = i <= c + .5 ? "1" : ".4";
-        });
         setActive(Math.round(p));
       };
 
@@ -112,7 +103,7 @@ export function WorkRail({ items, heading, prefix, all }: {
       const focus = (event: FocusEvent) => {
         const st = tween.scrollTrigger!;
         const target = event.target as HTMLElement;
-        const i = target.closest(".work-rail-end") ? n - 1 : cards.findIndex(c => c.contains(target));
+        const i = cards.findIndex(c => c.contains(target));
         if (i < 0) return;
         const y = st.start + (i / (n - 1)) * (st.end - st.start);
         if (Math.abs(window.scrollY - y) > 2) window.scrollTo(0, y);
@@ -146,8 +137,7 @@ export function WorkRail({ items, heading, prefix, all }: {
         <span className="work-rail-caption" aria-hidden="true"><b>{item.caption}</b> <span>{item.captionFeeling}</span></span>
         <span className="work-rail-label" aria-hidden="true">{item.title}</span>
       </Link>)}
-      <Link className="work-all work-rail-end" href={all.href}><span>{all.label}</span><sup>{all.count}</sup><i aria-hidden="true">↗</i></Link>
     </div>
-    <div className="work-rail-progress" aria-hidden="true">{Array.from({ length: BARS }, (_, i) => <span className="work-rail-bar" key={i} />)}</div>
+    <div className="work-rail-footer"><Link className="work-rail-all" href={all.href}>{all.label}<i aria-hidden="true">↗</i></Link></div>
   </div>;
 }
