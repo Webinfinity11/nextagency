@@ -16,7 +16,7 @@ export async function WorkSection({ locale }: { locale: Locale }) {
     aspect: p.cover.kind === "gradient" || !p.cover.src ? PLACEHOLDER_ASPECTS[i % PLACEHOLDER_ASPECTS.length] : p.cover.aspect, kind: p.cover.kind, src: p.cover.src, poster: p.cover.poster,
   }));
   return <section id="work" aria-labelledby="work-title"><WorkMotion>
-    <WorkRail items={items} prefix={`${copy.selected} —`}
+    <WorkRail items={items} prefix={copy.selected}
       all={{ href: `/${locale}/work`, label: copy.all }} />
     {categories.map(category => <section className={`work-category work-theme-${category.theme}`} key={category.id} aria-labelledby={`category-${category.id}`}>
       <header className="work-category-heading"><h2 className="work-heading" id={`category-${category.id}`} data-work-reveal>{display(category.title[locale], locale)}</h2><p data-work-reveal>{category.description[locale]}</p></header>
