@@ -372,6 +372,7 @@ html[lang="ka"] .work-rail-caption { text-transform: none; }
 .work-rail-item:focus-visible .work-rail-frame { outline: 2px solid currentColor; outline-offset: 4px; }
 /* Enhanced (JS + motion): a pinned stage; WorkRail.tsx positions every item with transforms. */
 .work-rail[data-rail] { height: 100svh; padding: clamp(28px, 6vh, 64px) 0 clamp(24px, 4vh, 40px); grid-template-rows: auto 1fr auto; gap: clamp(14px, 2.4vh, 26px); }
+@supports not (height: 100svh) { .work-rail[data-rail] { height: 100vh; } }
 .work-rail[data-rail] .work-rail-track { position: relative; display: block; overflow: visible; padding: 0; }
 .work-rail[data-rail] .work-rail-item { position: absolute; top: 50%; left: 0; display: block; will-change: transform; }
 .work-rail[data-rail] .work-rail-frame { position: absolute; left: 0; aspect-ratio: auto; transform-origin: 0 50%; will-change: transform; }

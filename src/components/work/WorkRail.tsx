@@ -33,6 +33,7 @@ export function WorkRail({ items, prefix, all }: {
       const captions = cards.map(c => c.querySelector<HTMLElement>(".work-rail-caption")!);
       const labels = cards.map(c => c.querySelector<HTMLElement>(".work-rail-label")!);
       const word = root.querySelector<HTMLElement>(".work-rail-word")!;
+      const track = root.querySelector<HTMLElement>(".work-rail-track")!;
       const touched = [...cards, ...frames, ...captions, ...labels];
       root.dataset.rail = "on";
 
@@ -50,6 +51,9 @@ export function WorkRail({ items, prefix, all }: {
         });
         frames.forEach((f, i) => { f.style.width = `${size[i].w}px`; f.style.height = `${size[i].h}px`; f.style.top = `${-size[i].h / 2}px`; });
         labelW = labels.map(l => l.offsetWidth);
+        // Items are absolutely positioned, so the track would otherwise collapse to 0 whenever the stage's height
+        // doesn't resolve, and the cards would spill over the sentence and the button. Reserve the tallest card + captions.
+        track.style.minHeight = `${Math.max(...size.map(s => s.h)) + 64}px`;
       };
 
       let active = -1;
@@ -59,11 +63,11 @@ export function WorkRail({ items, prefix, all }: {
         const first = active < 0;
         active = i;
         cards.forEach((c, j) => c.toggleAttribute("data-active", j === i));
-        if (first) { word.textContent = items[i].feeling; return; }
+        if (first) { word.textContent = items[i].title; return; }
         swap?.kill();
         swap = gsap.timeline()
           .to(word, { yPercent: -110, duration: .16, ease: "power2.in" })
-          .call(() => { word.textContent = items[i].feeling; })
+          .call(() => { word.textContent = items[i].title; })
           .fromTo(word, { yPercent: 110 }, { yPercent: 0, duration: .32, ease: "power3.out" });
       };
 
@@ -95,11 +99,11 @@ export function WorkRail({ items, prefix, all }: {
 
       measure();
       const state = { p: 0 };
-      const travel = () => (n - 1) * window.innerHeight * (mobile ? .45 : .7);
+      const travel = () => (n - 1) * window.innerHeight * (mobile ? .3 : .45);
       const tween = gsap.to(state, {
         p: n - 1, ease: "none", onUpdate: () => render(state.p),
         scrollTrigger: {
-          trigger: root, start: "top top", end: () => `+=${travel()}`, pin: true, scrub: .5, invalidateOnRefresh: true,
+          trigger: root, start: "top top", end: () => `+=${travel()}`, pin: true, scrub: .8, invalidateOnRefresh: true,
           onRefresh: () => { measure(); render(state.p); },
         },
       });
@@ -121,9 +125,10 @@ export function WorkRail({ items, prefix, all }: {
         root.removeEventListener("focusin", focus);
         swap?.kill();
         delete root.dataset.rail;
+        track.style.removeProperty("min-height");
         cards.forEach(c => c.removeAttribute("data-active"));
         touched.forEach(el => { ["transform", "opacity", "width", "height", "top"].forEach(prop => el.style.removeProperty(prop)); });
-        word.textContent = items[0].feeling;
+        word.textContent = items[0].title;
         gsap.set(word, { clearProps: "transform" });
       };
     });
@@ -131,7 +136,7 @@ export function WorkRail({ items, prefix, all }: {
   }, { scope });
 
   return <div ref={scope} className="work-rail">
-    <h2 id="work-title" className="work-rail-sentence"><span>{prefix}</span> <span className="work-rail-mask"><span className="work-rail-word">{items[0]?.feeling}</span></span></h2>
+    <h2 id="work-title" className="work-rail-sentence"><span>{prefix}</span> <span className="work-rail-mask"><span className="work-rail-word">{items[0]?.title}</span></span></h2>
     <div className="work-rail-track">
       {items.map((item, i) => <Link className="work-rail-item" href={item.href} key={item.slug} draggable={false} aria-label={item.title}>
         <span className="work-rail-frame" style={{ "--aspect": item.aspect } as CSSProperties} data-tone={i % 3}>
