@@ -57,18 +57,18 @@ export function WorkRail({ items, prefix, all }: {
       };
 
       let active = -1;
-      let swap: gsap.core.Timeline | undefined;
+      let swap: gsap.core.Tween | undefined;
       const setActive = (i: number) => {
         if (i === active) return;
         const first = active < 0;
         active = i;
         cards.forEach((c, j) => c.toggleAttribute("data-active", j === i));
-        if (first) { word.textContent = items[i].title; return; }
+        // The name is swapped synchronously; the rise is decoration only (no immediateRender), so a stalled ticker
+        // can never leave the word hidden or showing a stale name.
+        word.textContent = items[i].title;
+        if (first) return;
         swap?.kill();
-        swap = gsap.timeline()
-          .to(word, { yPercent: -110, duration: .16, ease: "power2.in" })
-          .call(() => { word.textContent = items[i].title; })
-          .fromTo(word, { yPercent: 110 }, { yPercent: 0, duration: .32, ease: "power3.out" });
+        swap = gsap.fromTo(word, { yPercent: 110 }, { yPercent: 0, duration: .36, ease: "power3.out", immediateRender: false });
       };
 
       const render = (p: number) => {
