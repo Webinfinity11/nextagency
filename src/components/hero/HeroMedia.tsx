@@ -25,7 +25,8 @@ const FRAGMENT_DIRECTIONS: Record<string, [number, number]> = {
 const FRAGMENT_DISTANCE = 30;
 // Wordmark rests at this fraction of its full gutter width and grows to 1 on scroll.
 const WORDMARK_REST_SCALE = 0.55;
-const WAVE_COLORS = ["#ffffff", "#d4d4d4", "#a3a3a3", "#737373", "#404040"];
+// Aceternity's reference palette: sky, indigo, purple, fuchsia, cyan.
+const WAVE_COLORS = ["#38bdf8", "#818cf8", "#c084fc", "#e879f9", "#22d3ee"];
 function fragmentOffset(id: string, distance: number) {
   const [x, y] = FRAGMENT_DIRECTIONS[id];
   return { x: x * distance, y: y * distance };
@@ -110,7 +111,7 @@ export function HeroMedia({ copy }: { copy: HeroContent }) {
             className="media-waves"
             colors={WAVE_COLORS}
             backgroundFill="#000"
-            waveOpacity={0.35}
+            waveOpacity={0.5}
             blur={10}
             speed="slow"
             waveWidth={50}
