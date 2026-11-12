@@ -9,8 +9,9 @@ import {
   reducedMotion,
 } from "@/lib/gsap";
 import type { HeroContent } from "@/content";
-// Clean stencil split: letter bodies stay put; only the cut fragments sit out along their cut
-// direction (unit vectors, SVG units). X's top fragment leans mostly up so it clears the T.
+// Scattered start: the whole wordmark is broken apart. Stencil fragments fly out along their own
+// cut direction; letter bodies scatter outward from the wordmark centre. Everything is tilted and
+// dimmed, then assembles on scroll. Directions are unit vectors in SVG units.
 const FRAGMENT_DIRECTIONS: Record<string, [number, number]> = {
   "l-n1-p2": [0.64, -0.77],
   "l-n2-p2": [0.64, -0.77],
@@ -21,19 +22,29 @@ const FRAGMENT_DIRECTIONS: Record<string, [number, number]> = {
   "l-x-p2": [0.25, -0.97],
   "l-x-p3": [0.64, 0.77],
 };
-// Scattered start: fragments fly well out along their cut direction, tilted, then assemble on scroll.
 const FRAGMENT_DISTANCE = 140;
-// Per-fragment tilt at rest (degrees), alternating so the scatter reads as debris, not a pattern.
-const FRAGMENT_ROTATION: Record<string, number> = {
-  "l-n1-p2": 28,
-  "l-n2-p2": -22,
-  "l-n1-p3": -34,
-  "l-n2-p3": 26,
-  "l-e1-p2": -14,
-  "l-e2-p2": 18,
-  "l-x-p2": 36,
-  "l-x-p3": -30,
+// Letter bodies: horizontal push away from the centre (fraction of their offset) and a vertical
+// throw that alternates up/down so neighbours separate.
+const BODY_SPREAD_X = 0.35;
+const BODY_THROW_Y: [number, number] = [70, 190];
+const MAX_TILT = 38;
+// Deterministic pseudo-random in [0, 1) so the scatter is identical on every load.
+const jitter = (i: number, salt: number) => {
+  const v = Math.sin(i * 12.9898 + salt * 78.233) * 43758.5453;
+  return v - Math.floor(v);
 };
+function scatter(piece: SVGGraphicsElement, i: number, centre: { x: number; y: number }) {
+  const id = piece.getAttribute("data-piece")!;
+  const rotation = (jitter(i, 1) * 2 - 1) * MAX_TILT;
+  if (id in FRAGMENT_DIRECTIONS) {
+    const [x, y] = FRAGMENT_DIRECTIONS[id];
+    return { x: x * FRAGMENT_DISTANCE, y: y * FRAGMENT_DISTANCE, rotation };
+  }
+  const b = piece.getBBox();
+  const dx = b.x + b.width / 2 - centre.x;
+  const throwY = BODY_THROW_Y[0] + jitter(i, 2) * (BODY_THROW_Y[1] - BODY_THROW_Y[0]);
+  return { x: dx * BODY_SPREAD_X, y: (i % 2 ? -1 : 1) * throwY, rotation };
+}
 // Wordmark rests at this fraction of its full gutter width and grows to 1 on scroll.
 // Rest size relative to the final (CSS) size: same on-screen start as before (0.38 of the gutter).
 const WORDMARK_REST_SCALE = 0.38 / 0.75;
@@ -41,10 +52,6 @@ const WORDMARK_REST_SCALE = 0.38 / 0.75;
 // Negative = above the frame (clipped by overflow), so it is hidden until it drops in.
 const WORDMARK_REST_TOP = -0.12;
 const WAVE_COLORS = ["#ffffff", "#d4d4d4", "#a3a3a3", "#737373", "#404040"];
-function fragmentOffset(id: string, distance: number) {
-  const [x, y] = FRAGMENT_DIRECTIONS[id];
-  return { x: x * distance, y: y * distance };
-}
 export function HeroMedia({ copy }: { copy: HeroContent }) {
   const scope = useRef<HTMLDivElement>(null);
   useGSAP(
@@ -54,25 +61,20 @@ export function HeroMedia({ copy }: { copy: HeroContent }) {
       const frame = root.querySelector(".media-frame");
       const inner = root.querySelector(".media-inner");
       const wordmark = root.querySelector(".media-wordmark");
-      const fragments = [...root.querySelectorAll("[data-piece]")].filter(
-        (piece) => piece.getAttribute("data-piece")! in FRAGMENT_DIRECTIONS,
-      );
+      const fragments = [...root.querySelectorAll<SVGGraphicsElement>("[data-piece]")];
+      const box = (wordmark as SVGSVGElement).viewBox.baseVal;
+      const centre = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
       gsap.set(frame, { yPercent: 100 });
       // Fragments sit just outside the viewBox at rest; let them render instead of clipping.
       gsap.set(wordmark, { overflow: "visible", scale: WORDMARK_REST_SCALE });
-      fragments.forEach((piece) =>
-        gsap.set(piece, {
-          ...fragmentOffset(piece.getAttribute("data-piece")!, FRAGMENT_DISTANCE),
-          rotation: FRAGMENT_ROTATION[piece.getAttribute("data-piece")!],
-          transformOrigin: "50% 50%",
-          opacity: 0.4,
-        }),
+      fragments.forEach((piece, i) =>
+        gsap.set(piece, { ...scatter(piece, i, centre), transformOrigin: "50% 50%", opacity: 0.4 }),
       );
       const start = contextSafe!(() => {
         gsap.to(frame, { yPercent: 0, duration: 1.2, ease: "power3.out" });
         // One journey from the moment the panel enters until the pin releases:
         // the small wordmark starts near the top of the black frame, then drifts
-        // down to the centre while growing to full width; fragments snap in late.
+        // down to the centre while growing to full width; the scattered pieces assemble on the way.
         const topOffset = () =>
           -((frame as HTMLElement).clientHeight * (0.5 - WORDMARK_REST_TOP));
         gsap
