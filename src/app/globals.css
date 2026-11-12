@@ -479,3 +479,26 @@ html[lang="ka"] .work-rail-caption { text-transform: none; }
   .work-motion *, .work-detail * { transition: none !important; }
   .work-parallax { transform: none !important; }
 }
+/* Services: pinned list, one row per scroll step; no rule above it. */
+.services { position: relative; height: 100svh; overflow: clip; --anchor: 38svh; --row: clamp(42px, 4vw, 64px); }
+.services-label { position: absolute; top: calc(var(--anchor) + .9em); left: 3.3vw; margin: 0; font-size: 15px; font-weight: 500; }
+.services-stage { position: absolute; inset: 0 auto 0 17vw; width: 42vw; }
+.services-list { position: absolute; top: var(--anchor); left: 0; margin: 0; padding: 0; list-style: none; will-change: transform; }
+.services-row { display: flex; align-items: baseline; gap: .7em; height: var(--row); font-size: clamp(28px, 2.7vw, 46px); font-weight: 700; letter-spacing: -.035em; line-height: 1; white-space: nowrap; color: #cfcfcf; transition: color .5s; }
+.services-row[data-active] { color: #000; }
+.services-num { width: 1.1ch; font-variant-numeric: tabular-nums; }
+.services-photo { position: absolute; top: var(--anchor); left: 62vw; width: clamp(240px, 20vw, 330px); aspect-ratio: 5 / 6; overflow: hidden; border-radius: 4px; background: #eee; }
+.services-media { position: absolute; inset: 0; overflow: hidden; }
+.services-fill { width: 100%; height: 100%; display: grid; place-items: center; color: #111; font-size: clamp(56px, 6vw, 96px); font-weight: 800; letter-spacing: -.05em; }
+.services-fill[data-dark] { color: #fff; }
+.services-detail-stack { position: absolute; top: var(--anchor); left: calc(62vw + clamp(240px, 20vw, 330px) + 2vw); right: 3.3vw; display: grid; }
+.services-details { grid-area: 1 / 1; margin: 0; padding: 0; list-style: none; font-size: clamp(15px, 1.2vw, 19px); line-height: 1.45; }
+@media (max-width: 767px) {
+  .services { --anchor: 30svh; --row: 34px; }
+  .services-label { top: 7svh; left: 6vw; font-size: 13px; }
+  .services-stage { left: 6vw; width: 88vw; }
+  .services-row { font-size: 22px; }
+  .services-photo { top: auto; bottom: 7svh; left: 6vw; width: 46vw; }
+  .services-detail-stack { top: auto; bottom: 7svh; left: calc(52vw + 4vw); right: 6vw; height: calc(46vw * 6 / 5); align-content: start; }
+  .services-details { font-size: 14px; }
+}
