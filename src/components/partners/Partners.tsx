@@ -2,7 +2,6 @@
 import { useEffect, useRef } from "react";
 import type { Locale } from "@/content/locales";
 import { partners, partnersCopy } from "@/content/partners";
-import { ScrollTrigger } from "@/lib/gsap";
 // One endless strip whose logos break into squares at the edges and reassemble
 // (after Aceternity "Disintegrating Gallery", canvas 2D, no WebGL). Only the logos come from infinity.ge.
 type Sprite = { img: HTMLCanvasElement; w: number; h: number; cells: Float32Array };
@@ -42,12 +41,8 @@ export function Partners({ locale }: { locale: Locale }) {
       const mobile = W < 768;
       logoH = mobile ? 44 : 70; cell = mobile ? 5 : 7; pad = mobile ? 26 : 36;
       slot = W / (mobile ? 2.4 : 5); edge = W * (mobile ? .3 : .22); scatter = W * (mobile ? .22 : .16);
-      const prevH = H;
       H = logoH + pad * 2;
       canvas.width = W * dpr; canvas.height = H * dpr; canvas.style.height = `${H}px`;
-      // The strip sits above every pinned section: when its height changes, pins must re-measure
-      // or the services pin overruns the footer.
-      if (H !== prevH) ScrollTrigger.refresh();
       sprites = partners.map((_, i) => bake(i));
     };
     const draw = () => {

@@ -1,5 +1,6 @@
 "use client";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 import { gsap, ScrollTrigger, useGSAP, afterLoader } from "@/lib/gsap";
 export function SmoothScroll() {
@@ -28,5 +29,17 @@ export function SmoothScroll() {
     },
     { scope },
   );
+  // Pins and scrubs measure the page once; a section that changes height afterwards (fonts,
+  // canvases, late CSS) leaves every later trigger out of place, so re-measure. Per page.
+  const pathname = usePathname();
+  useEffect(() => {
+    let timer = 0;
+    const ro = new ResizeObserver(() => {
+      clearTimeout(timer);
+      timer = window.setTimeout(() => ScrollTrigger.refresh(), 150);
+    });
+    document.querySelectorAll("#main > *, footer.footer").forEach(el => ro.observe(el));
+    return () => { clearTimeout(timer); ro.disconnect(); };
+  }, [pathname]);
   return <span ref={scope} hidden />;
 }
