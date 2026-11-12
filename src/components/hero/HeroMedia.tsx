@@ -26,7 +26,8 @@ const FRAGMENT_DISTANCE = 30;
 // Wordmark rests at this fraction of its full gutter width and grows to 1 on scroll.
 const WORDMARK_REST_SCALE = 0.38;
 // Where the wordmark's centre starts, as a fraction of the frame height from its top.
-const WORDMARK_REST_TOP = 0.16;
+// Negative = above the frame (clipped by overflow), so it is hidden until it drops in.
+const WORDMARK_REST_TOP = -0.12;
 const WAVE_COLORS = ["#ffffff", "#d4d4d4", "#a3a3a3", "#737373", "#404040"];
 function fragmentOffset(id: string, distance: number) {
   const [x, y] = FRAGMENT_DIRECTIONS[id];
@@ -73,10 +74,11 @@ export function HeroMedia({ copy }: { copy: HeroContent }) {
           // The frame stays full-bleed: shrinking it would cancel out the wordmark's growth.
           .fromTo(
             inner,
-            { y: topOffset },
+            { y: topOffset, autoAlpha: 0 },
             { y: 0, duration: 1, ease: "power1.inOut" },
             0,
           )
+          .to(inner, { autoAlpha: 1, duration: 0.3, ease: "none" }, 0.08)
           .to(wordmark, { scale: 1, duration: 1, ease: "power1.inOut" }, 0)
           .to(
             fragments,
