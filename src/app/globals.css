@@ -210,7 +210,8 @@ html[data-loader="skip"] .stat-word {
   justify-content: center;
 }
 .media-wordmark {
-  width: calc(100% - 6.6vw);
+  /* Final size: 75% of the gutter width. */
+  width: calc((100% - 6.6vw) * 0.75);
   max-width: none;
   flex-shrink: 0;
 }
@@ -336,7 +337,7 @@ html[data-loader="skip"] .stat-word {
     font-size: 9px;
   }
   .media-wordmark {
-    width: calc(100% - 32px);
+    width: calc((100% - 32px) * 0.75);
   }
   .support {
     padding: 7vh 6vw 3vh;

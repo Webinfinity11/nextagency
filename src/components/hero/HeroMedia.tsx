@@ -24,7 +24,8 @@ const FRAGMENT_DIRECTIONS: Record<string, [number, number]> = {
 // 30 keeps every fragment clear of neighbouring letters (closest: AGENCY's E bar vs G) and inside the gutter.
 const FRAGMENT_DISTANCE = 30;
 // Wordmark rests at this fraction of its full gutter width and grows to 1 on scroll.
-const WORDMARK_REST_SCALE = 0.38;
+// Rest size relative to the final (CSS) size: same on-screen start as before (0.38 of the gutter).
+const WORDMARK_REST_SCALE = 0.38 / 0.75;
 // Where the wordmark's centre starts, as a fraction of the frame height from its top.
 // Negative = above the frame (clipped by overflow), so it is hidden until it drops in.
 const WORDMARK_REST_TOP = -0.12;
