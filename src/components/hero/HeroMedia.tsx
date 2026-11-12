@@ -21,8 +21,19 @@ const FRAGMENT_DIRECTIONS: Record<string, [number, number]> = {
   "l-x-p2": [0.25, -0.97],
   "l-x-p3": [0.64, 0.77],
 };
-// 30 keeps every fragment clear of neighbouring letters (closest: AGENCY's E bar vs G) and inside the gutter.
-const FRAGMENT_DISTANCE = 30;
+// Scattered start: fragments fly well out along their cut direction, tilted, then assemble on scroll.
+const FRAGMENT_DISTANCE = 140;
+// Per-fragment tilt at rest (degrees), alternating so the scatter reads as debris, not a pattern.
+const FRAGMENT_ROTATION: Record<string, number> = {
+  "l-n1-p2": 28,
+  "l-n2-p2": -22,
+  "l-n1-p3": -34,
+  "l-n2-p3": 26,
+  "l-e1-p2": -14,
+  "l-e2-p2": 18,
+  "l-x-p2": 36,
+  "l-x-p3": -30,
+};
 // Wordmark rests at this fraction of its full gutter width and grows to 1 on scroll.
 // Rest size relative to the final (CSS) size: same on-screen start as before (0.38 of the gutter).
 const WORDMARK_REST_SCALE = 0.38 / 0.75;
@@ -52,7 +63,9 @@ export function HeroMedia({ copy }: { copy: HeroContent }) {
       fragments.forEach((piece) =>
         gsap.set(piece, {
           ...fragmentOffset(piece.getAttribute("data-piece")!, FRAGMENT_DISTANCE),
-          opacity: 0.55,
+          rotation: FRAGMENT_ROTATION[piece.getAttribute("data-piece")!],
+          transformOrigin: "50% 50%",
+          opacity: 0.4,
         }),
       );
       const start = contextSafe!(() => {
@@ -86,12 +99,13 @@ export function HeroMedia({ copy }: { copy: HeroContent }) {
             {
               x: 0,
               y: 0,
+              rotation: 0,
               opacity: 1,
-              duration: 0.45,
-              ease: "power3.out",
-              stagger: { each: 0.02, from: "center" },
+              duration: 0.6,
+              ease: "power2.inOut",
+              stagger: { each: 0.015, from: "random" },
             },
-            0.5,
+            0.3,
           );
       });
       return afterLoader(start);
