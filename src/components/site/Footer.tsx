@@ -18,6 +18,11 @@ export function Footer({ copy, locale }: { copy: HeroContent; locale: Locale }) 
       yPercent: 0, duration: 1.1, ease: "expo.out", stagger: .045,
       scrollTrigger: { trigger: root.querySelector(".footer-mark"), start: "top 98%", toggleActions: "play none none reverse" },
     });
+    // The lead fills word by word, grey to black, as the footer scrolls into view.
+    gsap.fromTo(root.querySelectorAll(".footer-lead [data-word]"), { color: "#c4c4c4" }, {
+      color: "#000", ease: "none", stagger: .3,
+      scrollTrigger: { trigger: root.querySelector(".footer-lead"), start: "top 92%", end: "top 45%", scrub: true },
+    });
     gsap.fromTo(root.querySelectorAll("[data-footer-reveal]"), { yPercent: 100 }, {
       yPercent: 0, duration: .9, ease: "power3.out", stagger: .06,
       scrollTrigger: { trigger: root, start: "top 85%", once: true },
@@ -27,8 +32,17 @@ export function Footer({ copy, locale }: { copy: HeroContent; locale: Locale }) 
     <footer className="footer" ref={scope}>
       <div className="footer-top">
         <div className="footer-contact">
-          <p className="footer-mask"><span data-footer-reveal className="footer-lead">{f.lead}</span></p>
-          <p className="footer-mask"><a data-footer-reveal className="footer-email" href={`mailto:${f.email}`}>{f.email}</a></p>
+          <p className="footer-lead">{f.lead.split(" ").map((w, i) => <span key={i} data-word>{w} </span>)}</p>
+          <p className="footer-mask">
+            <a data-footer-reveal className="footer-email" href={`mailto:${f.email}`} aria-label={f.email}>
+              <span className="footer-roll">
+                {[...f.email].map((ch, i) => <span key={i} aria-hidden style={{ "--i": i } as React.CSSProperties}>{ch}</span>)}
+              </span>
+              <span className="footer-arrow" aria-hidden>
+                <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9" fill="none" stroke="currentColor" strokeWidth="2" /></svg>
+              </span>
+            </a>
+          </p>
         </div>
         <div className="footer-cols">
           <nav aria-label={copy.navLabel}>
