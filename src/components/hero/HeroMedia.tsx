@@ -1,7 +1,7 @@
 "use client";
 import { useRef } from "react";
 import { Logo } from "@/components/brand/Logo";
-import { WavyBackground } from "@/components/ui/wavy-background";
+import { BackgroundCubesGrid } from "@/components/ui/background-cubes-grid";
 import {
   gsap,
   useGSAP,
@@ -23,10 +23,9 @@ const FRAGMENT_DIRECTIONS: Record<string, [number, number]> = {
 };
 // 30 keeps every fragment clear of neighbouring letters (closest: AGENCY's E bar vs G) and inside the gutter.
 const FRAGMENT_DISTANCE = 30;
-// Wordmark rests at this fraction of its full gutter width and grows to 1 on scroll.
-const WORDMARK_REST_SCALE = 0.55;
-// Aceternity's reference palette: sky, indigo, purple, fuchsia, cyan.
-const WAVE_COLORS = ["#38bdf8", "#818cf8", "#c084fc", "#e879f9", "#22d3ee"];
+// Wordmark rests small and faded, then grows to its full gutter width as the fragments close.
+const WORDMARK_REST_SCALE = 0.38;
+const WORDMARK_REST_OPACITY = 0.6;
 function fragmentOffset(id: string, distance: number) {
   const [x, y] = FRAGMENT_DIRECTIONS[id];
   return { x: x * distance, y: y * distance };
@@ -45,7 +44,11 @@ export function HeroMedia({ copy }: { copy: HeroContent }) {
       );
       gsap.set(frame, { yPercent: 100 });
       // Fragments sit just outside the viewBox at rest; let them render instead of clipping.
-      gsap.set(wordmark, { overflow: "visible", scale: WORDMARK_REST_SCALE });
+      gsap.set(wordmark, {
+        overflow: "visible",
+        scale: WORDMARK_REST_SCALE,
+        opacity: WORDMARK_REST_OPACITY,
+      });
       fragments.forEach((piece) =>
         gsap.set(piece, {
           ...fragmentOffset(piece.getAttribute("data-piece")!, FRAGMENT_DISTANCE),
@@ -67,7 +70,7 @@ export function HeroMedia({ copy }: { copy: HeroContent }) {
           // The frame stays full-bleed: shrinking it would cancel out the wordmark's growth.
           .to(
             wordmark,
-            { scale: 1, duration: 0.8, ease: "power2.inOut" },
+            { scale: 1, opacity: 1, duration: 0.8, ease: "power2.inOut" },
             0.2,
           )
           .to(
@@ -107,14 +110,14 @@ export function HeroMedia({ copy }: { copy: HeroContent }) {
       <div className="media-sticky">
         {/* Keep entrance (frame), growth (wordmark) and parallax (inner) as independent layers. */}
         <div className="media-frame">
-          <WavyBackground
-            className="media-waves"
-            colors={WAVE_COLORS}
-            backgroundFill="#000"
-            waveOpacity={0.5}
-            blur={10}
-            speed="slow"
-            waveWidth={50}
+          {/* Darker re-theme of Aceternity's stone demo: near-black tops, grey seams, muted glow. */}
+          <BackgroundCubesGrid
+            className="media-cubes"
+            topColor="#0a0a0a"
+            leftColor="#1c1c1c"
+            rightColor="#262626"
+            glowColor="#525252"
+            glow={0.45}
           />
           <div className="media-inner">
             <Logo className="media-wordmark" />
