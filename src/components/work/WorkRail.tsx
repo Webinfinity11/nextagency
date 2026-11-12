@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, type CSSProperties } from "react";
 import { gsap, useGSAP, afterLoader, ScrollTrigger } from "@/lib/gsap";
+import { NoiseLink } from "./NoiseLink";
 
 export type RailItem = {
   slug: string; href: string; title: string; caption: string; feeling: string; captionFeeling: string;
@@ -148,6 +149,6 @@ export function WorkRail({ items, prefix, all }: {
         <span className="work-rail-label" aria-hidden="true">{item.title}</span>
       </Link>)}
     </div>
-    <div className="work-rail-footer"><Link className="work-rail-all" href={all.href}>{all.label}<i aria-hidden="true">↗</i></Link></div>
+    <div className="work-rail-footer"><NoiseLink href={all.href}>{all.label}<i aria-hidden="true">↗</i></NoiseLink></div>
   </div>;
 }
