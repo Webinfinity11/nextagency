@@ -13,8 +13,6 @@ export type HeroContent = {
   langShort: string;
   /** Two phrases, each with a left and right group of two lines. */
   phrases: [[Lines, Lines], [Lines, Lines]];
-  stats: string[];
-  statNote: string;
   mediaLabel: string;
   support: string;
   closing: Lines;

@@ -141,39 +141,12 @@ html[lang="ka"] .hero-intro h1 {
   padding-bottom: 0.07em;
   margin-bottom: -0.07em;
 }
-.word,
-.stat-word {
+.word {
   display: inline-block;
 }
 html[data-loader="running"] .word,
-html[data-loader="running"] .stat-word,
-html[data-loader="skip"] .word,
-html[data-loader="skip"] .stat-word {
+html[data-loader="skip"] .word {
   transform: translateY(105%);
-}
-.stats {
-  margin-top: 6vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 2rem;
-}
-.stat {
-  margin: 0;
-  display: flex;
-  gap: 0.28em;
-  font-size: clamp(12px, 1.25vw, 18px);
-  letter-spacing: -0.02em;
-}
-.stat:nth-child(2) {
-  justify-content: center;
-}
-.stat:last-child {
-  justify-content: flex-end;
-}
-.stat-note {
-  font-size: 10px;
-  margin: 1.4rem 0 0;
-  text-align: right;
 }
 .media-region {
   /* entry + pinned assembly + shrink-to-card */
@@ -324,19 +297,6 @@ html[data-loader="skip"] .stat-word {
   .headline-line {
     gap: 0.2em;
   }
-  .stats {
-    margin-top: 3vh;
-    grid-template-columns: 1fr;
-    gap: 0.65rem;
-  }
-  .stat:nth-child(n) {
-    justify-content: flex-start;
-    font-size: 12px;
-  }
-  .stat-note {
-    text-align: left;
-    font-size: 9px;
-  }
   .media-wordmark {
     width: calc((100% - 32px) * 0.75);
   }
@@ -365,7 +325,6 @@ html[data-loader="skip"] .stat-word {
     display: none;
   }
   html .word,
-  html .stat-word,
   .closing-line {
     transform: none !important;
   }
@@ -379,8 +338,6 @@ html[data-loader="skip"] .stat-word {
     position: relative;
   }
 }
-
-html[data-loader="running"] .stat-note { visibility: hidden; }
 
 /* Work — shared cards and route layouts. */
 .work-motion { min-width: 0; }

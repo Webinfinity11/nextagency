@@ -70,21 +70,6 @@ export function HeroHeadline({
             0.3 + index * 0.1,
           ),
         );
-        root
-          .querySelectorAll(".stat")
-          .forEach((stat, index) =>
-            entrance.fromTo(
-              stat.querySelectorAll(".stat-word"),
-              { yPercent: 105 },
-              {
-                yPercent: 0,
-                duration: 0.55,
-                stagger: 0.025,
-                ease: "power3.out",
-              },
-              1.05 + index * 0.12,
-            ),
-          );
       });
       const remove = afterLoader(start);
       return () => {
@@ -120,18 +105,6 @@ export function HeroHeadline({
           </span>
         ))}
       </h1>
-      <div className="stats">
-        {copy.stats.map((stat) => (
-          <p className="stat" key={stat}>
-            {stat.split(" ").map((word, i) => (
-              <span className="word-mask" key={i}>
-                <span className="stat-word">{word}</span>
-              </span>
-            ))}
-          </p>
-        ))}
-      </div>
-      <p className="stat-note">{copy.statNote}</p>
     </div>
   );
 }

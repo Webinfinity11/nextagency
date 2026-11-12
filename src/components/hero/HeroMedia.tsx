@@ -50,7 +50,7 @@ function scatter(piece: SVGGraphicsElement, i: number, centre: { x: number; y: n
 const WORDMARK_REST_SCALE = 0.38 / 0.75;
 // Where the wordmark's centre starts, as a fraction of the frame height from its top.
 // Negative = above the frame (clipped by overflow), so it is hidden until it drops in.
-const WORDMARK_REST_TOP = -0.12;
+const WORDMARK_REST_TOP = -0.3;
 // After assembly the panel shrinks to this fraction of the viewport (white margins around it).
 const FRAME_END_SCALE = 0.78;
 const WAVE_COLORS =["#ffffff", "#d4d4d4", "#a3a3a3", "#737373", "#404040"];
@@ -96,7 +96,7 @@ export function HeroMedia({ copy }: { copy: HeroContent }) {
             { y: 0, duration: 1, ease: "power1.inOut" },
             0,
           )
-          .to(inner, { autoAlpha: 1, duration: 0.3, ease: "none" }, 0.08)
+          .to(inner, { autoAlpha: 1, duration: 0.3, ease: "none" }, 0.2)
           .to(wordmark, { scale: 1, duration: 1, ease: "power1.inOut" }, 0)
           .to(
             fragments,

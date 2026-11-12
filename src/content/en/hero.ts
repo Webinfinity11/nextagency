@@ -1,4 +1,4 @@
-// Placeholder copy: the owner will edit all copy and replace the explicitly illustrative stats.
+// Placeholder copy: the owner will edit all copy.
 import type { HeroContent } from "../types";
 export const hero: HeroContent = {
   title: "NEXT AGENCY — A step beyond",
@@ -20,12 +20,6 @@ export const hero: HeroContent = {
       ["MOVE FIRST.", "GO FURTHER."],
     ],
   ],
-  stats: [
-    "12+ fresh perspectives*",
-    "03 disciplines, one direction*",
-    "100% forward thinking*",
-  ],
-  statNote: "*Illustrative figures — final facts to follow.",
   mediaLabel: "Our next chapter, in motion",
   support:
     "The next move starts with a better question. We connect strategy, identity and digital experiences to give ambitious brands a clear way forward.",

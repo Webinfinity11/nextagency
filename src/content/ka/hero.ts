@@ -1,4 +1,4 @@
-// Placeholder copy: the owner will edit all copy and replace the explicitly illustrative stats.
+// Placeholder copy: the owner will edit all copy.
 import type { HeroContent } from "../types";
 export const hero: HeroContent = {
   title: "NEXT AGENCY — ერთი ნაბიჯით წინ",
@@ -20,12 +20,6 @@ export const hero: HeroContent = {
       ["იყავი პირველი.", "წადი შორს."],
     ],
   ],
-  stats: [
-    "12+ ახალი ხედვა*",
-    "03 დისციპლინა, ერთი მიმართულება*",
-    "100% წინ მიმართული აზროვნება*",
-  ],
-  statNote: "*საილუსტრაციო მონაცემები — ზუსტი ფაქტები მოგვიანებით დაემატება.",
   mediaLabel: "ჩვენი შემდეგი თავი — მოძრაობაში",
   support:
     "შემდეგი ნაბიჯი უკეთესი კითხვით იწყება. ვაკავშირებთ სტრატეგიას, იდენტობასა და ციფრულ გამოცდილებას, რომ ამბიციურ ბრენდებს წინსვლის მკაფიო გზა მივცეთ.",
