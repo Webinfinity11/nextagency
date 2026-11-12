@@ -1,6 +1,7 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { Logo } from "@/components/brand/Logo";
+import { WavyBackground } from "@/components/ui/wavy-background";
 import {
   gsap,
   useGSAP,
@@ -22,6 +23,9 @@ const FRAGMENT_DIRECTIONS: Record<string, [number, number]> = {
 };
 // 30 keeps every fragment clear of neighbouring letters (closest: AGENCY's E bar vs G) and inside the gutter.
 const FRAGMENT_DISTANCE = 30;
+// Wordmark rests at this fraction of its full gutter width and grows to 1 on scroll.
+const WORDMARK_REST_SCALE = 0.55;
+const WAVE_COLORS = ["#ffffff", "#d4d4d4", "#a3a3a3", "#737373", "#404040"];
 function fragmentOffset(id: string, distance: number) {
   const [x, y] = FRAGMENT_DIRECTIONS[id];
   return { x: x * distance, y: y * distance };
@@ -34,12 +38,13 @@ export function HeroMedia({ copy }: { copy: HeroContent }) {
       const root = scope.current!;
       const frame = root.querySelector(".media-frame");
       const inner = root.querySelector(".media-inner");
+      const wordmark = root.querySelector(".media-wordmark");
       const fragments = [...root.querySelectorAll("[data-piece]")].filter(
         (piece) => piece.getAttribute("data-piece")! in FRAGMENT_DIRECTIONS,
       );
       gsap.set(frame, { yPercent: 100 });
       // Fragments sit just outside the viewBox at rest; let them render instead of clipping.
-      gsap.set(root.querySelector(".media-wordmark"), { overflow: "visible" });
+      gsap.set(wordmark, { overflow: "visible", scale: WORDMARK_REST_SCALE });
       fragments.forEach((piece) =>
         gsap.set(piece, {
           ...fragmentOffset(piece.getAttribute("data-piece")!, FRAGMENT_DISTANCE),
@@ -58,14 +63,10 @@ export function HeroMedia({ copy }: { copy: HeroContent }) {
               invalidateOnRefresh: true,
             },
           })
+          // The frame stays full-bleed: shrinking it would cancel out the wordmark's growth.
           .to(
-            frame,
-            {
-              scale: 0.65,
-              borderRadius: 24,
-              duration: 0.8,
-              ease: "power2.inOut",
-            },
+            wordmark,
+            { scale: 1, duration: 0.8, ease: "power2.inOut" },
             0.2,
           )
           .to(
@@ -100,52 +101,23 @@ export function HeroMedia({ copy }: { copy: HeroContent }) {
     },
     { scope },
   );
-  // Blurred background reel: plays only while the panel is on screen; reduced motion keeps the poster.
-  // A missing file hides the element so the panel stays plain black.
-  useEffect(() => {
-    const video = scope.current?.querySelector<HTMLVideoElement>(".media-video");
-    if (!video) return;
-    const fail = () => video.setAttribute("data-failed", "");
-    // error may have fired before hydration; NETWORK_NO_SOURCE also covers a 404 src.
-    if (video.error || video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) fail();
-    video.addEventListener("error", fail);
-    if (reducedMotion()) return () => video.removeEventListener("error", fail);
-    video.muted = true;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (video.hasAttribute("data-failed")) return;
-      if (entry.isIntersecting) video.play().catch(() => {});
-      else video.pause();
-    });
-    observer.observe(video);
-    return () => {
-      observer.disconnect();
-      video.removeEventListener("error", fail);
-    };
-  }, []);
   return (
     <div className="media-region" ref={scope} aria-label={copy.mediaLabel}>
       <div className="media-sticky">
-        {/* Future showreel/video slot. Keep entrance, frame and parallax as independent layers. */}
+        {/* Keep entrance (frame), growth (wordmark) and parallax (inner) as independent layers. */}
         <div className="media-frame">
-          <video
-            className="media-video"
-            src="/media/showreel-bg.mp4"
-            poster="/media/showreel-bg-poster.jpg"
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            aria-hidden="true"
-            tabIndex={-1}
+          <WavyBackground
+            className="media-waves"
+            colors={WAVE_COLORS}
+            backgroundFill="#000"
+            waveOpacity={0.35}
+            blur={10}
+            speed="slow"
+            waveWidth={50}
           />
-          <span className="media-index">{copy.mediaIndex}</span>
           <div className="media-inner">
             <Logo className="media-wordmark" />
           </div>
-          <span className="media-caption">
-            {copy.mediaLabel}
-            <span aria-hidden="true">↘</span>
-          </span>
         </div>
       </div>
     </div>

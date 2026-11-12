@@ -16,7 +16,6 @@ export type HeroContent = {
   stats: string[];
   statNote: string;
   mediaLabel: string;
-  mediaIndex: string;
   support: string;
   closing: Lines;
   contact: string;

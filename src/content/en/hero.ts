@@ -27,7 +27,6 @@ export const hero: HeroContent = {
   ],
   statNote: "*Illustrative figures — final facts to follow.",
   mediaLabel: "Our next chapter, in motion",
-  mediaIndex: "01 / NEXT IN MOTION",
   support:
     "The next move starts with a better question. We connect strategy, identity and digital experiences to give ambitious brands a clear way forward.",
   closing: ["MAKE ROOM", "FOR WHAT’S NEXT."],
