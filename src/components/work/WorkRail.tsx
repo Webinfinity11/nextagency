@@ -149,6 +149,6 @@ export function WorkRail({ items, prefix, all }: {
         <span className="work-rail-label" aria-hidden="true">{item.title}</span>
       </Link>)}
     </div>
-    <div className="work-rail-footer"><NoiseLink href={all.href}>{all.label}<i aria-hidden="true">↗</i></NoiseLink></div>
+    <div className="work-rail-footer"><NoiseLink href={all.href}>{all.label}</NoiseLink></div>
   </div>;
 }

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 
 /**
- * Pill link on a drifting noise-gradient frame (after Aceternity's Noise Background): three radial gradients
+ * Pill link on a drifting noise-gradient frame (after Aceternity's Noise Background): three grey radial gradients (dark → light)
  * follow one wandering point through a soft spring. Paused off-screen; static with reduced motion.
  */
 export function NoiseLink({ href, children, speed = 0.1 }: { href: string; children: ReactNode; speed?: number }) {
@@ -49,9 +49,9 @@ export function NoiseLink({ href, children, speed = 0.1 }: { href: string; child
   }, [speed]);
 
   return <div ref={frame} className="noise-frame">
-    <span className="noise-layer" style={{ "--m": 1, "--c": "rgb(255 100 150)", opacity: .4 } as CSSProperties} />
-    <span className="noise-layer" style={{ "--m": .7, "--c": "rgb(100 150 255)", opacity: .3 } as CSSProperties} />
-    <span className="noise-layer" style={{ "--m": 1.2, "--c": "rgb(255 200 100)", opacity: .25 } as CSSProperties} />
+    <span className="noise-layer" style={{ "--m": 1, "--c": "rgb(17 17 17)", opacity: .35 } as CSSProperties} />
+    <span className="noise-layer" style={{ "--m": .7, "--c": "rgb(255 255 255)", opacity: .9 } as CSSProperties} />
+    <span className="noise-layer" style={{ "--m": 1.2, "--c": "rgb(110 110 110)", opacity: .3 } as CSSProperties} />
     <span className="noise-strip" aria-hidden="true" />
     <span className="noise-grain" aria-hidden="true" />
     <Link className="noise-link" href={href}>{children}</Link>
