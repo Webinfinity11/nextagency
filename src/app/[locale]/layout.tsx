@@ -5,6 +5,7 @@ import { Loader } from "@/components/loader/Loader";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
+import { Contact } from "@/components/contact/Contact";
 import { getContent } from "@/content";
 import { defaultLocale, isLocale, locales } from "@/content/locales";
 import "../globals.css";
@@ -67,6 +68,7 @@ export default async function RootLayout({
           <SmoothScroll />
           <Nav copy={copy} locale={locale} />
           {children}
+          <Contact locale={locale} />
           <Footer copy={copy} locale={locale} />
           <Loader />
         </div>
