@@ -25,6 +25,8 @@ const FRAGMENT_DIRECTIONS: Record<string, [number, number]> = {
 const FRAGMENT_DISTANCE = 30;
 // Wordmark rests at this fraction of its full gutter width and grows to 1 on scroll.
 const WORDMARK_REST_SCALE = 0.38;
+// Where the wordmark's centre starts, as a fraction of the frame height from its top.
+const WORDMARK_REST_TOP = 0.16;
 const WAVE_COLORS = ["#ffffff", "#d4d4d4", "#a3a3a3", "#737373", "#404040"];
 function fragmentOffset(id: string, distance: number) {
   const [x, y] = FRAGMENT_DIRECTIONS[id];
@@ -53,49 +55,41 @@ export function HeroMedia({ copy }: { copy: HeroContent }) {
       );
       const start = contextSafe!(() => {
         gsap.to(frame, { yPercent: 0, duration: 1.2, ease: "power3.out" });
+        // One journey from the moment the panel enters until the pin releases:
+        // the small wordmark starts near the top of the black frame, then drifts
+        // down to the centre while growing to full width; fragments snap in late.
+        const topOffset = () =>
+          -((frame as HTMLElement).clientHeight * (0.5 - WORDMARK_REST_TOP));
         gsap
           .timeline({
             scrollTrigger: {
               trigger: root,
-              start: "top top",
-              end: () => `+=${innerHeight * 1.2}`,
-              scrub: 0.3,
+              start: "top bottom",
+              end: "bottom 80%",
+              scrub: 0.4,
               invalidateOnRefresh: true,
             },
           })
           // The frame stays full-bleed: shrinking it would cancel out the wordmark's growth.
-          .to(
-            wordmark,
-            { scale: 1, duration: 0.8, ease: "power2.inOut" },
-            0.2,
+          .fromTo(
+            inner,
+            { y: topOffset },
+            { y: 0, duration: 1, ease: "power1.inOut" },
+            0,
           )
+          .to(wordmark, { scale: 1, duration: 1, ease: "power1.inOut" }, 0)
           .to(
             fragments,
             {
               x: 0,
               y: 0,
               opacity: 1,
-              duration: 0.6,
+              duration: 0.45,
               ease: "power3.out",
-              stagger: { each: 0.03, from: "center" },
+              stagger: { each: 0.02, from: "center" },
             },
-            0.2,
+            0.5,
           );
-        gsap.fromTo(
-          inner,
-          { yPercent: -20 },
-          {
-            yPercent: 0,
-            ease: "none",
-            scrollTrigger: {
-              trigger: document.body,
-              start: "top top",
-              end: () => `+=${innerHeight * 0.7}`,
-              scrub: 0.5,
-              invalidateOnRefresh: true,
-            },
-          },
-        );
       });
       return afterLoader(start);
     },
