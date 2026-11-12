@@ -5,7 +5,7 @@ import { servicesCopy } from "@/content/services";
 import type { Locale } from "@/content/locales";
 import { display } from "@/lib/mtavruli";
 // Pinned list after tinywins.com "Our services": each scroll step lifts the list one row,
-// the new photo grows in from the bottom-right corner over the old one, and the detail lines swap.
+// and the new photo grows in from the bottom-right corner over the old one.
 export function Services({ locale }: { locale: Locale }) {
   const { label, services } = servicesCopy(locale);
   const scope = useRef<HTMLElement>(null);
@@ -14,7 +14,6 @@ export function Services({ locale }: { locale: Locale }) {
     const list = root.querySelector<HTMLElement>(".services-list")!;
     const rows = gsap.utils.toArray<HTMLElement>(".services-row", root);
     const media = gsap.utils.toArray<HTMLElement>(".services-media", root);
-    const details = gsap.utils.toArray<HTMLElement>(".services-details", root);
     const still = reducedMotion();
     let active = 0, layer = 1;
     const paint = (i: number, duration: number) => {
@@ -26,18 +25,14 @@ export function Services({ locale }: { locale: Locale }) {
     };
     const go = (i: number) => {
       if (i === active) return;
-      const prev = active; active = i;
+      active = i;
       const d = still ? 0 : 1;
       paint(i, .7 * d);
       const img = media[i];
       gsap.set(img, { zIndex: ++layer, visibility: "visible" });
       gsap.fromTo(img, { clipPath: "inset(100% 0% 0% 100%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: .9 * d, ease: "power3.inOut", overwrite: true });
       gsap.fromTo(img.firstElementChild, { scale: 1.25 }, { scale: 1, duration: 1.1 * d, ease: "power3.out", overwrite: true });
-      gsap.to(details[prev].children, { autoAlpha: 0, duration: .2 * d, overwrite: true });
-      gsap.fromTo(details[i].children, { autoAlpha: 0, yPercent: 60 }, { autoAlpha: 1, yPercent: 0, duration: .55 * d, delay: .15 * d, stagger: .05 * d, ease: "power3.out", overwrite: true });
-      details.forEach((el, k) => el.setAttribute("aria-hidden", String(k !== i)));
     };
-    details.forEach((el, k) => k && gsap.set(el.children, { autoAlpha: 0 }));
     const n = services.length;
     ScrollTrigger.create({
       trigger: root, start: "top top", end: () => `+=${(n - 1) * innerHeight * .55}`, pin: true, invalidateOnRefresh: true,
@@ -65,13 +60,6 @@ export function Services({ locale }: { locale: Locale }) {
               <span>{String(i + 1).padStart(2, "0")}</span>
             </div>
           </div>
-        ))}
-      </div>
-      <div className="services-detail-stack">
-        {services.map((s, i) => (
-          <ul className="services-details" key={s.title} aria-hidden={i !== 0}>
-            {s.items.map(item => <li key={item}>{item}</li>)}
-          </ul>
         ))}
       </div>
     </section>
