@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
 import { useRef } from "react";
-import { Logo } from "@/components/brand/Logo";
 import type { HeroContent } from "@/content";
 import { footerCopy } from "@/content/footer";
+import { DotMark } from "./DotMark";
 import type { Locale } from "@/content/locales";
 import { gsap, useGSAP, reducedMotion } from "@/lib/gsap";
 // After tinywins.com's footer: contact lead top-left, two link columns top-right, full-bleed wordmark at the foot.
@@ -13,11 +13,6 @@ export function Footer({ copy, locale }: { copy: HeroContent; locale: Locale }) 
   useGSAP(() => {
     if (reducedMotion()) return;
     const root = scope.current!;
-    // Letters rise out of the baseline one after another as the wordmark scrolls in.
-    gsap.fromTo(root.querySelectorAll(".footer-mark [data-letter]"), { yPercent: 105 }, {
-      yPercent: 0, duration: 1.1, ease: "expo.out", stagger: .045,
-      scrollTrigger: { trigger: root.querySelector(".footer-mark"), start: "top 98%", toggleActions: "play none none reverse" },
-    });
     // The lead fills word by word, grey to black, as the footer scrolls into view.
     gsap.fromTo(root.querySelectorAll(".footer-lead [data-word]"), { color: "#c4c4c4" }, {
       color: "#000", ease: "none", stagger: .3,
@@ -58,7 +53,7 @@ export function Footer({ copy, locale }: { copy: HeroContent; locale: Locale }) 
         </div>
       </div>
       <div className="footer-meta"><span>© {new Date().getFullYear()} NEXT AGENCY — {f.rights}</span><span>{f.place}</span></div>
-      <Link className="footer-mark" href={`/${locale}`} aria-label={copy.home}><Logo className="footer-wide" /><Logo className="footer-stacked" variant="stacked" /></Link>
+      <Link className="footer-mark" href={`/${locale}`} aria-label={copy.home}><DotMark /></Link>
     </footer>
   );
 }
