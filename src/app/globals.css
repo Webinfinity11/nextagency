@@ -70,6 +70,7 @@ html[data-loader="running"] .nav-locale {
   height: 55px;
   padding: 0 20px;
   background: #ececec;
+  border-radius: 6px;
 }
 .nav-start { gap: 35px; }
 .nav-brand { width: 82px; flex-shrink: 0; }
