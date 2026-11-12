@@ -51,7 +51,9 @@ const WORDMARK_REST_SCALE = 0.38 / 0.75;
 // Where the wordmark's centre starts, as a fraction of the frame height from its top.
 // Negative = above the frame (clipped by overflow), so it is hidden until it drops in.
 const WORDMARK_REST_TOP = -0.12;
-const WAVE_COLORS = ["#ffffff", "#d4d4d4", "#a3a3a3", "#737373", "#404040"];
+// After assembly the panel shrinks to this fraction of the viewport (white margins around it).
+const FRAME_END_SCALE = 0.78;
+const WAVE_COLORS =["#ffffff", "#d4d4d4", "#a3a3a3", "#737373", "#404040"];
 export function HeroMedia({ copy }: { copy: HeroContent }) {
   const scope = useRef<HTMLDivElement>(null);
   useGSAP(
@@ -108,6 +110,12 @@ export function HeroMedia({ copy }: { copy: HeroContent }) {
               stagger: { each: 0.015, from: "random" },
             },
             0.3,
+          )
+          // Once the wordmark has settled, the full-bleed panel shrinks into an inset card.
+          .to(
+            frame,
+            { scale: FRAME_END_SCALE, borderRadius: 16, duration: 0.6, ease: "power2.inOut" },
+            1.05,
           );
       });
       return afterLoader(start);

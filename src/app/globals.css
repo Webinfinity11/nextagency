@@ -176,7 +176,8 @@ html[data-loader="skip"] .stat-word {
   text-align: right;
 }
 .media-region {
-  height: 200vh;
+  /* entry + pinned assembly + shrink-to-card */
+  height: 280vh;
 }
 .media-sticky {
   position: sticky;
