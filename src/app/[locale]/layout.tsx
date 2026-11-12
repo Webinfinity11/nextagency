@@ -4,6 +4,7 @@ import { Manrope, Noto_Sans_Georgian } from "next/font/google";
 import { Loader } from "@/components/loader/Loader";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { Nav } from "@/components/site/Nav";
+import { Footer } from "@/components/site/Footer";
 import { getContent } from "@/content";
 import { defaultLocale, isLocale, locales } from "@/content/locales";
 import "../globals.css";
@@ -66,6 +67,7 @@ export default async function RootLayout({
           <SmoothScroll />
           <Nav copy={copy} locale={locale} />
           {children}
+          <Footer copy={copy} locale={locale} />
           <Loader />
         </div>
       </body>
