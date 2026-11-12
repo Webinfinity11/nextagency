@@ -386,7 +386,6 @@ html[data-loader="running"] .stat-note { visibility: hidden; }
 .work-motion { min-width: 0; }
 .work-featured { padding: 8vh 3.3vw 110px; display: flex; flex-direction: column; gap: 100px; }
 .work-section-heading { display: grid; gap: 24px; }
-.work-eyebrow { font-size: 12px; letter-spacing: .06em; }
 .work-heading { margin: 0; font-size: clamp(36px, 5.2vw, 88px); font-weight: 800; line-height: 1.05; letter-spacing: -.03em; text-transform: uppercase; overflow-wrap: anywhere; }
 html .work-page-heading h1 { height: auto; }
 .work-pair { display: flex; gap: 16px; align-items: stretch; }

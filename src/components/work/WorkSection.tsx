@@ -10,7 +10,7 @@ export async function WorkSection({ locale }: { locale: Locale }) {
   const copy = workCopy(locale);
   return <section id="work" aria-labelledby="work-title"><WorkMotion>
     <div className="work-featured">
-      <header className="work-section-heading"><span className="work-eyebrow">NEXT / 01—06</span><h2 id="work-title" className="work-heading" data-work-reveal>{display(copy.selected, locale)}</h2></header>
+      <header className="work-section-heading"><h2 id="work-title" className="work-heading" data-work-reveal>{display(copy.selected, locale)}</h2></header>
       <div className="work-pair" data-large="0">{featured.slice(0, 2).map(project => <div className="work-column" key={project.slug}><ProjectCard project={project} locale={locale} /></div>)}</div>
       <div className="work-wide"><ProjectCard project={featured[2]} locale={locale} /></div>
       <div className="work-pair work-pair-reverse" data-large="1">{featured.slice(3, 5).map((project, i) => <div className="work-column" key={project.slug}><ProjectCard project={project} locale={locale} />{i === 0 && <Link className="work-all" href={`/${locale}/work`}><span data-work-reveal>{copy.all}</span><sup>{String(projects.length).padStart(2, "0")}</sup><i aria-hidden="true">↗</i></Link>}</div>)}</div>

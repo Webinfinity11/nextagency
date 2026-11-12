@@ -22,7 +22,7 @@ export default async function ProjectPage({ params }: PageProps<"/[locale]/work/
   const copy = workCopy(locale);
   return <main id="main" className="work-detail">
     <Link className="work-back" href={`/${locale}/work`}>↖ {copy.back}</Link>
-    <header className="work-page-heading"><span className="work-eyebrow">{copy.placeholder} / {String(project.order).padStart(2, "0")}</span><h1 className="work-heading">{display(project.title[locale], locale)}</h1><p>{project.summary[locale]}</p></header>
+    <header className="work-page-heading"><h1 className="work-heading">{display(project.title[locale], locale)}</h1><p>{project.summary[locale]}</p></header>
     <dl className="work-facts"><div><dt>{copy.year}</dt><dd>{project.year}</dd></div><div><dt>{copy.category}</dt><dd>{category.title[locale]}</dd></div></dl>
     <ProjectCover project={project} />
     <footer className="work-detail-footer"><p>{copy.note}</p><Link className="work-all" href={`/${locale}/work/${next.slug}`}><span>{copy.next}: {next.title[locale]}</span><i aria-hidden="true">↗</i></Link></footer>
