@@ -86,8 +86,8 @@ html[data-loader="running"] .nav-locale {
 .nav-menu[open] nav { position: absolute; top: 70px; left: 16px; right: 16px; padding: 16px; background: #ececec; display: grid; gap: 4px; }
 .nav-menu nav a { padding: 12px 0; font-size: 14px; }
 .hero-intro {
-  height: calc(70vh - 100px);
-  min-height: 380px;
+  height: calc(70vh - 250px);
+  min-height: 300px;
   padding: 6vh 3.3vw 3vh;
   display: flex;
   flex-direction: column;
@@ -238,7 +238,7 @@ html[data-loader="skip"] .word {
   .nav-locale { font-size: 11.5px; }
   .hero-intro {
     height: auto;
-    min-height: calc(70svh - 80px);
+    min-height: calc(70svh - 210px);
     padding: 4vh 6vw;
   }
   h1 {
@@ -446,7 +446,7 @@ html[lang="ka"] .work-rail-caption { text-transform: none; }
   .services-details { font-size: 14px; }
 }
 /* Partners: one disintegrating logo strip (canvas). */
-.partners { padding: 6vh 0 4vh; }
+.partners { padding: 0 0 2vh; }
 .partners-row { display: block; width: 100%; touch-action: pan-y; cursor: grab; }
 .partners-row:active { cursor: grabbing; }
 /* Footer: contact lead + link columns, full-bleed wordmark at the foot. */

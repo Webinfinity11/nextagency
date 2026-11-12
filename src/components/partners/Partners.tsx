@@ -39,7 +39,7 @@ export function Partners({ locale }: { locale: Locale }) {
     const layout = () => {
       W = section.clientWidth; dpr = Math.min(devicePixelRatio || 1, 2);
       const mobile = W < 768;
-      logoH = mobile ? 44 : 70; cell = mobile ? 5 : 7; pad = mobile ? 44 : 80;
+      logoH = mobile ? 44 : 70; cell = mobile ? 5 : 7; pad = mobile ? 26 : 36;
       slot = W / (mobile ? 2.4 : 5); edge = W * (mobile ? .3 : .22); scatter = W * (mobile ? .22 : .16);
       H = logoH + pad * 2;
       canvas.width = W * dpr; canvas.height = H * dpr; canvas.style.height = `${H}px`;
