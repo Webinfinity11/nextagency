@@ -500,20 +500,7 @@ html[lang="ka"] .work-rail-caption { text-transform: none; }
   .services-detail-stack { top: auto; bottom: 7svh; left: calc(52vw + 4vw); right: 6vw; height: calc(46vw * 6 / 5); align-content: start; }
   .services-details { font-size: 14px; }
 }
-/* Partners: hub + beams; logo rows are canvases. */
-.partners { position: relative; padding: 4vh 0 7vh; background: radial-gradient(circle, #d9d9d9 1.2px, transparent 1.6px) 0 0 / 40px 40px; }
+/* Partners: one disintegrating logo strip (canvas). */
+.partners { padding: 6vh 0 10vh; }
 .partners-row { display: block; width: 100%; touch-action: pan-y; cursor: grab; }
 .partners-row:active { cursor: grabbing; }
-.partners-middle { position: relative; height: clamp(240px, 30vw, 360px); display: grid; place-items: center; }
-.partners-beams { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.partners-beam { fill: none; stroke: #d6d6d6; stroke-width: 1; }
-.partners-dot { fill: #111; }
-.partners-dot.is-soft { fill: #a8a8a8; }
-.partners-hub { position: relative; display: grid; place-items: center; width: clamp(220px, 21vw, 300px); height: clamp(96px, 9vw, 128px); border: 1px solid #cfcfcf; border-radius: 999px; background: #fff; box-shadow: 0 1px 0 #fff inset, 0 10px 30px -18px #0003; }
-.partners-hub svg { width: 46%; }
-@media (max-width: 767px) {
-  .partners { padding: 4vh 0 6vh; background-size: 28px 28px; }
-  .partners-middle { height: 220px; }
-  .partners-hub { width: 170px; height: 78px; }
-}
-@media (prefers-reduced-motion: reduce) { .partners-dot { display: none; } }
