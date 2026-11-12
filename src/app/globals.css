@@ -449,11 +449,10 @@ html[lang="ka"] .work-rail-caption { text-transform: none; }
 .partners { padding: 0 0 2vh; }
 .partners-row { display: block; width: 100%; touch-action: pan-y; cursor: grab; }
 .partners-row:active { cursor: grabbing; }
-/* Footer: contact lead + link columns, full-bleed wordmark at the foot. */
+/* Footer: contact email + link columns, full-bleed wordmark at the foot. */
 .footer { padding: clamp(40px, 6vh, 72px) 3.3vw 0; display: grid; gap: clamp(28px, 4vh, 48px); }
 .footer-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 6vw; }
 .footer-contact { display: grid; gap: clamp(14px, 2vh, 24px); }
-.footer-lead { margin: 0; max-width: 16ch; font-size: clamp(34px, 4.6vw, 80px); font-weight: 600; letter-spacing: -.045em; line-height: 1.02; color: #c4c4c4; }
 .footer-mask { margin: 0; overflow: clip; padding-bottom: .08em; }
 .footer-mask > * { display: inline-flex; }
 .footer-email { align-items: center; gap: .45em; font-size: clamp(22px, 2.2vw, 36px); font-weight: 600; letter-spacing: -.03em; line-height: 1.2; }
@@ -478,7 +477,6 @@ html[lang="ka"] .work-rail-caption { text-transform: none; }
 @media (max-width: 767px) {
   .footer { padding: 48px 6vw 0; }
   .footer-top { flex-direction: column; align-items: stretch; gap: 40px; }
-  .footer-lead { font-size: 34px; }
   .footer-email { font-size: 20px; }
   .footer-cols { gap: 56px; font-size: 15px; }
   .footer-meta { flex-direction: column; gap: 4px; }

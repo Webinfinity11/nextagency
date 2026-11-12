@@ -6,18 +6,13 @@ import { footerCopy } from "@/content/footer";
 import { DotMark } from "./DotMark";
 import type { Locale } from "@/content/locales";
 import { gsap, useGSAP, reducedMotion } from "@/lib/gsap";
-// After tinywins.com's footer: contact lead top-left, two link columns top-right, full-bleed wordmark at the foot.
+// After tinywins.com's footer: contact email top-left, two link columns top-right, full-bleed wordmark at the foot.
 export function Footer({ copy, locale }: { copy: HeroContent; locale: Locale }) {
   const f = footerCopy(locale);
   const scope = useRef<HTMLElement>(null);
   useGSAP(() => {
     if (reducedMotion()) return;
     const root = scope.current!;
-    // The lead fills word by word, grey to black, as the footer scrolls into view.
-    gsap.fromTo(root.querySelectorAll(".footer-lead [data-word]"), { color: "#c4c4c4" }, {
-      color: "#000", ease: "none", stagger: .3,
-      scrollTrigger: { trigger: root.querySelector(".footer-lead"), start: "top 92%", end: "top 45%", scrub: true },
-    });
     gsap.fromTo(root.querySelectorAll("[data-footer-reveal]"), { yPercent: 100 }, {
       yPercent: 0, duration: .9, ease: "power3.out", stagger: .06,
       scrollTrigger: { trigger: root, start: "top 85%", once: true },
@@ -27,7 +22,6 @@ export function Footer({ copy, locale }: { copy: HeroContent; locale: Locale }) 
     <footer className="footer" ref={scope}>
       <div className="footer-top">
         <div className="footer-contact">
-          <p className="footer-lead">{f.lead.split(" ").map((w, i) => <span key={i} data-word>{w} </span>)}</p>
           <p className="footer-mask">
             <a data-footer-reveal className="footer-email" href={`mailto:${f.email}`} aria-label={f.email}>
               <span className="footer-roll">
