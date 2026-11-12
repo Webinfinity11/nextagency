@@ -46,7 +46,7 @@ export function Services({ locale }: { locale: Locale }) {
     });
   }, { scope });
   return (
-    <section className="services" ref={scope} aria-labelledby="services-title">
+    <section className="services" id="services" ref={scope} aria-labelledby="services-title">
       <h2 className="sr-only" id="services-title">{label}</h2>
       <div className="services-stage">
         <ol className="services-list">

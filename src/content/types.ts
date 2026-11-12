@@ -14,8 +14,4 @@ export type HeroContent = {
   /** Two phrases, each with a left and right group of two lines. */
   phrases: [[Lines, Lines], [Lines, Lines]];
   mediaLabel: string;
-  support: string;
-  closing: Lines;
-  contact: string;
-  contactNote: string;
 };

@@ -21,9 +21,4 @@ export const hero: HeroContent = {
     ],
   ],
   mediaLabel: "Our next chapter, in motion",
-  support:
-    "The next move starts with a better question. We connect strategy, identity and digital experiences to give ambitious brands a clear way forward.",
-  closing: ["MAKE ROOM", "FOR WHAT’S NEXT."],
-  contact: "Let’s shape the next step",
-  contactNote: "Contact details coming soon.",
 };

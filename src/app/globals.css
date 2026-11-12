@@ -107,7 +107,6 @@ h1 {
    descenders, so the English line height and masks fit; the wider letters need a smaller size.
    Chrome's text-transform: uppercase turns Mtavruli back into Mkhedruli, so it must stay off. */
 html[lang="ka"] h1,
-html[lang="ka"] .support h2,
 html[lang="ka"] .work-heading {
   text-transform: none;
 }
@@ -190,43 +189,6 @@ html[data-loader="skip"] .word {
   max-width: none;
   flex-shrink: 0;
 }
-.support {
-  min-height: 100vh;
-  padding: 8vh 3.3vw 3vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 5vh;
-}
-.support-copy {
-  width: min(560px, 65%);
-  margin: 0 0 0 auto;
-  font-size: clamp(18px, 2vw, 30px);
-  line-height: 1.4;
-  letter-spacing: -0.03em;
-}
-.support h2 {
-  margin: 0;
-  font-size: clamp(50px, 7.5vw, 140px);
-  font-weight: 800;
-  line-height: 0.95;
-  letter-spacing: -0.04em;
-  text-transform: uppercase;
-}
-.closing-mask {
-  display: block;
-  overflow: hidden;
-}
-.closing-line {
-  display: block;
-}
-.contact {
-  display: flex;
-  justify-content: space-between;
-  border-top: 1px solid;
-  padding-top: 1.5rem;
-  font-size: 12px;
-}
 .loader {
   position: fixed;
   inset: 0;
@@ -301,20 +263,6 @@ html[data-loader="skip"] .word {
   .media-wordmark {
     width: calc((100% - 32px) * 0.75);
   }
-  .support {
-    padding: 7vh 6vw 3vh;
-  }
-  .support-copy {
-    width: 100%;
-    font-size: 22px;
-  }
-  .support h2 {
-    font-size: 10vw;
-  }
-  .contact {
-    gap: 1rem;
-    font-size: 11px;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   .loader { display: none; }
@@ -325,8 +273,7 @@ html[data-loader="skip"] .word {
   .loader-flicker {
     display: none;
   }
-  html .word,
-  .closing-line {
+  html .word {
     transform: none !important;
   }
   .phrase-1 {
