@@ -76,7 +76,7 @@ export function Partners({ locale }: { locale: Locale }) {
     let last = performance.now(), raf = 0, visible = false;
     const frame = (now: number) => {
       const dt = Math.min(.05, (now - last) / 1000); last = now;
-      if (!still) { offset += drag - 48 * dt; drag *= .9; }
+      if (!still) { offset += drag - 80 * dt; drag *= .9; }
       draw();
       raf = visible && !still ? requestAnimationFrame(frame) : 0;
     };
