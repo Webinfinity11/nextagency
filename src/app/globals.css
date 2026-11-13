@@ -568,31 +568,18 @@ html[lang="ka"] .case-next strong { text-transform: none; line-height: 1.15; let
 .contact-status { min-height: 1.4em; margin: -4px 0 0; font-size: 14px; color: #2b3fb3; }
 .contact-status.is-error { color: #b42318; }
 .contact-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-/* Right: only the animation (no frame) — a dot globe on the page with a paper postcard in front of it. */
+/* Right: only the animation, no frame: globe, postcard, fold and flight are drawn by contactScene on one canvas. */
 .contact-stage { --accent: #5b7cff; position: relative; width: 100%; max-width: 620px; aspect-ratio: 1; }
 .contact-globe { position: absolute; inset: 0; width: 100%; height: 100%; }
 .contact-landed { position: absolute; z-index: 2; margin: 0; padding: 7px 12px; border-radius: 999px; background: #111; color: #fff; font-size: 13px; font-weight: 600; white-space: nowrap; transform: translate(-50%, calc(-100% - 16px)); animation: contact-pop .45s cubic-bezier(.2,.8,.2,1) both; }
 @keyframes contact-pop { from { opacity: 0; transform: translate(-50%, calc(-100% - 6px)) scale(.9); } }
-.contact-postcard { position: absolute; left: 50%; top: 58%; display: grid; grid-template-columns: 1.6fr 1fr; gap: 12px; width: min(62%, 330px); aspect-ratio: 3 / 2; margin-left: max(-31%, -165px); padding: 14px; border-radius: 5px; background: #fbfaf6; color: #141414; box-shadow: 0 24px 50px -18px rgba(0,0,0,.35), 0 2px 6px rgba(0,0,0,.12); will-change: transform; }
-.contact-postcard-text { display: grid; align-content: start; gap: 8px; min-width: 0; padding-right: 10px; border-right: 1px solid #e2ded3; }
-.contact-postcard-text time { font-size: 10px; letter-spacing: .04em; color: #7a776f; }
-.contact-postcard-text p { margin: 0; overflow: hidden; font-size: 12.5px; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; }
-.contact-postcard-text p span { color: #a29e94; }
-.contact-caret { display: inline-block; width: 1.5px; height: 1em; margin-left: 1px; vertical-align: -2px; background: var(--accent); animation: contact-blink 1s steps(1) infinite; }
-@keyframes contact-blink { 50% { opacity: 0; } }
-.contact-postcard-side { display: grid; align-content: space-between; justify-items: end; }
-.contact-stamp { display: grid; place-items: center; width: 40px; height: 48px; border: 2px dashed #c4bfb3; outline: 3px solid #fbfaf6; outline-offset: -5px; background: var(--accent); color: #fff; }
-.contact-stamp b { font-size: 19px; font-weight: 800; letter-spacing: -.04em; }
-.contact-address { display: grid; justify-items: start; width: 100%; font-size: 10.5px; line-height: 1.45; color: #4a4842; }
-.contact-address strong { font-size: 11.5px; color: #141414; }
 @media (max-width: 900px) {
   .contact { padding: 72px 6vw 32px; }
   .contact-grid { grid-template-columns: 1fr; gap: 24px; }
   .contact-form { justify-self: stretch; max-width: none; }
   .contact-stage { max-width: none; }
-  .contact-postcard { width: 66%; margin-left: -33%; }
 }
-@media (prefers-reduced-motion: reduce) { .contact-caret, .contact-landed { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .contact-landed { animation: none; } }
 /* Footer: contact email + link columns, full-bleed wordmark at the foot. */
 .footer { padding: clamp(40px, 6vh, 72px) 3.3vw 0; display: grid; gap: clamp(28px, 4vh, 48px); }
 .footer-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 6vw; }

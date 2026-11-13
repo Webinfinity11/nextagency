@@ -3,9 +3,10 @@ import { headers } from "next/headers";
 import { db } from "@/lib/db";
 import { clientIp } from "@/lib/login-limit";
 import { isLocale } from "@/content/locales";
-// Contact form → stored as a Message, read at /admin/messages.
+// Contact form → stored as a Message, read at /admin/messages (per-IP limit, in memory).
 export type SendResult = { ok: true } | { ok: false; error: "invalid" | "busy" | "failed" };
-const WINDOW = 10 * 60 * 1000, PER_IP = 5;
+// 5 messages per IP per 10 minutes in production; looser locally so the form can be tried repeatedly.
+const WINDOW = 10 * 60 * 1000, PER_IP = process.env.NODE_ENV === "production" ? 5 : 50;
 const sent = new Map<string, number[]>();
 export async function sendMessage(form: FormData): Promise<SendResult> {
   const v = (k: string, max: number) => String(form.get(k) ?? "").trim().slice(0, max);
