@@ -11,7 +11,6 @@ export async function WorkSection({ locale }: { locale: Locale }) {
   const copy = workCopy(locale);
   const items = projects.map((p, i) => ({
     slug: p.slug, href: `/${locale}/work/${p.slug}`, title: p.title[locale], caption: display(p.title[locale], locale),
-    feeling: p.feeling[locale], captionFeeling: display(p.feeling[locale], locale),
     aspect: p.cover.kind === "gradient" || !p.cover.src ? PLACEHOLDER_ASPECTS[i % PLACEHOLDER_ASPECTS.length] : p.cover.aspect, kind: p.cover.kind, src: p.cover.src, poster: p.cover.poster,
   }));
   return <section id="work" aria-labelledby="work-title"><WorkMotion>

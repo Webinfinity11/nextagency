@@ -71,7 +71,6 @@ export async function saveProject(_: FormState, form: FormData): Promise<FormSta
     slug, year, category: category as "identity" | "digital",
     titleKa: text("titleKa"), titleEn: text("titleEn"),
     summaryKa: text("summaryKa"), summaryEn: text("summaryEn"),
-    feelingKa: text("feelingKa"), feelingEn: text("feelingEn"),
     introKa: text("introKa"), introEn: text("introEn"),
     headlineKa: text("headlineKa"), headlineEn: text("headlineEn"),
     tagsKa: tagList(text("tagsKa")), tagsEn: tagList(text("tagsEn")),

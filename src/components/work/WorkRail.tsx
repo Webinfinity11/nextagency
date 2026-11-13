@@ -6,11 +6,11 @@ import { gsap, useGSAP, afterLoader, ScrollTrigger } from "@/lib/gsap";
 import { NoiseLink } from "./NoiseLink";
 
 export type RailItem = {
-  slug: string; href: string; title: string; caption: string; feeling: string; captionFeeling: string;
+  slug: string; href: string; title: string; caption: string;
   aspect: number; kind: "gradient" | "image" | "video"; src?: string; poster?: string;
 };
 
-const STEP = 0.65; // each slot away from the focus (either side) is 65% of the previous one
+const STEP = 0.8; // each slot away from the focus (either side) is 80% of the previous one
 const GAP = 24;
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
 
@@ -45,9 +45,9 @@ export function WorkRail({ items, prefix, all }: {
         vw = root.clientWidth;
         const vh = window.innerHeight;
         margin = vw * 0.04;
-        const h = Math.min(vh * 0.5, 480);
+        const h = Math.min(vh * 0.58, 560);
         size = items.map(({ aspect }) => {
-          const w = mobile ? Math.min(vw * 0.62, vh * 0.5 * aspect) : Math.min(h * aspect, vw * 0.42);
+          const w = mobile ? Math.min(vw * 0.7, vh * 0.55 * aspect) : Math.min(h * aspect, vw * 0.42);
           return { w, h: w / aspect };
         });
         frames.forEach((f, i) => { f.style.width = `${size[i].w}px`; f.style.height = `${size[i].h}px`; f.style.top = `${-size[i].h / 2}px`; });
@@ -80,7 +80,7 @@ export function WorkRail({ items, prefix, all }: {
         for (let i = 0; i < n; i++) {
           const d = Math.abs(i - p);
           const s = STEP ** d;
-          const far = clamp01((d - 4.2) / .8); // beyond ~5 slots on either side only the name remains
+          const far = clamp01((d - 6.2) / .8); // beyond ~7 slots (off screen) only the name remains
           width[i] = size[i].w * s * (1 - far) + labelW[i] * far;
           frames[i].style.transform = `scale(${s})`;
           frames[i].style.opacity = String(1 - far);
@@ -145,7 +145,7 @@ export function WorkRail({ items, prefix, all }: {
             : item.kind === "video" && item.src ? <video src={item.src} poster={item.poster} muted loop playsInline autoPlay preload="none" aria-hidden="true" />
             : <span className="work-rail-index" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>}
         </span>
-        <span className="work-rail-caption" aria-hidden="true"><b>{item.caption}</b> <span>{item.captionFeeling}</span></span>
+        <span className="work-rail-caption" aria-hidden="true"><b>{item.caption}</b></span>
         <span className="work-rail-label" aria-hidden="true">{item.title}</span>
       </Link>)}
     </div>

@@ -9,8 +9,6 @@ export type TextBlock = { kind: "text"; ka: string; en: string; bg?: string };
 export type Block = MediaBlock | TextBlock;
 export type Project = {
   slug: string; title: Localized; summary: Localized; category: CategoryId;
-  /** One word for the home rail sentence ("Make it …"). */
-  feeling: Localized;
   /** Project page info column. */
   tags: Record<Locale, string[]>; headline: Localized; intro: Localized;
   client: Localized; services: Localized; team: Localized; websiteUrl?: string;
@@ -25,7 +23,7 @@ export type Category = { id: CategoryId; title: Localized; description: Localize
 function toProject(r: Row): Project {
   return {
     slug: r.slug, title: { ka: r.titleKa, en: r.titleEn }, summary: { ka: r.summaryKa, en: r.summaryEn },
-    feeling: { ka: r.feelingKa, en: r.feelingEn }, category: r.category,
+    category: r.category,
     tags: { ka: r.tagsKa, en: r.tagsEn }, headline: { ka: r.headlineKa, en: r.headlineEn }, intro: { ka: r.introKa, en: r.introEn },
     client: { ka: r.clientKa, en: r.clientEn }, services: { ka: r.servicesKa, en: r.servicesEn }, team: { ka: r.teamKa, en: r.teamEn },
     websiteUrl: r.websiteUrl ?? undefined, accent: r.accent,

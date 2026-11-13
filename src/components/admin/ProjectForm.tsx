@@ -5,7 +5,7 @@ import { saveProject } from "@/app/admin/actions";
 
 export type ProjectFormValues = {
   id?: string; slug: string; titleKa: string; titleEn: string; summaryKa: string; summaryEn: string;
-  feelingKa: string; feelingEn: string; introKa: string; introEn: string; category: "identity" | "digital";
+  introKa: string; introEn: string; category: "identity" | "digital";
   headlineKa: string; headlineEn: string; tagsKa: string; tagsEn: string; clientKa: string; clientEn: string;
   servicesKa: string; servicesEn: string; teamKa: string; teamEn: string; websiteUrl: string; accent: string;
   year: number; published: boolean; coverSrc: string; coverPoster: string; coverAspect: number; toneA: string; toneB: string;
@@ -77,7 +77,7 @@ export function ProjectForm({ initial }: { initial: ProjectFormValues }) {
   const [v, setV] = useState(initial);
   const [slugTouched, setSlugTouched] = useState(!!initial.id);
   const set = <K extends keyof ProjectFormValues>(k: K, value: ProjectFormValues[K]) => setV(s => ({ ...s, [k]: value }));
-  const pair = (base: "title" | "summary" | "feeling" | "intro" | "headline" | "tags" | "client" | "services" | "team") => ({
+  const pair = (base: "title" | "summary" | "intro" | "headline" | "tags" | "client" | "services" | "team") => ({
     values: [v[`${base}Ka`], v[`${base}En`]] as [string, string],
     onChange: (lang: 0 | 1, value: string) => setV(s => {
       const next = { ...s, [`${base}${lang ? "En" : "Ka"}`]: value };
@@ -111,7 +111,6 @@ export function ProjectForm({ initial }: { initial: ProjectFormValues }) {
         <label className="admin-check"><input type="checkbox" name="published" checked={v.published} onChange={e => set("published", e.target.checked)} />საიტზე ჩანს</label>
       </div>
       <Pair label="მოკლე აღწერა (ბარათზე)" name="summary" {...pair("summary")} />
-      <Pair label="ერთი სიტყვა (მთავარ გვერდზე, სათაურის გვერდით)" name="feeling" {...pair("feeling")} />
     </section>
 
     <section className="admin-card">
