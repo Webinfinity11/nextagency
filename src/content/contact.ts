@@ -3,7 +3,7 @@ type ContactCopy = {
   title: string; intro: string;
   name: string; namePh: string; email: string; emailPh: string; company: string; companyPh: string;
   message: string; messagePh: string; submit: string; sending: string;
-  to: string; city: string; country: string; landed: string; sent: string; again: string;
+  city: string; country: string; landed: string; sent: string;
   errors: { invalid: string; busy: string; failed: string };
 };
 const copy: Record<Locale, ContactCopy> = {
@@ -12,8 +12,8 @@ const copy: Record<Locale, ContactCopy> = {
     name: "სახელი", namePh: "გიორგი ბერიძე", email: "ელფოსტა", emailPh: "giorgi@company.ge",
     company: "კომპანია", companyPh: "კომპანიის სახელი", message: "შეტყობინება", messagePh: "მოგვიყევი პროექტზე…",
     submit: "გაგზავნა", sending: "იგზავნება…",
-    to: "ვის", city: "თბილისი", country: "საქართველო", landed: "ჩავიდა თბილისში",
-    sent: "მიღებულია. მალე გიპასუხებთ.", again: "ახალი წერილი",
+    city: "თბილისი", country: "საქართველო", landed: "ჩავიდა თბილისში",
+    sent: "მიღებულია. მალე გიპასუხებთ.",
     errors: { invalid: "შეავსე სახელი, სწორი ელფოსტა და შეტყობინება.", busy: "ცოტა ხანში სცადე თავიდან.", failed: "ვერ გაიგზავნა. სცადე თავიდან ან მოგვწერე ელფოსტაზე." },
   },
   en: {
@@ -21,8 +21,8 @@ const copy: Record<Locale, ContactCopy> = {
     name: "Full name", namePh: "Jane Doe", email: "Email address", emailPh: "jane@company.com",
     company: "Company", companyPh: "Company name", message: "Message", messagePh: "Tell us about your project…",
     submit: "Send", sending: "Sending…",
-    to: "To", city: "Tbilisi", country: "Georgia", landed: "Landed in Tbilisi",
-    sent: "Received. We’ll get back to you soon.", again: "New message",
+    city: "Tbilisi", country: "Georgia", landed: "Landed in Tbilisi",
+    sent: "Received. We’ll get back to you soon.",
     errors: { invalid: "Add your name, a valid email and a message.", busy: "Please try again in a little while.", failed: "Couldn’t send. Try again or email us." },
   },
 };
