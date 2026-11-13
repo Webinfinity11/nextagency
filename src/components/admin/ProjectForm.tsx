@@ -14,7 +14,7 @@ export type ProjectFormValues = {
 type EditBlock = { key: string; bg: string } & ({ kind: "media"; src: string; poster: string; aspect: number; wide: boolean } | { kind: "text"; ka: string; en: string });
 
 const KA_LATIN: Record<string, string> = { ა: "a", ბ: "b", გ: "g", დ: "d", ე: "e", ვ: "v", ზ: "z", თ: "t", ი: "i", კ: "k", ლ: "l", მ: "m", ნ: "n", ო: "o", პ: "p", ჟ: "zh", რ: "r", ს: "s", ტ: "t", უ: "u", ფ: "p", ქ: "k", ღ: "gh", ყ: "q", შ: "sh", ჩ: "ch", ც: "ts", ძ: "dz", წ: "ts", ჭ: "ch", ხ: "kh", ჯ: "j", ჰ: "h" };
-const slugify = (s: string) => [...s.toLowerCase()].map(c => KA_LATIN[c] ?? c).join("").normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
+export const slugify = (s: string) => [...s.toLowerCase()].map(c => KA_LATIN[c] ?? c).join("").normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
 const isVideo = (src: string) => /\.(mp4|webm|mov)$/i.test(src);
 let keySeq = 0;
 const newKey = () => `b${Date.now()}-${keySeq++}`;
@@ -38,7 +38,7 @@ async function upload(file: File): Promise<{ url: string; aspect: number }> {
   return { url: json.url, aspect: Math.round(aspect * 1000) / 1000 };
 }
 
-function MediaPicker({ label, src, accept, onChange, hint }: { label: string; src: string; accept: string; hint?: string; onChange: (v: { url: string; aspect: number } | null) => void }) {
+export function MediaPicker({ label, src, accept, onChange, hint }: { label: string; src: string; accept: string; hint?: string; onChange: (v: { url: string; aspect: number } | null) => void }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   return <div className="admin-media">

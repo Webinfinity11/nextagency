@@ -6,6 +6,7 @@ import { footerCopy } from "@/content/footer";
 import { DotMark } from "./DotMark";
 import type { Locale } from "@/content/locales";
 import { gsap, useGSAP, reducedMotion } from "@/lib/gsap";
+import { navHref } from "@/content/nav";
 // After tinywins.com's footer: contact email top-left, two link columns top-right, full-bleed wordmark at the foot.
 export function Footer({ copy, locale }: { copy: HeroContent; locale: Locale }) {
   const f = footerCopy(locale);
@@ -37,7 +38,7 @@ export function Footer({ copy, locale }: { copy: HeroContent; locale: Locale }) 
           <nav aria-label={copy.navLabel}>
             <p className="footer-label">{f.siteLabel}</p>
             {copy.nav.map((label, i) => (
-              <Link key={label} className="footer-link" href={i === 0 ? `/${locale}/work` : `/${locale}#services`}>{label}</Link>
+              <Link key={label} className="footer-link" href={navHref(locale, i)}>{label}</Link>
             ))}
           </nav>
           <nav aria-label={f.socialLabel}>

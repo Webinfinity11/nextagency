@@ -92,3 +92,7 @@ Local: Postgres 17 in Docker (`nextagency-pg`, port 5433), `.env` from `.env.exa
 ## Contact
 
 Form on the left (name, email, company); on the right a dark card with a dot-matrix globe (Natural Earth 1:110m land, rasterized to a 1° bitmask in `src/components/contact/landMask.ts`) behind a paper postcard that prints the message as it is typed. Send folds the card, a paper plane flies around the globe to Tbilisi and a pin lands. Messages are stored (`Message` model, server action with honeypot and a per-IP limit) and read at `/admin/messages`.
+
+## Blog and contact pages
+
+Navigation is Work · Services · Blog · Contact (`src/content/nav.ts`, shared by header and footer). Blog posts (`Post` model) are edited at `/admin/posts` (both languages, cover, date, publish toggle; body is plain text: blank line = paragraph, `## ` = heading, `- ` = list) and shown at `/[locale]/blog` and `/[locale]/blog/[slug]`. `/[locale]/contact` has a large heading, direct details (email, place, socials from `content/footer.ts`) and the postcard form; the shared form before the footer hides itself on that page.

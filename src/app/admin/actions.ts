@@ -134,3 +134,37 @@ export async function deleteMessage(form: FormData) {
   await db.message.delete({ where: { id: String(form.get("id")) } });
   redirect("/admin/messages");
 }
+
+export async function savePost(_: FormState, form: FormData): Promise<FormState> {
+  await requireAdmin();
+  const id = String(form.get("id") ?? "");
+  const text = (k: string) => String(form.get(k) ?? "").trim();
+  const slug = text("slug").toLowerCase();
+  if (!text("titleKa") || !text("titleEn")) return { error: "სათაური ორივე ენაზე სავალდებულოა." };
+  if (!SLUG.test(slug)) return { error: "ბმული (slug) მხოლოდ ლათინური პატარა ასოებით, ციფრებით და ტირეებით." };
+  const date = new Date(text("publishedAt"));
+  if (Number.isNaN(date.getTime())) return { error: "თარიღი არასწორია." };
+  const taken = await db.post.findUnique({ where: { slug }, select: { id: true } });
+  if (taken && taken.id !== id) return { error: `ბმული „${slug}“ უკვე სხვა სტატიას აქვს.` };
+  const data = {
+    slug, titleKa: text("titleKa"), titleEn: text("titleEn"), excerptKa: text("excerptKa"), excerptEn: text("excerptEn"),
+    bodyKa: text("bodyKa"), bodyEn: text("bodyEn"), publishedAt: date, published: form.get("published") === "on",
+    coverSrc: isMedia(form.get("coverSrc")) && !isVideo(text("coverSrc")) ? text("coverSrc") : null, coverAspect: aspectOf(form.get("coverAspect")),
+  };
+  if (id) await db.post.update({ where: { id }, data }); else await db.post.create({ data });
+  redirect("/admin/posts?saved=1");
+}
+
+export async function deletePost(form: FormData) {
+  await requireAdmin();
+  await db.post.delete({ where: { id: String(form.get("id")) } });
+  redirect("/admin/posts");
+}
+
+export async function togglePostPublished(form: FormData) {
+  await requireAdmin();
+  const id = String(form.get("id"));
+  const p = await db.post.findUniqueOrThrow({ where: { id }, select: { published: true } });
+  await db.post.update({ where: { id }, data: { published: !p.published } });
+  redirect("/admin/posts");
+}

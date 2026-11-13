@@ -7,6 +7,7 @@ export async function AdminHeader() {
     <Link href="/admin" className="admin-brand">NEXT AGENCY <span>ადმინი</span></Link>
     <nav>
       <Link href="/admin">პროექტები</Link>
+      <Link href="/admin/posts">ბლოგი</Link>
       <Link href="/admin/messages">შეტყობინებები{unread > 0 && <b className="admin-badge">{unread}</b>}</Link>
       <Link href="/ka" target="_blank">საიტი ↗</Link>
       <form action={logout}><button className="admin-link">გასვლა</button></form>
