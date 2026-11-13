@@ -285,8 +285,12 @@ export function createContactScene(canvas: HTMLCanvasElement, opts: { accent: st
       }
       ctx.globalAlpha = 1;
     };
+    // Behind the globe: the globe's disc hides it completely (the dot globe would let it show through);
+    // only what is past the limb stays visible.
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.arc(gx, gy, R + 1, 0, Math.PI * 2); ctx.clip("evenodd");
     drawTrail(false);
-    if (send && plane && mesh && !plane.front) drawPaper(mesh.polys, mesh.place, plane.pose, .35);
+    if (send && plane && mesh && !plane.front) drawPaper(mesh.polys, mesh.place, plane.pose, 1);
+    ctx.restore(); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     // Globe.
     const dot = Math.max(1.6, R / 72);
     for (let i = 0; i < P.length; i += 4) {
