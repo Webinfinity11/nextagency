@@ -49,10 +49,10 @@ export function Contact({ locale }: { locale: Locale }) {
         <div className="contact-form">
           <h2 id="contact-title">{c.title}</h2>
           <p className="contact-intro">{c.intro}</p>
-          <label>{c.name}<input name="name" required maxLength={120} autoComplete="name" placeholder={c.namePh} /></label>
-          <label>{c.email}<input name="email" type="email" required maxLength={200} autoComplete="email" placeholder={c.emailPh} /></label>
-          <label>{c.company}<input name="company" maxLength={160} autoComplete="organization" placeholder={c.companyPh} /></label>
-          <label>{c.message}<textarea name="message" required maxLength={5000} rows={5} placeholder={c.messagePh} disabled={busy} onChange={e => scene.current?.setText(e.target.value)} onFocus={() => scene.current?.setFocus(true)} onBlur={() => scene.current?.setFocus(false)} /></label>
+          <label>{c.name}<input name="name" required maxLength={120} autoComplete="name" /></label>
+          <label>{c.email}<input name="email" type="email" required maxLength={200} autoComplete="email" /></label>
+          <label>{c.company}<input name="company" maxLength={160} autoComplete="organization" /></label>
+          <label>{c.message}<textarea name="message" required maxLength={5000} rows={5} disabled={busy} onChange={e => scene.current?.setText(e.target.value)} onFocus={() => scene.current?.setFocus(true)} onBlur={() => scene.current?.setFocus(false)} /></label>
           <input type="hidden" name="locale" value={locale} />
           <label className="contact-trap" aria-hidden="true">Website<input name="website" tabIndex={-1} autoComplete="off" /></label>
           <button type="submit" disabled={busy}>{busy ? c.sending : c.submit}</button>

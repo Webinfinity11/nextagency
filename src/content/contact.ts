@@ -1,7 +1,7 @@
 import type { Locale } from "./locales";
 type ContactCopy = {
   title: string; intro: string;
-  name: string; namePh: string; email: string; emailPh: string; company: string; companyPh: string;
+  name: string; email: string; company: string;
   message: string; messagePh: string; submit: string; sending: string;
   landed: string; sent: string; airmail: string;
   errors: { invalid: string; busy: string; failed: string };
@@ -9,8 +9,8 @@ type ContactCopy = {
 const copy: Record<Locale, ContactCopy> = {
   ka: {
     title: "დაგვიკავშირდი", intro: "მოგვწერე პროექტზე და მალე გიპასუხებთ.",
-    name: "სახელი", namePh: "გიორგი ბერიძე", email: "ელფოსტა", emailPh: "giorgi@company.ge",
-    company: "კომპანია", companyPh: "კომპანიის სახელი", message: "შეტყობინება", messagePh: "მოგვიყევი პროექტზე…",
+    name: "სახელი", email: "ელფოსტა",
+    company: "კომპანია", message: "შეტყობინება", messagePh: "მოგვიყევი პროექტზე…",
     submit: "გაგზავნა", sending: "იგზავნება…",
     landed: "ჩავიდა თბილისში", airmail: "ავიაფოსტა",
     sent: "მიღებულია. მალე გიპასუხებთ.",
@@ -18,8 +18,8 @@ const copy: Record<Locale, ContactCopy> = {
   },
   en: {
     title: "Contact us", intro: "Tell us about your project and we’ll get back to you soon.",
-    name: "Full name", namePh: "Jane Doe", email: "Email address", emailPh: "jane@company.com",
-    company: "Company", companyPh: "Company name", message: "Message", messagePh: "Tell us about your project…",
+    name: "Full name", email: "Email address",
+    company: "Company", message: "Message", messagePh: "Tell us about your project…",
     submit: "Send", sending: "Sending…",
     landed: "Landed in Tbilisi", airmail: "AIR MAIL",
     sent: "Received. We’ll get back to you soon.",
