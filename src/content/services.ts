@@ -5,7 +5,9 @@ export type ServiceCategory = "tech" | "marketing" | "design";
 export type Service = { category: ServiceCategory; title: string; description: string; tags: string[]; tone: [string, string] };
 type QA = { title: string; text: string };
 type Copy = {
-  label: string; eyebrow: string; title: string; all: string; categories: Record<ServiceCategory, string>;
+  label: string;
+  /** The six services shown in the home page's pinned list, in this order. */
+  home: { title: string; tone: [string, string] }[]; eyebrow: string; title: string; all: string; categories: Record<ServiceCategory, string>;
   services: Service[];
   cta: { title: string; text: string; button: string };
   guide: { title: string; items: QA[] };
@@ -14,9 +16,11 @@ type Copy = {
 };
 const tones: [string, string][] = [["#d6d6d6", "#9a9a9a"], ["#3a3a3a", "#0e0e0e"], ["#ececec", "#bcbcbc"], ["#5c5c5c", "#1c1c1c"], ["#c4c4c4", "#7c7c7c"], ["#2a2a2a", "#050505"]];
 const list = (items: Omit<Service, "tone">[]) => items.map((s, i) => ({ ...s, tone: tones[i % tones.length] }));
+const homeList = (titles: string[]) => titles.map((title, i) => ({ title, tone: tones[i % tones.length] }));
 const copy: Record<Locale, Copy> = {
   ka: {
     label: "ჩვენი სერვისები",
+    home: homeList(["საიტის დამზადება", "სოციალური მედიის მართვა", "SEO ოპტიმიზაცია", "ვიდეო პროდაქშენი", "CRM სისტემების დანერგვა", "AI Chatbot ინტეგრაცია"]),
     eyebrow: "NEXT AGENCY",
     title: "შენი ბიზნესის შემდეგი ეტაპი.",
     all: "ყველა",
@@ -61,6 +65,7 @@ const copy: Record<Locale, Copy> = {
   },
   en: {
     label: "Our services",
+    home: homeList(["Website creation", "Social media management", "SEO optimization", "Video production", "CRM system implementation", "AI chatbot integration"]),
     eyebrow: "NEXT AGENCY",
     title: "Your next chapter.",
     all: "All",

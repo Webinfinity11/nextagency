@@ -7,7 +7,7 @@ import { display } from "@/lib/mtavruli";
 // Pinned list after tinywins.com "Our services": each scroll step lifts the list one row,
 // and the new photo grows in from the bottom-right corner over the old one.
 export function Services({ locale }: { locale: Locale }) {
-  const { label, services } = servicesCopy(locale);
+  const { label, home: services } = servicesCopy(locale);
   const scope = useRef<HTMLElement>(null);
   useGSAP(() => {
     const root = scope.current!;
