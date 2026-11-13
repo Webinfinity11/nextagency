@@ -120,3 +120,17 @@ export async function moveProject(form: FormData) {
   await db.$transaction(list.map((p, k) => db.project.update({ where: { id: p.id }, data: { order: k + 1 } })));
   redirect("/admin");
 }
+
+export async function toggleMessageRead(form: FormData) {
+  await requireAdmin();
+  const id = String(form.get("id"));
+  const m = await db.message.findUniqueOrThrow({ where: { id }, select: { read: true } });
+  await db.message.update({ where: { id }, data: { read: !m.read } });
+  redirect("/admin/messages");
+}
+
+export async function deleteMessage(form: FormData) {
+  await requireAdmin();
+  await db.message.delete({ where: { id: String(form.get("id")) } });
+  redirect("/admin/messages");
+}

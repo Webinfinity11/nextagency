@@ -96,3 +96,13 @@
   .admin-actions { grid-column: 1 / -1; justify-content: flex-start; }
   .admin-pair, .admin-grid-2, .admin-grid-3 { grid-template-columns: 1fr; }
 }
+
+.admin-badge { display: inline-grid; place-items: center; min-width: 20px; height: 20px; margin-left: 6px; padding: 0 6px; border-radius: 999px; background: #5b7cff; color: #fff; font-size: 12px; font-weight: 700; }
+.admin-messages { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.admin-messages li { display: grid; gap: 12px; padding: 18px 20px; background: #fff; border-radius: 14px; border: 1px solid transparent; }
+.admin-messages li.is-new { border-color: #5b7cff; }
+.admin-messages li.is-new strong::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 8px; border-radius: 50%; background: #5b7cff; vertical-align: 1px; }
+.admin-message-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+.admin-message-head a { font-size: 14px; color: #555; }
+.admin-message-body { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.6; }
+.admin-messages .admin-actions { justify-content: flex-start; }

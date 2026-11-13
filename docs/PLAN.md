@@ -88,3 +88,7 @@ Projects live in PostgreSQL (Prisma 7, `prisma/schema.prisma`, client generated 
 Uploads: `POST /api/admin/upload` (admin only; jpg/png/webp/avif/gif/mp4/webm/mov, 200 MB) writes to `UPLOAD_DIR` under a random name; `/media/[...path]` serves them with immutable caching and Range support (Safari video). Production requires an absolute `UPLOAD_DIR` (Railway volume) because the standalone server runs inside `.next/standalone`, which each build replaces.
 
 Local: Postgres 17 in Docker (`nextagency-pg`, port 5433), `.env` from `.env.example`, `pnpm prisma migrate dev`, then `pnpm db:import-projects "<folder>" [--replace]` to load the agency's web projects (one folder per project: `*_Feature.webp` cover + numbered page screenshots; texts are drafts inside `scripts/import-projects.mts`). Railway: Postgres service + `DATABASE_URL`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SESSION_SECRET`, a volume and `UPLOAD_DIR`; `railway.json` runs `pnpm db:migrate` before each deploy. Deleting a project does not delete its uploaded files.
+
+## Contact
+
+Form on the left (name, email, company); on the right a dark card with a dot-matrix globe (Natural Earth 1:110m land, rasterized to a 1° bitmask in `src/components/contact/landMask.ts`) behind a paper postcard that prints the message as it is typed. Send folds the card, a paper plane flies around the globe to Tbilisi and a pin lands. Messages are stored (`Message` model, server action with honeypot and a per-IP limit) and read at `/admin/messages`.

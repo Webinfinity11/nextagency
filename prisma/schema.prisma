@@ -64,3 +64,17 @@ model Project {
 
   @@index([published, order])
 }
+
+/// A message sent from the contact form; listed at /admin/messages.
+model Message {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  company   String   @default("")
+  body      String
+  locale    String   @default("ka")
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}

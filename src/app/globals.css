@@ -550,40 +550,65 @@ html[lang="ka"] .case-next strong { text-transform: none; line-height: 1.15; let
 .partners { padding: 0 0 2vh; }
 .partners-row { display: block; width: 100%; }
 /* Contact: form left, greyscale cloud-shader card with rotating testimonials right. */
-.contact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 110px); align-items: center; padding: clamp(64px, 12vh, 140px) 3.3vw clamp(40px, 8vh, 96px); }
+.contact { padding: clamp(64px, 12vh, 140px) 3.3vw clamp(40px, 8vh, 96px); }
+.contact-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 110px); align-items: center; }
 .contact-form { display: grid; gap: 18px; max-width: 520px; width: 100%; justify-self: end; }
 .contact-form h2 { margin: 0; font-size: clamp(30px, 2.6vw, 44px); font-weight: 700; letter-spacing: -.03em; line-height: 1.05; }
-.contact-intro { margin: -6px 0 10px; color: #8f8f8f; font-size: 15px; }
+.contact-intro { margin: -6px 0 10px; color: #6f6f6f; font-size: 15px; }
 .contact-form label { display: grid; gap: 8px; font-size: 14px; font-weight: 500; }
-.contact-form input, .contact-form textarea { width: 100%; padding: 13px 14px; border: 1px solid #e4e4e4; border-radius: 10px; background: #f6f6f6; color: #000; font: inherit; font-size: 15px; font-weight: 400; transition: border-color .2s, background-color .2s; }
-.contact-form textarea { resize: vertical; min-height: 120px; }
-.contact-form input::placeholder, .contact-form textarea::placeholder { color: #a3a3a3; }
-.contact-form input:focus-visible, .contact-form textarea:focus-visible { outline: none; border-color: #000; background: #fff; }
-.contact-form button { margin-top: 8px; padding: 15px; border: 0; border-radius: 999px; background: #000; color: #fff; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; transition: transform .2s cubic-bezier(.2,.8,.2,1), background-color .2s; }
-.contact-form button:hover { background: #262626; }
-.contact-form button:active { transform: scale(.98); }
-.contact-form button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
-.contact-card { position: relative; aspect-ratio: 4 / 5; max-height: 86svh; width: 100%; max-width: 620px; overflow: hidden; border-radius: 22px; background: #111; color: #fff; display: grid; place-items: center; }
-.contact-shader { position: absolute; inset: 0; width: 100%; height: 100%; }
-.contact-quotes { position: relative; display: grid; width: min(82%, 440px); }
-.contact-quote { grid-area: 1 / 1; margin: 0; padding: clamp(22px, 2.4vw, 34px); border: 1px solid rgba(255,255,255,.38); border-radius: 18px; background: linear-gradient(135deg, rgba(255,255,255,.5), rgba(255,255,255,.26) 55%, rgba(255,255,255,.18)); backdrop-filter: blur(44px) saturate(180%) brightness(1.04); box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 -1px 0 rgba(255,255,255,.12), 0 24px 60px rgba(16,52,104,.18); color: #0b1f3a; opacity: 0; transform: translateY(14px); filter: blur(6px); transition: opacity .6s ease, transform .7s cubic-bezier(.2,.8,.2,1), filter .6s ease; pointer-events: none; }
-/* Frosted glass (dark text on light glass): write backdrop-filter unprefixed only — with both forms the compiler keeps just the -webkit- one, which Chrome ignores. */
-.contact-quote[data-active] { opacity: 1; transform: none; filter: none; pointer-events: auto; }
-.contact-quote svg { width: 30px; color: rgba(11,31,58,.45); }
-.contact-quote blockquote { margin: 16px 0 22px; font-size: clamp(17px, 1.4vw, 21px); font-weight: 500; line-height: 1.45; }
-.contact-quote figcaption { display: grid; gap: 2px; font-size: 14px; }
-.contact-quote figcaption span { color: rgba(11,31,58,.68); }
-.contact-dots { position: absolute; bottom: 22px; left: 50%; display: flex; gap: 4px; transform: translateX(-50%); }
-.contact-dots button { width: 22px; height: 22px; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
-.contact-dots button::after { content: ""; width: 6px; height: 6px; border-radius: 99px; background: rgba(255,255,255,.5); transition: width .4s cubic-bezier(.2,.8,.2,1), background-color .3s; }
-.contact-dots button[aria-current]::after { width: 22px; background: #fff; }
-.contact-dots button:focus-visible { outline: 2px solid #fff; border-radius: 99px; }
-@media (max-width: 767px) {
-  .contact { grid-template-columns: 1fr; padding: 72px 6vw 32px; gap: 40px; }
+.contact-form input { width: 100%; padding: 13px 14px; border: 1px solid #e4e4e4; border-radius: 10px; background: #f6f6f6; color: #000; font: inherit; font-size: 15px; font-weight: 400; transition: border-color .2s, background-color .2s; }
+.contact-form input::placeholder { color: #9a9a9a; }
+.contact-form input:focus-visible { outline: none; border-color: #000; background: #fff; }
+.contact-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+/* Right: a dark card with the dot globe behind a paper postcard, composer at the foot. */
+.contact-card { --accent: #5b7cff; position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 18px; width: 100%; max-width: 620px; min-height: min(86svh, 760px); padding: clamp(18px, 2.2vw, 28px); overflow: hidden; border-radius: 22px; background: #0b0b0c; color: #ecebe6; isolation: isolate; }
+.contact-globe { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
+.contact-landed { position: absolute; z-index: 2; margin: 0; padding: 7px 12px; border-radius: 999px; background: #fff; color: #0b0b0c; font-size: 13px; font-weight: 600; white-space: nowrap; transform: translate(-50%, calc(-100% - 16px)); animation: contact-pop .45s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes contact-pop { from { opacity: 0; transform: translate(-50%, calc(-100% - 6px)) scale(.9); } }
+.contact-postcard { align-self: center; display: grid; grid-template-columns: 1.5fr 1fr; gap: 16px; width: min(100%, 440px); aspect-ratio: 3 / 2; padding: 18px; border-radius: 6px; background: #f4f2ec; color: #141414; box-shadow: 0 30px 60px -20px rgba(0,0,0,.6), 0 2px 6px rgba(0,0,0,.25); }
+.contact-postcard-text { display: grid; align-content: start; gap: 10px; min-width: 0; padding-right: 14px; border-right: 1px solid #d9d5ca; }
+.contact-postcard-text time { font-size: 11px; letter-spacing: .04em; color: #7a776f; }
+.contact-postcard-text p { margin: 0; max-height: 8.6em; overflow: hidden; font-size: 14px; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; }
+.contact-postcard-text p span { color: #a29e94; }
+.contact-caret { display: inline-block; width: 1.5px; height: 1em; margin-left: 1px; vertical-align: -2px; background: var(--accent); animation: contact-blink 1s steps(1) infinite; }
+@keyframes contact-blink { 50% { opacity: 0; } }
+.contact-postcard-side { position: relative; display: grid; align-content: space-between; justify-items: end; }
+.contact-stamp { display: grid; place-items: center; width: 52px; height: 62px; border: 2px dashed #b9b4a8; outline: 3px solid #f4f2ec; outline-offset: -5px; background: var(--accent); color: #fff; }
+.contact-stamp b { font-size: 24px; font-weight: 800; letter-spacing: -.04em; }
+.contact-postmark { position: absolute; top: 14px; right: 34px; width: 56px; height: 56px; border: 1.5px solid rgba(20,20,20,.28); border-radius: 50%; background: repeating-linear-gradient(0deg, transparent 0 7px, rgba(20,20,20,.22) 7px 8.5px); mask: radial-gradient(circle, #000 64%, transparent 65%); pointer-events: none; }
+.contact-address { display: grid; justify-items: start; width: 100%; font-size: 12px; line-height: 1.5; color: #4a4842; }
+.contact-address strong { font-size: 13px; color: #141414; }
+.contact-composer { display: grid; gap: 10px; padding: 14px; border: 1px solid #262629; border-radius: 16px; background: rgba(18,18,20,.88); backdrop-filter: blur(8px); }
+.contact-to { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 13px; color: #b9b8b2; }
+.contact-to span { color: #77767b; }
+.contact-to svg { width: 10px; margin-left: 6px; color: var(--accent); }
+.contact-composer textarea { width: 100%; min-height: 72px; padding: 6px 2px; border: 0; background: transparent; color: #f2f1ec; font: inherit; font-size: 15px; line-height: 1.5; resize: none; }
+.contact-composer textarea::placeholder { color: #6c6b70; }
+.contact-composer textarea:focus-visible { outline: none; }
+.contact-composer:focus-within { border-color: #3a3a3f; }
+.contact-send { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.contact-error { margin: 0; font-size: 13px; color: #ff8a80; }
+.contact-send button, .contact-done button { display: inline-flex; align-items: center; gap: 9px; padding: 12px 20px; border: 0; border-radius: 999px; background: var(--accent); color: #fff; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; transition: background-color .2s, transform .2s cubic-bezier(.2,.8,.2,1); }
+.contact-send button svg { width: 15px; transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+.contact-send button:hover { background: #4867f0; }
+.contact-send button:hover svg { transform: translate(2px, -2px); }
+.contact-send button:active { transform: scale(.97); }
+.contact-send button:disabled { opacity: .7; cursor: progress; }
+.contact-send button:focus-visible, .contact-done button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.contact-done { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.contact-done p { margin: 0; font-size: 15px; color: #f2f1ec; }
+.contact-done button { background: #f2f1ec; color: #0b0b0c; }
+.contact-done button:hover { background: #fff; }
+@media (max-width: 900px) {
+  .contact { padding: 72px 6vw 32px; }
+  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
   .contact-form { justify-self: stretch; max-width: none; }
-  .contact-card { aspect-ratio: 4 / 5; max-width: none; }
+  .contact-card { max-width: none; min-height: 640px; }
+  .contact-postcard { gap: 12px; padding: 14px; }
+  .contact-stamp { width: 42px; height: 50px; }
+  .contact-postmark { width: 44px; height: 44px; right: 26px; }
 }
-@media (prefers-reduced-motion: reduce) { .contact-quote { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .contact-caret, .contact-landed { animation: none; } }
 /* Footer: contact email + link columns, full-bleed wordmark at the foot. */
 .footer { padding: clamp(40px, 6vh, 72px) 3.3vw 0; display: grid; gap: clamp(28px, 4vh, 48px); }
 .footer-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 6vw; }
