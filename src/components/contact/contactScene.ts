@@ -205,14 +205,22 @@ export function createContactScene(canvas: HTMLCanvasElement, opts: { accent: st
       return { p, s, z: w.reduce((t, q) => t + q[2], 0) / w.length + p.layer * .01, front: area > 0, shade: Math.max(0, .9 - lit) * .45 };
     }).sort((a, b) => a.z - b.z);
     ctx.globalAlpha = alpha;
-    for (const it of items) for (let k = 1; k < it.s.length - 1; k++) triangle([it.s[0], it.s[k], it.s[k + 1]], [it.p.pts[0], it.p.pts[k], it.p.pts[k + 1]], it.front ? tex : null, it.shade);
+    for (const it of items) {
+      for (let k = 1; k < it.s.length - 1; k++) triangle([it.s[0], it.s[k], it.s[k + 1]], [it.p.pts[0], it.p.pts[k], it.p.pts[k + 1]], it.front ? tex : null, it.shade);
+      // A hairline round each piece (outer edges and creases) so white paper still reads on the white page.
+      ctx.strokeStyle = "rgba(20,20,24,.26)"; ctx.lineWidth = .7; ctx.lineJoin = "round";
+      ctx.beginPath(); it.s.forEach((q, k) => k ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y)); ctx.closePath(); ctx.stroke();
+    }
     ctx.globalAlpha = 1;
   };
 
   // Timeline (ms from send).
   // One lap ending on the near side, then a visible run in to the city.
-  const TL = { rise: [0, 380], s1: [380, 900], s2: [900, 1420], s3: [1420, 1860], s4: [1680, 2120], orient: [2120, 2900], orbit: [2900, 6300], land: [6300, 7600] } as const;
-  const LAPS = 1, A0 = Math.PI * .5;
+  // The lap starts at the front, passes behind, and the plane peels off as soon as it comes back round on the
+  // right; from there one curve, tangent to the orbit, takes it straight to the city.
+  const TL = { rise: [0, 380], s1: [380, 900], s2: [900, 1420], s3: [1420, 1860], s4: [1680, 2120], orient: [2120, 2900], orbit: [2900, 5700], land: [5700, 7000] } as const;
+  const A0 = Math.PI * .5, SWEEP = Math.PI * 1.5 + .3, A1 = A0 + SWEEP;
+  const sweep = (k: number) => 1 - Math.cos(k * Math.PI / 2); // eases in, leaves the orbit at full speed
 
   const planePlace = (st: NonNullable<typeof send>, now: number) => {
     const t = now - st.t0;
@@ -251,16 +259,19 @@ export function createContactScene(canvas: HTMLCanvasElement, opts: { accent: st
     }
     const sScale = cardS * .3;
     if (t < TL.orbit[1]) {
-      const k = seg(now, st.t0 + TL.orbit[0], st.t0 + TL.orbit[1]), a = A0 + easeInOut(k) * Math.PI * 2 * LAPS;
+      const k = seg(now, st.t0 + TL.orbit[0], st.t0 + TL.orbit[1]), a = A0 + sweep(k) * SWEEP;
       const o = orbit(a), q = orbit(a + .02);
       const f = norm([q.x - o.x, q.y - o.y, (q.z - o.z) * R * .3]);
       return { pose: { pos: [o.x, o.y, o.z * R * .3], f, u: flightUp(f), s: sScale * (1 - .25 * k) }, front: o.z > 0, alpha: 1 };
     }
-    const k = easeInOut(seg(now, st.t0 + TL.land[0], st.t0 + TL.land[1]));
-    const o = orbit(A0 + Math.PI * 2 * LAPS);
-    const pos: V2 = { x: o.x + (tp.x - o.x) * k, y: o.y + (tp.y - o.y) * k };
-    const f = heading(o, tp);
-    return { pose: { pos: [pos.x, pos.y, 0], f, u: flightUp(f), s: sScale * (.75 - .5 * k) }, front: true, alpha: 1 - Math.max(0, (k - .8) / .2) };
+    const k = ease(seg(now, st.t0 + TL.land[0], st.t0 + TL.land[1]));
+    const o = orbit(A1), on = orbit(A1 + .01), tx = on.x - o.x, ty = on.y - o.y, tl = Math.hypot(tx, ty) || 1;
+    // Nearly straight at the city: the midpoint, bowed a little along the orbit's direction for a soft turn.
+    const reach = Math.hypot(tp.x - o.x, tp.y - o.y) * .18, c = { x: (o.x + tp.x) / 2 + tx / tl * reach, y: (o.y + tp.y) / 2 + ty / tl * reach };
+    const at = (q: number) => ({ x: (1 - q) ** 2 * o.x + 2 * (1 - q) * q * c.x + q * q * tp.x, y: (1 - q) ** 2 * o.y + 2 * (1 - q) * q * c.y + q * q * tp.y });
+    const pos = at(k), ahead = at(Math.min(1, k + .02));
+    const f = heading(pos, k > .98 ? tp : ahead);
+    return { pose: { pos: [pos.x, pos.y, 0], f, u: flightUp(f), s: sScale * (.75 - .35 * k) }, front: true, alpha: 1 - Math.max(0, (k - .85) / .15) };
   };
 
   const frame = (now: number) => {
@@ -338,7 +349,7 @@ export function createContactScene(canvas: HTMLCanvasElement, opts: { accent: st
       const to = spin + (((goal - spin) % (Math.PI * 2)) + Math.PI * 3) % (Math.PI * 2) - Math.PI;
       drawCard(tex, { text, placeholder: opts.placeholder, locale: opts.locale, accent: opts.accent, airmail: opts.airmail, caret: false });
       if (still) { spin = to; pinAt = now; kick(); const p = project(T[0], T[1], T[2]); return Promise.resolve({ x: p.x, y: p.y }); }
-      turn = { from: spin, to, t0: now + 2200, ms: 3800 };
+      turn = { from: spin, to, t0: now + 2200, ms: 3300 };
       trail.length = 0;
       const p0 = freshPaper(), c1 = cut(p0, STEPS[0]), p1 = flatten(c1, STEPS[0]), c2 = cut(p1, STEPS[1]), p2 = flatten(c2, STEPS[1]);
       // Cut along the centre and both wing lines so every piece folds rigidly; tag each by its centroid.
