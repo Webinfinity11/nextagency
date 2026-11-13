@@ -4,15 +4,18 @@ import type { Project as Row } from "@/generated/prisma/client";
 import type { Locale } from "./locales";
 export type Localized = Record<Locale, string>;
 export type CategoryId = "identity" | "digital";
-export type MediaBlock = { kind: "image" | "video"; src: string; poster?: string; aspect: number; wide: boolean };
-export type TextBlock = { kind: "text"; ka: string; en: string };
+export type MediaBlock = { kind: "image" | "video"; src: string; poster?: string; aspect: number; wide: boolean; bg?: string };
+export type TextBlock = { kind: "text"; ka: string; en: string; bg?: string };
 export type Block = MediaBlock | TextBlock;
 export type Project = {
   slug: string; title: Localized; summary: Localized; category: CategoryId;
   /** One word for the home rail sentence ("Make it …"). */
   feeling: Localized;
-  /** Longer text at the top of the project page. */
-  intro: Localized;
+  /** Project page info column. */
+  tags: Record<Locale, string[]>; headline: Localized; intro: Localized;
+  client: Localized; services: Localized; team: Localized; websiteUrl?: string;
+  /** Media panel background on the project page. */
+  accent: string;
   cover: { kind: "gradient" | "image" | "video"; src?: string; poster?: string; aspect: number; tone: [string, string] };
   year: number; order: number;
   blocks: Block[];
@@ -22,7 +25,10 @@ export type Category = { id: CategoryId; title: Localized; description: Localize
 function toProject(r: Row): Project {
   return {
     slug: r.slug, title: { ka: r.titleKa, en: r.titleEn }, summary: { ka: r.summaryKa, en: r.summaryEn },
-    feeling: { ka: r.feelingKa, en: r.feelingEn }, intro: { ka: r.introKa, en: r.introEn }, category: r.category,
+    feeling: { ka: r.feelingKa, en: r.feelingEn }, category: r.category,
+    tags: { ka: r.tagsKa, en: r.tagsEn }, headline: { ka: r.headlineKa, en: r.headlineEn }, intro: { ka: r.introKa, en: r.introEn },
+    client: { ka: r.clientKa, en: r.clientEn }, services: { ka: r.servicesKa, en: r.servicesEn }, team: { ka: r.teamKa, en: r.teamEn },
+    websiteUrl: r.websiteUrl ?? undefined, accent: r.accent,
     cover: { kind: r.coverKind, src: r.coverSrc ?? undefined, poster: r.coverPoster ?? undefined, aspect: r.coverAspect, tone: [r.toneA, r.toneB] },
     year: r.year, order: r.order, blocks: Array.isArray(r.blocks) ? (r.blocks as Block[]) : [],
   };

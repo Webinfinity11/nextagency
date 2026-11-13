@@ -32,18 +32,20 @@ const HEX = /^#[0-9a-f]{6}$/i;
 const isMedia = (v: unknown): v is string => typeof v === "string" && /^\/media\/[\w./-]+$/.test(v) && !v.includes("..");
 const aspectOf = (v: unknown) => { const n = Number(v); return Number.isFinite(n) && n > 0.1 && n < 10 ? n : 1.5; };
 const isVideo = (src: string) => /\.(mp4|webm|mov)$/i.test(src);
+const tagList = (v: string) => v.split(",").map(t => t.trim()).filter(Boolean).slice(0, 8);
 
 function parseBlocks(raw: string): Block[] {
   let list: unknown;
   try { list = JSON.parse(raw || "[]"); } catch { return []; }
   if (!Array.isArray(list)) return [];
   return list.flatMap((b): Block[] => {
+    const bg = HEX.test(String(b?.bg ?? "")) ? String(b.bg) : undefined;
     if (b?.kind === "text") {
       const ka = String(b.ka ?? "").trim(), en = String(b.en ?? "").trim();
-      return ka || en ? [{ kind: "text", ka, en }] : [];
+      return ka || en ? [{ kind: "text", ka, en, bg }] : [];
     }
     if (isMedia(b?.src)) {
-      return [{ kind: isVideo(b.src) ? "video" : "image", src: b.src, poster: isMedia(b.poster) ? b.poster : undefined, aspect: aspectOf(b.aspect), wide: !!b.wide }];
+      return [{ kind: isVideo(b.src) ? "video" : "image", src: b.src, poster: isMedia(b.poster) ? b.poster : undefined, aspect: aspectOf(b.aspect), wide: !!b.wide, bg }];
     }
     return [];
   });
@@ -60,6 +62,7 @@ export async function saveProject(_: FormState, form: FormData): Promise<FormSta
   if (!SLUG.test(slug)) return { error: "ბმული (slug) მხოლოდ ლათინური პატარა ასოებით, ციფრებით და ტირეებით." };
   if (!Number.isInteger(year) || year < 1990 || year > 2100) return { error: "წელი არასწორია." };
   if (category !== "identity" && category !== "digital") return { error: "აირჩიე კატეგორია." };
+  if (text("websiteUrl") && !/^https?:\/\/\S+$/i.test(text("websiteUrl"))) return { error: "საიტის ბმული უნდა იწყებოდეს https://-ით." };
   const taken = await db.project.findUnique({ where: { slug }, select: { id: true } });
   if (taken && taken.id !== id) return { error: `ბმული „${slug}“ უკვე სხვა პროექტს აქვს.` };
 
@@ -70,6 +73,13 @@ export async function saveProject(_: FormState, form: FormData): Promise<FormSta
     summaryKa: text("summaryKa"), summaryEn: text("summaryEn"),
     feelingKa: text("feelingKa"), feelingEn: text("feelingEn"),
     introKa: text("introKa"), introEn: text("introEn"),
+    headlineKa: text("headlineKa"), headlineEn: text("headlineEn"),
+    tagsKa: tagList(text("tagsKa")), tagsEn: tagList(text("tagsEn")),
+    clientKa: text("clientKa"), clientEn: text("clientEn"),
+    servicesKa: text("servicesKa"), servicesEn: text("servicesEn"),
+    teamKa: text("teamKa"), teamEn: text("teamEn"),
+    websiteUrl: /^https?:\/\/\S+$/i.test(text("websiteUrl")) ? text("websiteUrl") : null,
+    accent: HEX.test(text("accent")) ? text("accent") : "#1d1d1d",
     published: form.get("published") === "on",
     coverKind: coverSrc ? (isVideo(coverSrc) ? "video" as const : "image" as const) : "gradient" as const,
     coverSrc, coverPoster: coverSrc && isVideo(coverSrc) && isMedia(form.get("coverPoster")) ? text("coverPoster") : null,

@@ -6,10 +6,12 @@ import { saveProject } from "@/app/admin/actions";
 export type ProjectFormValues = {
   id?: string; slug: string; titleKa: string; titleEn: string; summaryKa: string; summaryEn: string;
   feelingKa: string; feelingEn: string; introKa: string; introEn: string; category: "identity" | "digital";
+  headlineKa: string; headlineEn: string; tagsKa: string; tagsEn: string; clientKa: string; clientEn: string;
+  servicesKa: string; servicesEn: string; teamKa: string; teamEn: string; websiteUrl: string; accent: string;
   year: number; published: boolean; coverSrc: string; coverPoster: string; coverAspect: number; toneA: string; toneB: string;
   blocks: EditBlock[];
 };
-type EditBlock = { key: string } & ({ kind: "media"; src: string; poster: string; aspect: number; wide: boolean } | { kind: "text"; ka: string; en: string });
+type EditBlock = { key: string; bg: string } & ({ kind: "media"; src: string; poster: string; aspect: number; wide: boolean } | { kind: "text"; ka: string; en: string });
 
 const KA_LATIN: Record<string, string> = { ა: "a", ბ: "b", გ: "g", დ: "d", ე: "e", ვ: "v", ზ: "z", თ: "t", ი: "i", კ: "k", ლ: "l", მ: "m", ნ: "n", ო: "o", პ: "p", ჟ: "zh", რ: "r", ს: "s", ტ: "t", უ: "u", ფ: "p", ქ: "k", ღ: "gh", ყ: "q", შ: "sh", ჩ: "ch", ც: "ts", ძ: "dz", წ: "ts", ჭ: "ch", ხ: "kh", ჯ: "j", ჰ: "h" };
 const slugify = (s: string) => [...s.toLowerCase()].map(c => KA_LATIN[c] ?? c).join("").normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
@@ -75,7 +77,7 @@ export function ProjectForm({ initial }: { initial: ProjectFormValues }) {
   const [v, setV] = useState(initial);
   const [slugTouched, setSlugTouched] = useState(!!initial.id);
   const set = <K extends keyof ProjectFormValues>(k: K, value: ProjectFormValues[K]) => setV(s => ({ ...s, [k]: value }));
-  const pair = (base: "title" | "summary" | "feeling" | "intro") => ({
+  const pair = (base: "title" | "summary" | "feeling" | "intro" | "headline" | "tags" | "client" | "services" | "team") => ({
     values: [v[`${base}Ka`], v[`${base}En`]] as [string, string],
     onChange: (lang: 0 | 1, value: string) => setV(s => {
       const next = { ...s, [`${base}${lang ? "En" : "Ka"}`]: value };
@@ -85,7 +87,7 @@ export function ProjectForm({ initial }: { initial: ProjectFormValues }) {
   });
   const setBlock = (key: string, patch: Partial<EditBlock>) => setV(s => ({ ...s, blocks: s.blocks.map(b => b.key === key ? { ...b, ...patch } as EditBlock : b) }));
   const moveBlock = (i: number, d: number) => setV(s => { const b = [...s.blocks]; [b[i], b[i + d]] = [b[i + d], b[i]]; return { ...s, blocks: b }; });
-  const blocksJson = JSON.stringify(v.blocks.map(b => b.kind === "text" ? { kind: "text", ka: b.ka, en: b.en } : { kind: "media", src: b.src, poster: b.poster || undefined, aspect: b.aspect, wide: b.wide }));
+  const blocksJson = JSON.stringify(v.blocks.map(b => b.kind === "text" ? { kind: "text", ka: b.ka, en: b.en, bg: b.bg || undefined } : { kind: "media", src: b.src, poster: b.poster || undefined, aspect: b.aspect, wide: b.wide, bg: b.bg || undefined }));
 
   return <form action={action} className="admin-form">
     {v.id && <input type="hidden" name="id" value={v.id} />}
@@ -131,9 +133,23 @@ export function ProjectForm({ initial }: { initial: ProjectFormValues }) {
 
     <section className="admin-card">
       <h2>პროექტის გვერდი</h2>
-      <Pair label="შესავალი ტექსტი" name="intro" area {...pair("intro")} />
+      <p className="admin-muted">მარცხენა სვეტი: ტეგები, ქვესათაური, აღწერა და ფაქტები. ცარიელი ველი გვერდზე არ ჩანს.</p>
+      <Pair label="ტეგები (მძიმით გამოყავი: UX/UI დიზაინი, ვებ დეველოპმენტი)" name="tags" {...pair("tags")} />
+      <Pair label="ქვესათაური" name="headline" {...pair("headline")} />
+      <Pair label="აღწერა" name="intro" area {...pair("intro")} />
+      <Pair label="კლიენტი" name="client" {...pair("client")} />
+      <Pair label="რა გავაკეთეთ" name="services" {...pair("services")} />
+      <Pair label="გუნდი (თითო ადამიანი ახალ ხაზზე)" name="team" area {...pair("team")} />
+      <div className="admin-grid-2">
+        <label className="admin-field">საიტის ბმული (ღილაკი „საიტის ნახვა“)
+          <input name="websiteUrl" type="url" placeholder="https://" value={v.websiteUrl} onChange={e => set("websiteUrl", e.target.value)} />
+        </label>
+        <label className="admin-field">მარჯვენა პანელის ფერი
+          <span className="admin-tones" style={{ marginTop: 0 }}><input type="color" name="accent" value={v.accent} onChange={e => set("accent", e.target.value)} /><span className="admin-swatch" style={{ background: v.accent }} /></span>
+        </label>
+      </div>
       <div className="admin-blocks">
-        <span className="admin-label">ბლოკები (ზემოდან ქვემოთ, როგორც გვერდზე)</span>
+        <span className="admin-label">მარჯვენა პანელის ბლოკები (ზემოდან ქვემოთ, როგორც გვერდზე)</span>
         {v.blocks.length === 0 && <p className="admin-muted">ჯერ ცარიელია. დაამატე ფოტო, ვიდეო ან ტექსტი.</p>}
         {v.blocks.map((b, i) => <div className="admin-block" key={b.key}>
           <div className="admin-block-bar">
@@ -143,6 +159,10 @@ export function ProjectForm({ initial }: { initial: ProjectFormValues }) {
               <button type="button" className="admin-icon" disabled={i === v.blocks.length - 1} onClick={() => moveBlock(i, 1)} aria-label="ქვემოთ">↓</button>
               <button type="button" className="admin-btn admin-btn-danger" onClick={() => setV(s => ({ ...s, blocks: s.blocks.filter(x => x.key !== b.key) }))}>მოშორება</button>
             </span>
+          </div>
+          <div className="admin-tones" style={{ margin: "0 0 12px" }}>
+            <label className="admin-check" style={{ margin: 0 }}><input type="checkbox" checked={!!b.bg} onChange={e => setBlock(b.key, { bg: e.target.checked ? v.accent : "" })} />საკუთარი ფონის ფერი</label>
+            {b.bg && <input type="color" value={b.bg} onChange={e => setBlock(b.key, { bg: e.target.value })} />}
           </div>
           {b.kind === "text"
             ? <Pair label="ტექსტი" name={`block-${b.key}-`} area values={[b.ka, b.en]} onChange={(lang, value) => setBlock(b.key, lang ? { en: value } : { ka: value })} />
@@ -161,13 +181,13 @@ export function ProjectForm({ initial }: { initial: ProjectFormValues }) {
               const files = [...(e.target.files ?? [])]; e.target.value = "";
               for (const file of files) {
                 const key = newKey();
-                setV(s => ({ ...s, blocks: [...s.blocks, { key, kind: "media", src: "", poster: "", aspect: 1.5, wide: true }] }));
+                setV(s => ({ ...s, blocks: [...s.blocks, { key, kind: "media", src: "", poster: "", aspect: 1.5, wide: true, bg: "" }] }));
                 try { const m = await upload(file); setBlock(key, { src: m.url, aspect: m.aspect }); }
                 catch (err) { alert(`${file.name}: ${(err as Error).message}`); setV(s => ({ ...s, blocks: s.blocks.filter(x => x.key !== key) })); }
               }
             }} />
           </label>
-          <button type="button" className="admin-btn" onClick={() => setV(s => ({ ...s, blocks: [...s.blocks, { key: newKey(), kind: "text", ka: "", en: "" }] }))}>+ ტექსტი</button>
+          <button type="button" className="admin-btn" onClick={() => setV(s => ({ ...s, blocks: [...s.blocks, { key: newKey(), kind: "text", ka: "", en: "", bg: "" }] }))}>+ ტექსტი</button>
         </div>
       </div>
     </section>

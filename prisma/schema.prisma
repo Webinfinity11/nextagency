@@ -29,9 +29,24 @@ model Project {
   /// One word for the home rail sentence ("Make it …").
   feelingKa   String    @default("")
   feelingEn   String    @default("")
-  /// Longer text at the top of the project page.
+  /// Project page info column: tags (e.g. "UX/UI დიზაინი"), a headline, the description (intro) and facts.
+  tagsKa      String[]  @default([])
+  tagsEn      String[]  @default([])
+  headlineKa  String    @default("")
+  headlineEn  String    @default("")
   introKa     String    @default("")
   introEn     String    @default("")
+  clientKa    String    @default("")
+  clientEn    String    @default("")
+  /// What was delivered ("Product" in the info column).
+  servicesKa  String    @default("")
+  servicesEn  String    @default("")
+  /// One person per line.
+  teamKa      String    @default("")
+  teamEn      String    @default("")
+  websiteUrl  String?
+  /// Background of the media panel on the project page; a block can override it.
+  accent      String    @default("#1d1d1d")
   category    Category
   year        Int
   published   Boolean   @default(true)
@@ -42,7 +57,7 @@ model Project {
   coverAspect Float     @default(1.5)
   toneA       String    @default("#d9d9d9")
   toneB       String    @default("#8a8a8a")
-  /// Project page body: [{ kind: "image" | "video", src, poster?, aspect, wide } | { kind: "text", ka, en }]
+  /// Project page body: [{ kind: "image" | "video", src, poster?, aspect, wide, bg? } | { kind: "text", ka, en, bg? }]
   blocks      Json      @default("[]")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
