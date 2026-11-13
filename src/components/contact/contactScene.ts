@@ -94,8 +94,12 @@ function drawCard(tex: HTMLCanvasElement, opts: { text: string; placeholder: str
   g.fillStyle = "#fff"; g.fillRect(72, 8, 20, 24);
   g.fillStyle = opts.accent; g.fillRect(74, 10, 16, 20);
   g.strokeStyle = "#fff"; g.lineWidth = .9; g.setLineDash([1, 1]); g.strokeRect(72.5, 8.5, 19, 23); g.setLineDash([]);
-  g.strokeStyle = "#fff"; g.lineWidth = .8; g.lineJoin = "round";
-  g.beginPath(); g.moveTo(77, 18); g.lineTo(87, 14); g.lineTo(84, 24); g.lineTo(81.5, 19.5); g.closePath(); g.moveTo(81.5, 19.5); g.lineTo(87, 14); g.stroke();
+  // The brand N (the three pieces of the logo mark, viewBox 0 2.7 123 129.8).
+  g.save(); g.translate(76.2, 11.2); g.scale(.0945, .0945); g.translate(0, -2.7); g.fillStyle = "#fff";
+  for (const pts of [[0, 2.7, 29.9, 2.7, 123, 114.1, 123, 132.5, 93.1, 132.5, 0, 21.1], [87.6, 2.7, 123, 2.7, 123, 40.2], [0, 94.9, 35.6, 132.5, 0, 132.5]]) {
+    g.beginPath(); g.moveTo(pts[0], pts[1]); for (let i = 2; i < pts.length; i += 2) g.lineTo(pts[i], pts[i + 1]); g.closePath(); g.fill();
+  }
+  g.restore();
   g.fillStyle = "#fff"; g.font = `700 2.2px ${family}`; g.textAlign = "center"; g.fillText(opts.airmail, 82, 28.2); g.textAlign = "left";
   // Postmark: ring plus wavy cancellation lines running into the stamp.
   g.strokeStyle = "rgba(60,58,52,.35)"; g.lineWidth = .5;
@@ -206,8 +210,9 @@ export function createContactScene(canvas: HTMLCanvasElement, opts: { accent: st
   };
 
   // Timeline (ms from send).
-  const TL = { rise: [0, 380], s1: [380, 900], s2: [900, 1420], s3: [1420, 1860], s4: [1680, 2120], orient: [2120, 2900], orbit: [2900, 8600], land: [8600, 9500] } as const;
-  const LAPS = 2.5, A0 = Math.PI * .5;
+  // One lap ending on the near side, then a visible run in to the city.
+  const TL = { rise: [0, 380], s1: [380, 900], s2: [900, 1420], s3: [1420, 1860], s4: [1680, 2120], orient: [2120, 2900], orbit: [2900, 6300], land: [6300, 7600] } as const;
+  const LAPS = 1, A0 = Math.PI * .5;
 
   const planePlace = (st: NonNullable<typeof send>, now: number) => {
     const t = now - st.t0;
@@ -255,7 +260,7 @@ export function createContactScene(canvas: HTMLCanvasElement, opts: { accent: st
     const o = orbit(A0 + Math.PI * 2 * LAPS);
     const pos: V2 = { x: o.x + (tp.x - o.x) * k, y: o.y + (tp.y - o.y) * k };
     const f = heading(o, tp);
-    return { pose: { pos: [pos.x, pos.y, 0], f, u: flightUp(f), s: sScale * .75 * (1 - k) }, front: true, alpha: 1 - k * .6 };
+    return { pose: { pos: [pos.x, pos.y, 0], f, u: flightUp(f), s: sScale * (.75 - .5 * k) }, front: true, alpha: 1 - Math.max(0, (k - .8) / .2) };
   };
 
   const frame = (now: number) => {
@@ -333,7 +338,7 @@ export function createContactScene(canvas: HTMLCanvasElement, opts: { accent: st
       const to = spin + (((goal - spin) % (Math.PI * 2)) + Math.PI * 3) % (Math.PI * 2) - Math.PI;
       drawCard(tex, { text, placeholder: opts.placeholder, locale: opts.locale, accent: opts.accent, airmail: opts.airmail, caret: false });
       if (still) { spin = to; pinAt = now; kick(); const p = project(T[0], T[1], T[2]); return Promise.resolve({ x: p.x, y: p.y }); }
-      turn = { from: spin, to, t0: now + 2200, ms: 6000 };
+      turn = { from: spin, to, t0: now + 2200, ms: 3800 };
       trail.length = 0;
       const p0 = freshPaper(), c1 = cut(p0, STEPS[0]), p1 = flatten(c1, STEPS[0]), c2 = cut(p1, STEPS[1]), p2 = flatten(c2, STEPS[1]);
       // Cut along the centre and both wing lines so every piece folds rigidly; tag each by its centroid.
