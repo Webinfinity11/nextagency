@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/work">) 
 export default async function WorkIndex({ params }: PageProps<"/[locale]/work">) {
   const { locale } = await params; if (!isLocale(locale)) notFound();
   const categories = await getCategories();
-  const groups = await Promise.all(categories.map(async category => ({ category, projects: await getProjectsByCategory(category.id) })));
+  const groups = (await Promise.all(categories.map(async category => ({ category, projects: await getProjectsByCategory(category.id) })))).filter(g => g.projects.length);
   const copy = workCopy(locale);
   return <main id="main" className="work-index"><WorkMotion>
     <header className="work-page-heading"><h1 className="work-heading" data-work-reveal>{display(copy.title, locale)}</h1><p>{copy.description}</p></header>

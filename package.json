@@ -9,7 +9,7 @@
     "lint": "eslint",
     "postinstall": "prisma generate",
     "db:migrate": "prisma migrate deploy",
-    "db:seed": "prisma db seed"
+    "db:import-projects": "tsx scripts/import-projects.mts"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

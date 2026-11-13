@@ -14,7 +14,9 @@ function Media({ kind, src, poster, sizes, priority }: { kind: "image" | "video"
 }
 export function CaseCover({ project }: { project: Project }) {
   const { cover } = project;
-  return <div className="case-cover" data-case-cover>
+  // A portrait cover (made for the home rail) is shown whole on the panel colour instead of cropped to a strip.
+  const portrait = cover.kind !== "gradient" && !!cover.src && cover.aspect < 1.1;
+  return <div className={`case-cover${portrait ? " is-portrait" : ""}`} data-case-cover style={portrait ? { background: project.accent } : undefined}>
     <div className="case-cover-inner" data-case-parallax style={{ "--tone-a": cover.tone[0], "--tone-b": cover.tone[1] } as CSSProperties}>
       {cover.src && cover.kind !== "gradient"
         ? <Media kind={cover.kind} src={cover.src} poster={cover.poster} sizes="100vw" priority />
