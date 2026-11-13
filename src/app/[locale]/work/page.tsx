@@ -1,13 +1,12 @@
 import { notFound } from "next/navigation";
-import { isLocale, locales } from "@/content/locales";
+import { isLocale } from "@/content/locales";
 import { getCategories, getProjectsByCategory } from "@/content/projects";
 import { ProjectCard } from "@/components/work/ProjectCard";
 import { WorkMotion } from "@/components/work/WorkMotion";
 import { workCopy } from "@/components/work/copy";
 import { workMetadata } from "./metadata";
 import { display } from "@/lib/mtavruli";
-export const dynamicParams = false;
-export function generateStaticParams() { return locales.map(locale => ({ locale })); }
+export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: PageProps<"/[locale]/work">) {
   const { locale } = await params; if (!isLocale(locale)) notFound();
   const copy = workCopy(locale); return workMetadata(locale, "/work", copy.title, copy.description);

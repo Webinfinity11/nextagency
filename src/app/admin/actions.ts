@@ -1,0 +1,107 @@
+"use server";
+import { redirect } from "next/navigation";
+import { db } from "@/lib/db";
+import { checkCredentials, endSession, requireAdmin, startSession } from "@/lib/admin-auth";
+import type { Block } from "@/content/projects";
+
+export type FormState = { error?: string; email?: string } | undefined;
+
+export async function login(_: FormState, form: FormData): Promise<FormState> {
+  const email = String(form.get("email") ?? "");
+  if (!checkCredentials(email, String(form.get("password") ?? ""))) {
+    await new Promise(r => setTimeout(r, 800)); // slows down guessing
+    return { error: "ელფოსტა ან პაროლი არასწორია.", email }; // React resets the form; keep the email
+  }
+  await startSession();
+  redirect("/admin");
+}
+
+export async function logout() {
+  await endSession();
+  redirect("/admin/login");
+}
+
+const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const HEX = /^#[0-9a-f]{6}$/i;
+const isMedia = (v: unknown): v is string => typeof v === "string" && /^\/media\/[\w./-]+$/.test(v) && !v.includes("..");
+const aspectOf = (v: unknown) => { const n = Number(v); return Number.isFinite(n) && n > 0.1 && n < 10 ? n : 1.5; };
+const isVideo = (src: string) => /\.(mp4|webm|mov)$/i.test(src);
+
+function parseBlocks(raw: string): Block[] {
+  let list: unknown;
+  try { list = JSON.parse(raw || "[]"); } catch { return []; }
+  if (!Array.isArray(list)) return [];
+  return list.flatMap((b): Block[] => {
+    if (b?.kind === "text") {
+      const ka = String(b.ka ?? "").trim(), en = String(b.en ?? "").trim();
+      return ka || en ? [{ kind: "text", ka, en }] : [];
+    }
+    if (isMedia(b?.src)) {
+      return [{ kind: isVideo(b.src) ? "video" : "image", src: b.src, poster: isMedia(b.poster) ? b.poster : undefined, aspect: aspectOf(b.aspect), wide: !!b.wide }];
+    }
+    return [];
+  });
+}
+
+export async function saveProject(_: FormState, form: FormData): Promise<FormState> {
+  await requireAdmin();
+  const id = String(form.get("id") ?? "");
+  const text = (k: string) => String(form.get(k) ?? "").trim();
+  const slug = text("slug").toLowerCase();
+  const year = Number(text("year"));
+  const category = text("category");
+  if (!text("titleKa") || !text("titleEn")) return { error: "სათაური ორივე ენაზე სავალდებულოა." };
+  if (!SLUG.test(slug)) return { error: "ბმული (slug) მხოლოდ ლათინური პატარა ასოებით, ციფრებით და ტირეებით." };
+  if (!Number.isInteger(year) || year < 1990 || year > 2100) return { error: "წელი არასწორია." };
+  if (category !== "identity" && category !== "digital") return { error: "აირჩიე კატეგორია." };
+  const taken = await db.project.findUnique({ where: { slug }, select: { id: true } });
+  if (taken && taken.id !== id) return { error: `ბმული „${slug}“ უკვე სხვა პროექტს აქვს.` };
+
+  const coverSrc = isMedia(form.get("coverSrc")) ? text("coverSrc") : null;
+  const data = {
+    slug, year, category: category as "identity" | "digital",
+    titleKa: text("titleKa"), titleEn: text("titleEn"),
+    summaryKa: text("summaryKa"), summaryEn: text("summaryEn"),
+    feelingKa: text("feelingKa"), feelingEn: text("feelingEn"),
+    introKa: text("introKa"), introEn: text("introEn"),
+    published: form.get("published") === "on",
+    coverKind: coverSrc ? (isVideo(coverSrc) ? "video" as const : "image" as const) : "gradient" as const,
+    coverSrc, coverPoster: coverSrc && isVideo(coverSrc) && isMedia(form.get("coverPoster")) ? text("coverPoster") : null,
+    coverAspect: aspectOf(form.get("coverAspect")),
+    toneA: HEX.test(text("toneA")) ? text("toneA") : "#d9d9d9",
+    toneB: HEX.test(text("toneB")) ? text("toneB") : "#8a8a8a",
+    blocks: parseBlocks(text("blocks")),
+  };
+  if (id) await db.project.update({ where: { id }, data });
+  else {
+    const last = await db.project.aggregate({ _max: { order: true } });
+    await db.project.create({ data: { ...data, order: (last._max.order ?? 0) + 1 } });
+  }
+  redirect("/admin?saved=1");
+}
+
+export async function deleteProject(form: FormData) {
+  await requireAdmin();
+  await db.project.delete({ where: { id: String(form.get("id")) } });
+  redirect("/admin");
+}
+
+export async function togglePublished(form: FormData) {
+  await requireAdmin();
+  const id = String(form.get("id"));
+  const p = await db.project.findUniqueOrThrow({ where: { id }, select: { published: true } });
+  await db.project.update({ where: { id }, data: { published: !p.published } });
+  redirect("/admin");
+}
+
+/** Swaps a project with its neighbour in the list (dir = -1 up, 1 down) and renumbers 1…n. */
+export async function moveProject(form: FormData) {
+  await requireAdmin();
+  const id = String(form.get("id")), dir = Number(form.get("dir"));
+  const list = await db.project.findMany({ orderBy: [{ order: "asc" }, { createdAt: "asc" }], select: { id: true } });
+  const i = list.findIndex(p => p.id === id), j = i + dir;
+  if (i < 0 || j < 0 || j >= list.length) redirect("/admin");
+  [list[i], list[j]] = [list[j], list[i]];
+  await db.$transaction(list.map((p, k) => db.project.update({ where: { id: p.id }, data: { order: k + 1 } })));
+  redirect("/admin");
+}

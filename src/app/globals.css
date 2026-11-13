@@ -386,6 +386,13 @@ html[lang="ka"] .work-rail-caption { text-transform: none; }
 .work-facts dt { font-size: 12px; opacity: .6; }
 .work-facts dd { margin: 8px 0 0; }
 .work-detail > .work-frame { width: 100%; max-height: 70vh; }
+.work-intro { max-width: 760px; margin: 56px 0 0; font-size: clamp(20px, 1.8vw, 28px); line-height: 1.4; letter-spacing: -.01em; white-space: pre-line; }
+/* Project page body (blocks from /admin). */
+.work-blocks { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px, 1.4vw, 24px); margin-top: 56px; }
+.work-block-media { position: relative; margin: 0; overflow: hidden; border-radius: 4px; background: #eee; }
+.work-block-media.is-wide { grid-column: 1 / -1; }
+.work-block-media img, .work-block-media video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.work-block-text { grid-column: 1 / -1; max-width: 760px; margin: clamp(24px, 4vw, 64px) 0; font-size: clamp(17px, 1.3vw, 21px); line-height: 1.55; white-space: pre-line; }
 .work-detail-footer { display: flex; align-items: baseline; justify-content: space-between; gap: 40px; padding-top: 40px; }
 .work-detail-footer p { font-size: 14px; }
 @media (min-width: 768px) and (hover: hover) and (prefers-reduced-motion: no-preference) {
@@ -418,6 +425,8 @@ html[lang="ka"] .work-rail-caption { text-transform: none; }
   .work-index-group { padding: 30px 0 60px; }
   .work-detail { padding: 30px 6vw 60px; }
   .work-detail-footer { flex-direction: column; gap: 10px; }
+  .work-blocks { grid-template-columns: 1fr; }
+  .work-block-media { grid-column: 1 / -1; }
   .work-detail-footer .work-all { font-size: 18px; }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -78,3 +78,13 @@ The permitted `mix-blend-mode: difference` option keeps the wordmark white on bl
 ## Work
 
 The home Work section is a server-rendered child slot between HeroMedia and support. `src/content/projects.ts` is the async repository boundary for six bilingual placeholder projects and two categories (future Prisma replacement); components receive records through props. Shared cards power the featured 2–1–2 grid, native-scroll-enhanced drag categories, `/[locale]/work`, and static `/[locale]/work/[slug]` case-study stubs. Scoped GSAP/Flip/SplitText handle promotion, reserved row heights, parallax and reveals; reduced motion keeps content visible with native horizontal scrolling. Work metadata includes canonical and ka/en/x-default alternatives. Run `scripts/verify-work.mjs` against the production server for interaction assertions and reference comparisons.
+
+## Admin and projects (database)
+
+Projects live in PostgreSQL (Prisma 7, `prisma/schema.prisma`, client generated into `src/generated/prisma`, `pg` driver adapter). `src/content/projects.ts` keeps the same `Project` shape for the site, now read from the database; only published projects reach the site, ordered by `order`. Home, `/[locale]/work` and `/[locale]/work/[slug]` render per request (`dynamic = "force-dynamic"`), so the build never needs the database and admin changes appear immediately.
+
+`/admin` (own root layout, Georgian UI, `noindex`): one login from `ADMIN_EMAIL` / `ADMIN_PASSWORD`, session = HMAC-signed httpOnly cookie (`SESSION_SECRET`), checked by every page, server action and the upload route. Project list: reorder (↑/↓), hide/publish, view, edit, delete with confirmation. Project form: both languages for title, summary, one-word feeling and intro; slug auto-filled from the title (Georgian transliterated); category, year, published; cover image/video (+ optional poster) or a two-colour gradient; page body blocks — image/video (full width or two side by side) and text — reorderable.
+
+Uploads: `POST /api/admin/upload` (admin only; jpg/png/webp/avif/gif/mp4/webm/mov, 200 MB) writes to `UPLOAD_DIR` under a random name; `/media/[...path]` serves them with immutable caching and Range support (Safari video). Production requires an absolute `UPLOAD_DIR` (Railway volume) because the standalone server runs inside `.next/standalone`, which each build replaces.
+
+Local: Postgres 17 in Docker (`nextagency-pg`, port 5433), `.env` from `.env.example`, `pnpm prisma migrate dev`, `pnpm db:seed` (six placeholder projects). Railway: Postgres service + `DATABASE_URL`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SESSION_SECRET`, a volume and `UPLOAD_DIR`; `railway.json` runs `pnpm db:migrate` before each deploy. Deleting a project does not delete its uploaded files.

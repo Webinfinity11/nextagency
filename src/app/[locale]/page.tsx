@@ -4,6 +4,8 @@ import { Hero } from "@/components/hero/Hero";
 import { Services } from "@/components/services/Services";
 import { getContent } from "@/content";
 import { isLocale } from "@/content/locales";
+// Projects come from the database, so render per request (new ones from /admin appear immediately).
+export const dynamic = "force-dynamic";
 export default async function Home({ params }: PageProps<"/[locale]">) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();

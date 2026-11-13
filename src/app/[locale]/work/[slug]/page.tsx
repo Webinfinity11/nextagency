@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { isLocale, locales } from "@/content/locales";
+import { isLocale } from "@/content/locales";
 import { getProject, getProjects, getCategories } from "@/content/projects";
 import { ProjectCover } from "@/components/work/ProjectCard";
+import { ProjectBlocks } from "@/components/work/ProjectBlocks";
 import { workCopy } from "@/components/work/copy";
 import { workMetadata } from "../metadata";
 import { display } from "@/lib/mtavruli";
-export const dynamicParams = false;
-export async function generateStaticParams() { const projects = await getProjects(); return locales.flatMap(locale => projects.map(p => ({ locale, slug: p.slug }))); }
+export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: PageProps<"/[locale]/work/[slug]">) {
   const { locale, slug } = await params; if (!isLocale(locale)) notFound();
   const project = await getProject(slug); if (!project) notFound();
@@ -25,6 +25,8 @@ export default async function ProjectPage({ params }: PageProps<"/[locale]/work/
     <header className="work-page-heading"><h1 className="work-heading">{display(project.title[locale], locale)}</h1><p>{project.summary[locale]}</p></header>
     <dl className="work-facts"><div><dt>{copy.year}</dt><dd>{project.year}</dd></div><div><dt>{copy.category}</dt><dd>{category.title[locale]}</dd></div></dl>
     <ProjectCover project={project} />
-    <footer className="work-detail-footer"><p>{copy.note}</p><Link className="work-all" href={`/${locale}/work/${next.slug}`}><span>{copy.next}: {next.title[locale]}</span><i aria-hidden="true">↗</i></Link></footer>
+    {project.intro[locale] && <p className="work-intro">{project.intro[locale]}</p>}
+    <ProjectBlocks blocks={project.blocks} locale={locale} />
+    <footer className="work-detail-footer">{project.blocks.length === 0 && !project.intro[locale] ? <p>{copy.note}</p> : <span />}<Link className="work-all" href={`/${locale}/work/${next.slug}`}><span>{copy.next}: {next.title[locale]}</span><i aria-hidden="true">↗</i></Link></footer>
   </main>;
 }

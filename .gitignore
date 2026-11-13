@@ -6,3 +6,7 @@ node_modules/
 
 docs/research/frames/raw/
 next-env.d.ts
+
+# Generated Prisma client and local uploads
+/src/generated/
+/uploads/

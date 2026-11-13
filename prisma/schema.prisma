@@ -1,0 +1,51 @@
+// Content managed from /admin. Text fields come in pairs, one per locale (ka, en).
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Category {
+  identity
+  digital
+}
+
+enum CoverKind {
+  gradient
+  image
+  video
+}
+
+model Project {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  titleKa     String
+  titleEn     String
+  summaryKa   String    @default("")
+  summaryEn   String    @default("")
+  /// One word for the home rail sentence ("Make it …").
+  feelingKa   String    @default("")
+  feelingEn   String    @default("")
+  /// Longer text at the top of the project page.
+  introKa     String    @default("")
+  introEn     String    @default("")
+  category    Category
+  year        Int
+  published   Boolean   @default(true)
+  order       Int       @default(0)
+  coverKind   CoverKind @default(gradient)
+  coverSrc    String?
+  coverPoster String?
+  coverAspect Float     @default(1.5)
+  toneA       String    @default("#d9d9d9")
+  toneB       String    @default("#8a8a8a")
+  /// Project page body: [{ kind: "image" | "video", src, poster?, aspect, wide } | { kind: "text", ka, en }]
+  blocks      Json      @default("[]")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([published, order])
+}
