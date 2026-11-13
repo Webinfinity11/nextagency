@@ -13,7 +13,7 @@ export function Partners({ locale }: { locale: Locale }) {
     const section = root.current!;
     const canvas = section.querySelector<HTMLCanvasElement>(".partners-row")!;
     const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let offset = 0, drag = 0;
+    let offset = 0;
     let W = 0, H = 0, logoH = 0, cell = 7, dpr = 1, pad = 0, slot = 0, edge = 0, scatter = 0;
     let sprites: (Sprite | null)[] = partners.map(() => null);
     const images = partners.map(p => { const img = new Image(); img.src = p.src; return img; });
@@ -76,7 +76,7 @@ export function Partners({ locale }: { locale: Locale }) {
     let last = performance.now(), raf = 0, visible = false;
     const frame = (now: number) => {
       const dt = Math.min(.05, (now - last) / 1000); last = now;
-      if (!still) { offset += drag - 80 * dt; drag *= .9; }
+      if (!still) offset -= 80 * dt;
       draw();
       raf = visible && !still ? requestAnimationFrame(frame) : 0;
     };
@@ -86,17 +86,8 @@ export function Partners({ locale }: { locale: Locale }) {
     const ro = new ResizeObserver(() => { layout(); kick(); });
     ro.observe(section);
     images.forEach((img, i) => img.addEventListener("load", () => { sprites[i] = bake(i); kick(); }));
-    // Drag to scrub the strip; the push decays back into the steady drift.
-    let x0 = 0, down = false;
-    const start = (e: PointerEvent) => { down = true; x0 = e.clientX; canvas.setPointerCapture(e.pointerId); };
-    const move = (e: PointerEvent) => { if (!down) return; offset += e.clientX - x0; drag = (e.clientX - x0) * .3; x0 = e.clientX; kick(); };
-    const end = () => { down = false; };
-    canvas.addEventListener("pointerdown", start); canvas.addEventListener("pointermove", move);
-    canvas.addEventListener("pointerup", end); canvas.addEventListener("pointercancel", end);
     return () => {
       cancelAnimationFrame(raf); io.disconnect(); ro.disconnect();
-      canvas.removeEventListener("pointerdown", start); canvas.removeEventListener("pointermove", move);
-      canvas.removeEventListener("pointerup", end); canvas.removeEventListener("pointercancel", end);
     };
   }, []);
   return (

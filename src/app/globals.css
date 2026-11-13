@@ -450,10 +450,9 @@ html[lang="ka"] .work-rail-caption { text-transform: none; }
   .services-row { font-size: 22px; }
   .services-photo { top: auto; bottom: 7svh; right: auto; left: 6vw; width: 70vw; }
 }
-/* Partners: one disintegrating logo strip (canvas). */
+/* Partners: one disintegrating logo strip (canvas), auto-drifting only. */
 .partners { padding: 0 0 2vh; }
-.partners-row { display: block; width: 100%; touch-action: pan-y; cursor: grab; }
-.partners-row:active { cursor: grabbing; }
+.partners-row { display: block; width: 100%; }
 /* Contact: form left, greyscale cloud-shader card with rotating testimonials right. */
 .contact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 110px); align-items: center; padding: clamp(64px, 12vh, 140px) 3.3vw clamp(40px, 8vh, 96px); }
 .contact-form { display: grid; gap: 18px; max-width: 520px; width: 100%; justify-self: end; }
