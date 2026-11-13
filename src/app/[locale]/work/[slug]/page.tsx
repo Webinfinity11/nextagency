@@ -44,10 +44,10 @@ export default async function ProjectPage({ params }: PageProps<"/[locale]/work/
         <CasePanel project={project} locale={locale} />
       </section>
       <footer className="case-footer">
-        <Link className="case-back" href={`/${locale}/work`}>↖ {copy.all}</Link>
+        <Link className="case-back" href={`/${locale}/work`}>{copy.all}</Link>
         <Link className="case-next" href={`/${locale}/work/${next.slug}`}>
           <span>{copy.next}</span>
-          <strong>{display(next.title[locale], locale)} <i aria-hidden="true">↗</i></strong>
+          <strong>{display(next.title[locale], locale)}</strong>
         </Link>
       </footer>
     </CaseMotion>
