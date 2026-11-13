@@ -1,22 +1,23 @@
 import type { Locale } from "./locales";
+import type { MatrixVisual } from "@/components/services/serviceMatrix";
 // Services list and the /services page copy (taken from infinity.ge/services at the owner's request).
-// `tone` is the placeholder gradient for the home section photo until real photos exist.
 export type ServiceCategory = "tech" | "marketing" | "design";
-export type Service = { category: ServiceCategory; title: string; description: string; tags: string[]; tone: [string, string] };
+export type Service = { category: ServiceCategory; title: string; description: string; tags: string[] };
 type QA = { title: string; text: string };
 type Copy = {
   label: string;
-  /** The six services shown in the home page's pinned list, in this order. */
-  home: { title: string; tone: [string, string] }[]; eyebrow: string; title: string; all: string; categories: Record<ServiceCategory, string>;
+  /** The six services shown in the home page's pinned list, in this order, each with its dot-matrix drawing and signal colour. */
+  home: { title: string; visual: MatrixVisual; accent: string }[]; eyebrow: string; title: string; all: string; categories: Record<ServiceCategory, string>;
   services: Service[];
   cta: { title: string; text: string; button: string };
   guide: { title: string; items: QA[] };
   faq: { title: string; text: string; more: string; moreText: string; button: string; items: QA[] };
   start: { title: string; text: string; button: string };
 };
-const tones: [string, string][] = [["#d6d6d6", "#9a9a9a"], ["#3a3a3a", "#0e0e0e"], ["#ececec", "#bcbcbc"], ["#5c5c5c", "#1c1c1c"], ["#c4c4c4", "#7c7c7c"], ["#2a2a2a", "#050505"]];
-const list = (items: Omit<Service, "tone">[]) => items.map((s, i) => ({ ...s, tone: tones[i % tones.length] }));
-const homeList = (titles: string[]) => titles.map((title, i) => ({ title, tone: tones[i % tones.length] }));
+const list = (items: Service[]) => items;
+// One signal colour per service, all at similar lightness/chroma so none shouts over the others on the black panel.
+const HOME: [MatrixVisual, string][] = [["web", "#5b7cff"], ["social", "#ff5b4f"], ["seo", "#b9ec5a"], ["video", "#ffb13d"], ["crm", "#a183ff"], ["ai", "#3fdcc0"]];
+const homeList = (titles: string[]) => titles.map((title, i) => ({ title, visual: HOME[i][0], accent: HOME[i][1] }));
 const copy: Record<Locale, Copy> = {
   ka: {
     label: "ჩვენი სერვისები",

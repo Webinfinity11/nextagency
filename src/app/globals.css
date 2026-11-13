@@ -538,10 +538,8 @@ html[lang="ka"] .case-next strong { text-transform: none; line-height: 1.15; let
 .services-row { display: flex; align-items: baseline; gap: .7em; height: var(--row); font-size: clamp(26px, 2.5vw, 42px); font-weight: 700; letter-spacing: -.035em; line-height: 1; white-space: nowrap; color: #cfcfcf; transition: color .5s; }
 .services-row[data-active] { color: #000; }
 .services-num { width: 1.6ch; font-variant-numeric: tabular-nums; }
-.services-photo { position: absolute; top: 14svh; right: 3.3vw; width: min(60svh, 36vw); aspect-ratio: 5 / 6; overflow: hidden; border-radius: 4px; background: #eee; }
-.services-media { position: absolute; inset: 0; overflow: hidden; }
-.services-fill { width: 100%; height: 100%; display: grid; place-items: center; color: #111; font-size: clamp(56px, 6vw, 96px); font-weight: 800; letter-spacing: -.05em; }
-.services-fill[data-dark] { color: #fff; }
+.services-photo { position: absolute; top: 14svh; right: 3.3vw; width: min(60svh, 36vw); aspect-ratio: 5 / 6; overflow: hidden; border-radius: 6px; background: #0b0b0c; }
+.services-matrix { /* LED dot-matrix */ display: block; width: 100%; height: 100%; touch-action: pan-y; }
 @media (max-width: 767px) {
   .services { --anchor: 30svh; --row: 34px; }
     .services-stage { left: 6vw; width: 88vw; }

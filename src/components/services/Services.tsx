@@ -4,8 +4,9 @@ import { gsap, ScrollTrigger, useGSAP, reducedMotion } from "@/lib/gsap";
 import { servicesCopy } from "@/content/services";
 import type { Locale } from "@/content/locales";
 import { display } from "@/lib/mtavruli";
+import { createServiceMatrix } from "./serviceMatrix";
 // Pinned list after tinywins.com "Our services": each scroll step lifts the list one row,
-// and the new photo grows in from the bottom-right corner over the old one.
+// and the dot-matrix panel on the right reflows into that service's drawing.
 export function Services({ locale }: { locale: Locale }) {
   const { label, home: services } = servicesCopy(locale);
   const scope = useRef<HTMLElement>(null);
@@ -13,9 +14,9 @@ export function Services({ locale }: { locale: Locale }) {
     const root = scope.current!;
     const list = root.querySelector<HTMLElement>(".services-list")!;
     const rows = gsap.utils.toArray<HTMLElement>(".services-row", root);
-    const media = gsap.utils.toArray<HTMLElement>(".services-media", root);
+    const matrix = createServiceMatrix(root.querySelector<HTMLCanvasElement>(".services-matrix")!, services);
     const still = reducedMotion();
-    let active = 0, layer = 1;
+    let active = 0;
     const paint = (i: number, duration: number) => {
       gsap.to(list, { y: -rows[i].offsetTop, duration, ease: "power3.out", overwrite: true });
       rows.forEach((row, k) => {
@@ -28,10 +29,7 @@ export function Services({ locale }: { locale: Locale }) {
       active = i;
       const d = still ? 0 : 1;
       paint(i, .7 * d);
-      const img = media[i];
-      gsap.set(img, { zIndex: ++layer, visibility: "visible" });
-      gsap.fromTo(img, { clipPath: "inset(100% 0% 0% 100%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: .9 * d, ease: "power3.inOut", overwrite: true });
-      gsap.fromTo(img.firstElementChild, { scale: 1.25 }, { scale: 1, duration: 1.1 * d, ease: "power3.out", overwrite: true });
+      matrix.show(i);
     };
     const n = services.length;
     ScrollTrigger.create({
@@ -39,6 +37,7 @@ export function Services({ locale }: { locale: Locale }) {
       onUpdate: self => go(Math.round(self.progress * (n - 1))),
       onRefresh: () => paint(active, 0),
     });
+    return () => matrix.destroy();
   }, { scope });
   return (
     <section className="services" id="services" ref={scope} aria-labelledby="services-title">
@@ -53,15 +52,7 @@ export function Services({ locale }: { locale: Locale }) {
           ))}
         </ol>
       </div>
-      <div className="services-photo" aria-hidden="true">
-        {services.map((s, i) => (
-          <div className="services-media" key={s.title} style={{ zIndex: i === 0 ? 1 : 0, visibility: i === 0 ? "visible" : "hidden" }}>
-            <div className="services-fill" data-dark={i % 2 ? "" : undefined} style={{ background: `linear-gradient(145deg, ${s.tone[0]}, ${s.tone[1]})` }}>
-              <span>{String(i + 1).padStart(2, "0")}</span>
-            </div>
-          </div>
-        ))}
-      </div>
+      <div className="services-photo" aria-hidden="true"><canvas className="services-matrix" /></div>
     </section>
   );
 }
