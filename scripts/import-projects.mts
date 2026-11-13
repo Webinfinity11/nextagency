@@ -70,6 +70,21 @@ const P: Entry[] = [
     headlineKa: "ონლაინ მაღაზია თანამედროვე მოდის ბრენდისთვის", headlineEn: "An online store for a modern fashion brand",
     introKa: "Mevile Store თანამედროვე მოდის ბრენდია.\nმინიმალისტური საიტი პროდუქტსა და ფოტოგრაფიას ტოვებს წინა პლანზე.",
     introEn: "Mevile Store is a modern fashion brand.\nA minimal website keeps the product and the photography in front." },
+  { folder: "GNG_Inner_WebP_Images", slug: "gng-inner", titleKa: "GNG Inner", titleEn: "GNG Inner", accent: "#3e3632",
+    summaryKa: "ავეჯი და ინტერიერი", summaryEn: "Furniture and interiors",
+    headlineKa: "საიტი ავეჯისა და ინტერიერის კომპანიისთვის", headlineEn: "A website for a furniture and interiors company",
+    introKa: "GNG ავეჯს ქმნის კონკრეტული სივრცისთვის.\nსაიტზეა შესრულებული პროექტები, პროექტის გალერეა, სერვისები და კომპანიის ისტორია, რომელიც 2015 წლიდან იწყება.",
+    introEn: "GNG makes furniture for a specific space.\nThe website shows completed projects, a project gallery, services and the company story, which starts in 2015." },
+  { folder: "Lilat_Flowers_WebP_Images", slug: "lilat-flowers", titleKa: "Lilat Flowers", titleEn: "Lilat Flowers", accent: "#535f35",
+    summaryKa: "ყვავილების ონლაინ მაღაზია", summaryEn: "Online flower shop",
+    headlineKa: "ონლაინ მაღაზია ყვავილების სახლისთვის", headlineEn: "An online store for a flower house",
+    introKa: "Lilat Flowers-ის საიტზე თაიგულებს ონლაინ ირჩევ და თბილისში მიტანას შეუკვეთავ.\nსაიტზეა კატეგორიები, პროდუქტის გვერდი, საკუთარი თაიგულის კონსტრუქტორი და ფლორისტიკის კურსი.",
+    introEn: "On the Lilat Flowers website you choose bouquets online and order delivery across Tbilisi.\nIt has categories, product pages, a build-your-own bouquet tool and a floristry course." },
+  { folder: "Materiel_WebP_Images", slug: "materiel", titleKa: "Materiel", titleEn: "Materiel", accent: "#1d2024",
+    summaryKa: "მოდის ბრენდის ონლაინ მაღაზია", summaryEn: "Fashion brand online store",
+    headlineKa: "ონლაინ მაღაზია მოდის ბრენდისთვის", headlineEn: "An online store for a fashion brand",
+    introKa: "Materiel თანამედროვე ტანსაცმლის ბრენდია.\nსაიტზეა მაღაზია, პროდუქტის გვერდი, კოლექციები და ბრენდის საწარმოო გვერდი. დიდი ფოტოგრაფია ტანსაცმელს წინა პლანზე აყენებს.",
+    introEn: "Materiel is a contemporary clothing brand.\nThe website has the shop, product pages, collections and a brand production page, with large photography keeping the clothes in front." },
 ];
 
 const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) });
@@ -98,6 +113,7 @@ if (flag === "--replace") {
 }
 for (const [i, p] of P.entries()) {
   const folder = path.join(dir, p.folder);
+  if (!existsSync(folder)) continue; // only the projects present in this folder are imported
   const files = readdirSync(folder).filter(f => f.endsWith(".webp")).sort();
   const feature = files.find(f => /_Feature\.webp$/.test(f));
   if (!feature) { console.warn(`skip ${p.folder}: no feature image`); continue; }
