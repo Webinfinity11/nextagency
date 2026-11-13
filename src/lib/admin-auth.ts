@@ -15,6 +15,8 @@ const same = (a: string, b: string) => timingSafeEqual(createHash("sha256").upda
 export function checkCredentials(email: string, password: string) {
   const e = process.env.ADMIN_EMAIL, p = process.env.ADMIN_PASSWORD;
   if (!e || !p) return false;
+  // Rate limiting is per IP only, so in production the password itself must resist guessing.
+  if (process.env.NODE_ENV === "production" && p.length < 16) { console.error("ADMIN_PASSWORD must be at least 16 characters; admin login is disabled"); return false; }
   // Evaluate both so a wrong email takes as long as a wrong password.
   const ok = [same(email.trim().toLowerCase(), e.trim().toLowerCase()), same(password, p)];
   return ok[0] && ok[1];

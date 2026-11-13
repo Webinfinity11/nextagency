@@ -1,7 +1,7 @@
 "use server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { clearFailures, loginBlocked, recordFailure } from "@/lib/login-limit";
+import { clearFailures, clientIp, loginBlocked, recordFailure } from "@/lib/login-limit";
 import { db } from "@/lib/db";
 import { checkCredentials, endSession, requireAdmin, startSession } from "@/lib/admin-auth";
 import type { Block } from "@/content/projects";
@@ -10,7 +10,7 @@ export type FormState = { error?: string; email?: string } | undefined;
 
 export async function login(_: FormState, form: FormData): Promise<FormState> {
   const email = String(form.get("email") ?? "");
-  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0].trim() || "unknown";
+  const ip = clientIp(await headers());
   if (loginBlocked(ip)) return { error: "ძალიან ბევრი წარუმატებელი ცდა. სცადე 15 წუთში.", email };
   if (!checkCredentials(email, String(form.get("password") ?? ""))) {
     recordFailure(ip);
