@@ -92,7 +92,7 @@ function drawCard(tex: HTMLCanvasElement, opts: { text: string; placeholder: str
   g.fillText(opts.locale === "ka" ? `${d.getDate()} ${KA_MONTHS[d.getMonth()]}, ${d.getFullYear()}` : d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }).toUpperCase(), 10, 14);
   // Stamp with a serrated edge, a plane glyph and AIR MAIL.
   g.fillStyle = "#fff"; g.fillRect(72, 8, 20, 24);
-  g.fillStyle = opts.accent; g.fillRect(74, 10, 16, 20);
+  g.fillStyle = "#111"; g.fillRect(74, 10, 16, 20); // black stamp, white brand N
   g.strokeStyle = "#fff"; g.lineWidth = .9; g.setLineDash([1, 1]); g.strokeRect(72.5, 8.5, 19, 23); g.setLineDash([]);
   // The brand N (the three pieces of the logo mark, viewBox 0 2.7 123 129.8).
   g.save(); g.translate(76.2, 11.2); g.scale(.0945, .0945); g.translate(0, -2.7); g.fillStyle = "#fff";
