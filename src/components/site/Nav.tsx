@@ -13,7 +13,7 @@ export function Nav({ copy, locale }: { copy: HeroContent; locale: Locale }) {
       </Link>
       <nav className="nav-links" aria-label={copy.navLabel}>
         {copy.nav.map((label, index) => (
-          <Link key={label} href={index === 0 ? `/${locale}/work` : `/${locale}#services`}>
+          <Link key={label} href={index === 0 ? `/${locale}/work` : index === 1 ? `/${locale}/services` : `/${locale}#services`}>
             {label}
           </Link>
         ))}
@@ -32,7 +32,7 @@ export function Nav({ copy, locale }: { copy: HeroContent; locale: Locale }) {
         <summary aria-label={copy.navLabel}><span /><span /></summary>
         <nav aria-label={copy.navLabel}>
           {copy.nav.map((label, index) => (
-            <Link key={label} href={index === 0 ? `/${locale}/work` : `/${locale}#services`}>{label}</Link>
+            <Link key={label} href={index === 0 ? `/${locale}/work` : index === 1 ? `/${locale}/services` : `/${locale}#services`}>{label}</Link>
           ))}
         </nav>
       </details>

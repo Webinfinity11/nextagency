@@ -28,7 +28,6 @@ export default async function ProjectPage({ params }: PageProps<"/[locale]/work/
   return <main id="main" className="case">
     <CaseMotion>
       <header className="case-hero">
-        <p className="case-kicker" data-case-fade><span>{category.title[locale]}</span><span>{project.year}</span></p>
         <h1 className="case-title" data-case-title>{display(project.title[locale], locale)}</h1>
       </header>
       <CaseCover project={project} />

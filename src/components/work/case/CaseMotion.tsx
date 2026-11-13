@@ -11,14 +11,11 @@ export function CaseMotion({ children }: { children: ReactNode }) {
     const mm = gsap.matchMedia();
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       const title = root.querySelector<HTMLElement>("[data-case-title]")!;
-      const fade = root.querySelectorAll<HTMLElement>("[data-case-fade]");
       const cover = root.querySelector<HTMLElement>("[data-case-cover]")!;
       const split = SplitText.create(title, { type: "lines", mask: "lines", linesClass: "case-title-line", autoSplit: true });
       gsap.set(split.lines, { yPercent: 110 });
-      gsap.set(fade, { autoAlpha: 0, y: 12 });
       const removeLoader = afterLoader(() => {
         gsap.to(split.lines, { yPercent: 0, duration: 1, ease: "power3.out", stagger: .1 });
-        gsap.to(fade, { autoAlpha: 1, y: 0, duration: .7, delay: .25, ease: "power2.out" });
         ScrollTrigger.refresh();
       });
       // Cover: inset and rounded at rest (CSS --case-inset / --case-radius), full-bleed by the time it reaches
