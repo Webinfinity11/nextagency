@@ -111,7 +111,7 @@ if (flag === "--replace") {
   const { count } = await db.project.deleteMany({ where: { slug: { notIn: P.map(p => p.slug) } } });
   console.log(`removed ${count} other projects`);
 }
-for (const [i, p] of P.entries()) {
+for (const p of P) {
   const folder = path.join(dir, p.folder);
   if (!existsSync(folder)) continue; // only the projects present in this folder are imported
   const files = readdirSync(folder).filter(f => f.endsWith(".webp")).sort();
@@ -123,11 +123,13 @@ for (const [i, p] of P.entries()) {
   const blocks = pages.map((m, k) => ({ kind: "image", src: m.url, aspect: m.aspect, wide: k === 0 || (k === pages.length - 1 && (pages.length - 1) % 2 === 1) }));
   const { folder: _, ...text } = p;
   const data = {
-    ...text, category: "digital" as const, year: 2026, order: i + 1, published: true,
+    ...text, category: "digital" as const, year: 2026, published: true,
     tagsKa: ["ვებ დეველოპმენტი"], tagsEn: ["Web Development"], servicesKa: "ვებ დიზაინი, დეველოპმენტი", servicesEn: "Web design, development",
     coverKind: "image" as const, coverSrc: cover.url, coverPoster: null, coverAspect: cover.aspect, blocks,
   };
-  await db.project.upsert({ where: { slug: p.slug }, update: data, create: data });
+  // Order is set only for new projects; re-running keeps the order chosen in /admin.
+  const last = await db.project.aggregate({ _max: { order: true } });
+  await db.project.upsert({ where: { slug: p.slug }, update: data, create: { ...data, order: (last._max.order ?? 0) + 1 } });
   console.log(`${p.slug}: cover + ${pages.length} pages`);
 }
 await db.$disconnect();
