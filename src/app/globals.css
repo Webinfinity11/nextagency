@@ -306,9 +306,9 @@ html .work-page-heading h1 { height: auto; }
 .work-rail-frame[data-tone="2"] { background: #cdcdcd; }
 .work-rail-frame img, .work-rail-frame video { width: 100%; height: 100%; object-fit: cover; }
 .work-rail-index { font-size: 13px; color: #8c8c8c; letter-spacing: .04em; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-.work-rail-caption { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
-.work-rail-caption b { font-weight: 500; } /* caption = company name only */
-html[lang="ka"] .work-rail-caption { text-transform: none; }
+.work-rail-caption { font-size: 17px; line-height: 1.2; letter-spacing: -.01em; color: #111; white-space: nowrap; }
+.work-rail-caption b { font-weight: 700; } /* caption = company name only */
+html[lang="ka"] .work-rail-caption { text-transform: none; } /* site font, readable size */
 .work-rail-label { display: none; font-size: 15px; white-space: nowrap; }
 .work-rail-footer { display: flex; justify-content: center; }
 /* Noise-gradient pill (NoiseLink.tsx): --nx/--ny is the drifting point, each layer scales it by --m. */
@@ -442,7 +442,7 @@ html[lang="ka"] .case-next strong { text-transform: none; line-height: 1.15; let
   .work-rail-sentence { font-size: 17px; }
   .work-rail-track { padding: 16px 6vw 12px; }
   .work-rail-frame { height: 220px; }
-  .work-rail-caption { font-size: 10px; }
+  .work-rail-caption { font-size: 14px; }
   .noise-link { font-size: 14px; }
   .work-meta { gap: 4px 12px; flex-wrap: wrap; font-size: 14px; }
   .work-meta p { order: 3; width: 100%; }
