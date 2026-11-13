@@ -14,6 +14,6 @@ export function ProjectCover({ project }: { project: Project }) {
 export function ProjectCard({ project, locale }: { project: Project; locale: Locale }) {
   return <Link className="work-card" href={`/${locale}/work/${project.slug}`} draggable={false}>
     <ProjectCover project={project} />
-    <div className="work-meta"><h3>{project.title[locale]}</h3><p>{project.summary[locale]}</p><span aria-hidden="true">↗</span></div>
+    <div className="work-meta"><h3>{project.title[locale]}</h3><p>{project.summary[locale]}</p></div>
   </Link>;
 }

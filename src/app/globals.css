@@ -344,8 +344,7 @@ html[lang="ka"] .work-rail-caption { text-transform: none; } /* site font, reada
 .work-placeholder-6 i { inset: 15% 30%; }
 .work-meta { margin-top: 14px; display: flex; gap: 20px; align-items: baseline; font-size: clamp(14px, 1.15vw, 18px); line-height: 1.4; }
 .work-meta h3 { font-size: inherit; margin: 0; font-weight: 800; flex-shrink: 0; }
-.work-meta p { margin: 0; opacity: .6; }
-.work-meta > span { margin-left: auto; }
+.work-meta p { margin: 0; opacity: .6; } /* no trailing arrow */
 .work-all { margin-top: auto; padding-top: 40px; display: flex; align-items: baseline; gap: .4em; font-size: clamp(20px, 2.2vw, 32px); letter-spacing: -.03em; width: fit-content; }
 .work-all > span { position: relative; }
 .work-all > span::after { content: ""; position: absolute; bottom: -4px; left: 0; width: 100%; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .5s cubic-bezier(.33,1,.68,1); }
