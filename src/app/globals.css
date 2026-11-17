@@ -208,11 +208,11 @@ html[data-loader="skip"] .word {
 .loader-wipe { background: #fff; }
 .loader-clean {
   position: absolute;
-  /* 480px wide, capped to 84vw on phones; top keeps it centred (134.7 / 506.5 aspect). */
+  /* 480px wide, capped to 84vw on phones; top keeps it centred (218 / 803 aspect). */
   left: calc(50% - min(240px, 42vw));
-  top: calc(50% - min(240px, 42vw) * 0.265943);
+  top: calc(50% - min(240px, 42vw) * 0.271482);
   width: min(480px, 84vw);
-  aspect-ratio: 506.5 / 134.7;
+  aspect-ratio: 803 / 218;
   visibility: hidden;
   transform-origin: center;
 }
@@ -220,10 +220,11 @@ html[data-loader="skip"] .word {
 .loader-dark-logo { color: #000; }
 .loader-flicker {
   position: absolute;
-  width: 150px;
-  height: 162.59px;
-  top: calc(50% - 81.295px);
-  left: calc(50% - 75px);
+  /* BoilingMark's 248 × 238 viewBox: the square itself shows at ~165px before settling to the logo's size. */
+  width: 180px;
+  height: 172.74px;
+  top: calc(50% - 86.37px);
+  left: calc(50% - 90px);
   color: #fff;
 }
 .loader-flicker svg { width: 100%; height: 100%; overflow: visible; }

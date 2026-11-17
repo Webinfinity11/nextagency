@@ -44,7 +44,7 @@ export async function generateMetadata({
     },
   };
 }
-const bootstrap = `try{if(sessionStorage.getItem('next-agency:loaded'))document.documentElement.dataset.loader='skip'}catch(e){}`;
+const bootstrap = `try{if(sessionStorage.getItem('kai-studio:loaded'))document.documentElement.dataset.loader='skip'}catch(e){}`;
 export default async function RootLayout({
   children,
   params,

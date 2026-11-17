@@ -1,16 +1,18 @@
 import { useId } from "react";
+import { BRAND_RED, KANJI_LOCAL, MARK } from "./Logo";
 
-// The exact three stencil-N cuts from public/brand/logo.svg, never rearranged.
-const silhouette = "M0 2.7H29.9L123 114.1V132.5H93.1L0 21.1Z M87.6 2.7H123V40.2Z M0 94.9L35.6 132.5H0Z";
+// The 改 square from Logo.tsx in square-local units (0–228 × 0–218): the textures fill the square and 改 stays cut out.
+const square = `M0 0H${MARK.width}V${MARK.height}H0Z`;
+const silhouette = `${square}${KANJI_LOCAL}`;
 export const markStyles = ["charcoal", "hatch", "wireframe", "circles", "white", "sketch", "grey", "noise", "horizontal", "halftone", "double", "dither"];
 export function BoilingMark() {
   const id = useId().replace(/:/g, "");
   const url = (name: string) => `url(#${id}-${name})`;
   return (
-    <svg viewBox="-10 -10 143 155" aria-hidden="true" focusable="false">
+    <svg viewBox="-10 -10 248 238" aria-hidden="true" focusable="false">
       <defs>
-        <path id={`${id}-n`} d={silhouette} />
-        <clipPath id={`${id}-clip`}><path d={silhouette} /></clipPath>
+        <path id={`${id}-n`} d={silhouette} fillRule="evenodd" />
+        <clipPath id={`${id}-clip`}><path d={silhouette} clipRule="evenodd" /></clipPath>
         <pattern id={`${id}-hatch`} width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(-12)"><path d="M1 0V5" stroke="white" strokeWidth="1.3" /></pattern>
         <pattern id={`${id}-horizontal`} width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0 2H6" stroke="white" strokeWidth="2" /></pattern>
         <pattern id={`${id}-halftone`} width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="2" fill="white" /></pattern>
@@ -33,6 +35,11 @@ export function BoilingMark() {
           {style === "double" && <g clipPath={url("clip")}><path d={silhouette} fill="none" stroke="white" strokeWidth="7" /><path d={silhouette} fill="none" stroke="black" strokeWidth="4" /></g>}
         </g>
       ))}
+      {/* The resolved state: the real red square and white 改, identical to the lockup's. */}
+      <g className="mark-solid" style={{ opacity: 0 }}>
+        <path d={square} fill={BRAND_RED} />
+        <path d={KANJI_LOCAL} fill="#fff" />
+      </g>
     </svg>
   );
 }
