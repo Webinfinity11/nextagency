@@ -87,7 +87,7 @@ Projects live in PostgreSQL (Prisma 7, `prisma/schema.prisma`, client generated 
 
 Uploads: `POST /api/admin/upload` (admin only; jpg/png/webp/avif/gif/mp4/webm/mov, 200 MB) writes to `UPLOAD_DIR` under a random name; `/media/[...path]` serves them with immutable caching and Range support (Safari video). Production requires an absolute `UPLOAD_DIR` (Railway volume) because the standalone server runs inside `.next/standalone`, which each build replaces.
 
-Local: Postgres 17 in Docker (`nextagency-pg`, port 5433), `.env` from `.env.example`, `pnpm prisma migrate dev`, then `pnpm db:import-projects "<folder>" [--replace]` to load the agency's web projects (one folder per project: `*_Feature.webp` cover + numbered page screenshots; texts are drafts inside `scripts/import-projects.mts`). Railway: Postgres service + `DATABASE_URL`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SESSION_SECRET`, a volume and `UPLOAD_DIR`; `railway.json` runs `pnpm db:migrate` before each deploy. Deleting a project does not delete its uploaded files.
+Local: Postgres 17 in Docker (`nextagency-pg`, port 5433), `.env` from `.env.example`, `pnpm prisma migrate dev`, then `pnpm db:import-projects "<folder>" [--replace]` to load the agency's web projects (one folder per project: `*_Feature.webp` cover + numbered page screenshots; texts are drafts inside `scripts/import-projects.mts`). Railway: Postgres service + `DATABASE_URL`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SESSION_SECRET`, a volume and `UPLOAD_DIR`; `pnpm start` runs `prisma migrate deploy` before the server starts (Railway skipped the preDeploy command). Deleting a project does not delete its uploaded files.
 
 ## Contact
 
