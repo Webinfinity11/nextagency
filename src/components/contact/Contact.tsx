@@ -5,10 +5,11 @@ import { contactCopy } from "@/content/contact";
 import type { Locale } from "@/content/locales";
 import { sendMessage } from "./actions";
 import { createContactScene } from "./contactScene";
+import { BRAND_RED } from "@/components/brand/Logo";
 // Contact: the whole form on the left; on the right only the animation (contactScene): a postcard in front of a
 // dot-matrix globe. The message prints on the card as it is typed; Send folds the card into a paper plane that
 // loops the globe and lands on Tbilisi. Messages are stored and read in /admin/messages.
-const ACCENT = "#5b7cff";
+const ACCENT = BRAND_RED;
 const TBILISI = { lat: 41.72, lon: 44.79 };
 type Phase = "idle" | "sending" | "flying" | "landed" | "error";
 

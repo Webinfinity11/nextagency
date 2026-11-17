@@ -3,6 +3,7 @@
 // mountain fold, wings), turns it into the flight direction, loops it round a tilted orbit with thin trail lines
 // (hidden while behind the globe) and lands it on Tbilisi with a pin. The paper is a mesh cut along each crease;
 // faces carry the postcard texture by affine-mapped triangles; back faces are plain paper, shaded by the light.
+import { BRAND_RED, KANJI_LOCAL } from "@/components/brand/Logo";
 import { LAND } from "./landMask";
 
 type V2 = { x: number; y: number };
@@ -80,6 +81,7 @@ function flatten(polys: ReturnType<typeof cut>, step: Crease[]): Poly[] {
 
 // ---- postcard texture ----
 const KA_MONTHS = ["იანვარი", "თებერვალი", "მარტი", "აპრილი", "მაისი", "ივნისი", "ივლისი", "აგვისტო", "სექტემბერი", "ოქტომბერი", "ნოემბერი", "დეკემბერი"];
+let KANJI_PATH: Path2D | undefined;
 function drawCard(tex: HTMLCanvasElement, opts: { text: string; placeholder: string; locale: string; accent: string; airmail: string; caret: boolean }) {
   const g = tex.getContext("2d")!, S = tex.width / PW; // pixels per paper unit
   const family = getComputedStyle(document.body).fontFamily || "sans-serif"; // the site stack (Manrope + Noto Sans Georgian)
@@ -92,13 +94,11 @@ function drawCard(tex: HTMLCanvasElement, opts: { text: string; placeholder: str
   g.fillText(opts.locale === "ka" ? `${d.getDate()} ${KA_MONTHS[d.getMonth()]}, ${d.getFullYear()}` : d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }).toUpperCase(), 10, 14);
   // Stamp with a serrated edge, a plane glyph and AIR MAIL.
   g.fillStyle = "#fff"; g.fillRect(72, 8, 20, 24);
-  g.fillStyle = "#111"; g.fillRect(74, 10, 16, 20); // black stamp, white brand N
+  g.fillStyle = BRAND_RED; g.fillRect(74, 10, 16, 20); // KAI-orange stamp, white 改
   g.strokeStyle = "#fff"; g.lineWidth = .9; g.setLineDash([1, 1]); g.strokeRect(72.5, 8.5, 19, 23); g.setLineDash([]);
-  // The brand N (the three pieces of the logo mark, viewBox 0 2.7 123 129.8).
-  g.save(); g.translate(76.2, 11.2); g.scale(.0945, .0945); g.translate(0, -2.7); g.fillStyle = "#fff";
-  for (const pts of [[0, 2.7, 29.9, 2.7, 123, 114.1, 123, 132.5, 93.1, 132.5, 0, 21.1], [87.6, 2.7, 123, 2.7, 123, 40.2], [0, 94.9, 35.6, 132.5, 0, 132.5]]) {
-    g.beginPath(); g.moveTo(pts[0], pts[1]); for (let i = 2; i < pts.length; i += 2) g.lineTo(pts[i], pts[i + 1]); g.closePath(); g.fill();
-  }
+  // 改 from the logo (square-local units; glyph centre ≈ 116.4, 108.4), 11 units wide, above the AIR MAIL line.
+  const k = .068;
+  g.save(); g.translate(82 - 116.4 * k, 17.6 - 108.4 * k); g.scale(k, k); g.fillStyle = "#fff"; g.fill(KANJI_PATH ??= new Path2D(KANJI_LOCAL));
   g.restore();
   g.fillStyle = "#fff"; g.font = `700 2.2px ${family}`; g.textAlign = "center"; g.fillText(opts.airmail, 82, 28.2); g.textAlign = "left";
   // Postmark: ring plus wavy cancellation lines running into the stamp.

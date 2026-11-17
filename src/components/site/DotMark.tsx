@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { Logo } from "@/components/brand/Logo";
+import { BRAND_RED, Logo } from "@/components/brand/Logo";
 // The wordmark as a dot matrix (after mrkflow.ge's "HELLO"): the pointer drags nearby dots along,
 // and springs pull them home. Dots rise into place, left to right, when the footer scrolls in.
 export function DotMark() {
@@ -32,11 +32,16 @@ export function DotMark() {
       const o = off.getContext("2d", { willReadFrequently: true })!;
       o.drawImage(img, 0, 0, W, H);
       const data = o.getImageData(0, 0, W, H).data, pts: number[] = [];
-      for (let yy = gap / 2; yy < H; yy += gap) for (let xx = gap / 2; xx < W; xx += gap)
-        if (data[(Math.floor(yy) * W + Math.floor(xx)) * 4 + 3] > 128) pts.push(xx, yy);
+      // Ink dots are black (a few grey); the 改 square's red becomes orange dots and its white glyph stays empty.
+      const kinds: number[] = [];
+      for (let yy = gap / 2; yy < H; yy += gap) for (let xx = gap / 2; xx < W; xx += gap) {
+        const at = (Math.floor(yy) * W + Math.floor(xx)) * 4, red = data[at], green = data[at + 1];
+        if (data[at + 3] <= 128 || green > 160) continue;
+        pts.push(xx, yy); kinds.push(red > 140 ? 2 : 0);
+      }
       const n = pts.length / 2;
       hx = new Float32Array(n); hy = new Float32Array(n); vx = new Float32Array(n); vy = new Float32Array(n); tone = new Uint8Array(n);
-      for (let i = 0; i < n; i++) { hx[i] = pts[i * 2]; hy[i] = pts[i * 2 + 1]; const s = Math.sin(i * 91.7 + 13.1) * 43758.5; tone[i] = s - Math.floor(s) < .07 ? 1 : 0; }
+      for (let i = 0; i < n; i++) { hx[i] = pts[i * 2]; hy[i] = pts[i * 2 + 1]; const s = Math.sin(i * 91.7 + 13.1) * 43758.5; tone[i] = kinds[i] || (s - Math.floor(s) < .07 ? 1 : 0); }
       x = hx.slice(); y = hy.slice();
       if (!entered) for (let i = 0; i < n; i++) y[i] = H + gap * 2;
       frame();
@@ -49,8 +54,8 @@ export function DotMark() {
       let moving = false;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H + gap);
-      for (const t of [0, 1]) {
-        ctx.fillStyle = t ? "#a3a3a3" : "#000";
+      for (const t of [0, 1, 2]) {
+        ctx.fillStyle = t === 2 ? BRAND_RED : t ? "#a3a3a3" : "#000";
         ctx.beginPath();
         for (let i = 0; i < hx.length; i++) {
           if (tone[i] !== t) continue;

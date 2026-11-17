@@ -2,6 +2,9 @@
 @import "lenis/dist/lenis.css";
 :root {
   color-scheme: light;
+  /* KAI orange (the 改 square); --brand-deep is its hover/pressed shade. */
+  --brand: #f03c1f;
+  --brand-deep: #d22f15;
 }
 * {
   box-sizing: border-box;
@@ -387,9 +390,9 @@ html[lang="ka"] .svc-title, html[lang="ka"] .svc h2 { text-transform: none; line
 .svc-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
 .svc-tabs button { display: inline-flex; align-items: center; gap: 10px; padding: 11px 18px; border: 1px solid #d8d8d8; border-radius: 999px; background: #fff; color: #111; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; transition: background-color .25s, border-color .25s, color .25s; }
 .svc-tabs button span { font-size: 13px; font-weight: 500; color: #9a9a9a; transition: color .25s; }
-.svc-tabs button:hover { border-color: #111; }
-.svc-tabs button[aria-pressed="true"] { background: #111; border-color: #111; color: #fff; }
-.svc-tabs button[aria-pressed="true"] span { color: #9a9a9a; }
+.svc-tabs button:hover { border-color: var(--brand); }
+.svc-tabs button[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: #fff; }
+.svc-tabs button[aria-pressed="true"] span { color: rgba(255,255,255,.75); }
 .svc-tabs button:focus-visible { outline: 2px solid #111; outline-offset: 3px; }
 .svc-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid #e3e3e3; }
 .svc-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: center; padding: clamp(22px, 2.4vw, 34px) 0; border-bottom: 1px solid #e3e3e3; transition: background-color .3s; }
@@ -407,8 +410,8 @@ html[lang="ka"] .svc-title, html[lang="ka"] .svc h2 { text-transform: none; line
 .svc-cta { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; margin: clamp(60px, 8vw, 120px) 0; padding: clamp(32px, 5vw, 72px); border-radius: 24px; background: #0d0d0d; color: #fff; }
 .svc-cta h2 { margin: 0 0 12px; font-size: clamp(32px, 4.2vw, 68px); font-weight: 800; line-height: 1.05; letter-spacing: -.03em; }
 .svc-cta p { margin: 0; max-width: 46ch; color: #a9a9a9; font-size: 17px; }
-.svc-button { display: inline-flex; align-items: center; justify-content: center; padding: 15px 26px; border-radius: 999px; background: #000; color: #fff; font-size: 15px; font-weight: 600; white-space: nowrap; transition: background-color .25s, transform .2s cubic-bezier(.2,.8,.2,1); }
-.svc-button:hover { background: #2a2a2a; }
+.svc-button { display: inline-flex; align-items: center; justify-content: center; padding: 15px 26px; border-radius: 999px; background: var(--brand); color: #fff; font-size: 15px; font-weight: 600; white-space: nowrap; transition: background-color .25s, transform .2s cubic-bezier(.2,.8,.2,1); }
+.svc-button:hover { background: var(--brand-deep); }
 .svc-button:active { transform: scale(.98); }
 .svc-button.is-light { background: #fff; color: #000; }
 .svc-button.is-light:hover { background: #e9e9e9; }
@@ -514,9 +517,9 @@ html[lang="ka"] .case-title { text-transform: none; line-height: 1.12; letter-sp
 .case-tags li { padding: 7px 13px; border-radius: 999px; background: #e2e2df; font-size: 12px; line-height: 1; letter-spacing: .03em; text-transform: uppercase; }
 html[lang="ka"] .case-tags li { text-transform: none; letter-spacing: 0; font-size: 13px; }
 .case-headline { margin: 0; font-size: clamp(22px, 1.8vw, 30px); font-weight: 600; line-height: 1.2; letter-spacing: -.02em; }
-.case-visit { display: flex; justify-content: center; align-items: center; gap: 10px; padding: 14px 20px; border-radius: 999px; background: #000; color: #fff; font-size: 14px; font-weight: 600; letter-spacing: .02em; transition: background-color .25s, transform .2s cubic-bezier(.2,.8,.2,1); }
+.case-visit { display: flex; justify-content: center; align-items: center; gap: 10px; padding: 14px 20px; border-radius: 999px; background: var(--brand); color: #fff; font-size: 14px; font-weight: 600; letter-spacing: .02em; transition: background-color .25s, transform .2s cubic-bezier(.2,.8,.2,1); }
 .case-visit span { transition: transform .35s cubic-bezier(.2,.8,.2,1); }
-.case-visit:hover { background: #262626; }
+.case-visit:hover { background: var(--brand-deep); }
 .case-visit:hover span { transform: translateX(4px); }
 .case-visit:active { transform: scale(.98); }
 .case-text { margin: 0; white-space: pre-line; color: #2a2a2a; }
@@ -610,18 +613,18 @@ html[lang="ka"] .case-next strong { text-transform: none; line-height: 1.15; let
 .contact-form textarea { resize: vertical; min-height: 120px; }
 .contact-form input::placeholder, .contact-form textarea::placeholder { color: #9a9a9a; }
 .contact-form input:focus-visible, .contact-form textarea:focus-visible { outline: none; border-color: #000; background: #fff; }
-.contact-form button { margin-top: 8px; padding: 15px; border: 0; border-radius: 999px; background: #000; color: #fff; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; transition: transform .2s cubic-bezier(.2,.8,.2,1), background-color .2s; }
-.contact-form button:hover { background: #262626; }
+.contact-form button { margin-top: 8px; padding: 15px; border: 0; border-radius: 999px; background: var(--brand); color: #fff; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; transition: transform .2s cubic-bezier(.2,.8,.2,1), background-color .2s; }
+.contact-form button:hover { background: var(--brand-deep); }
 .contact-form button:active { transform: scale(.98); }
 .contact-form button:disabled { opacity: .6; cursor: progress; }
-.contact-form button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
+.contact-form button:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
 .contact-status { min-height: 1.4em; margin: -4px 0 0; font-size: 14px; color: #2b3fb3; }
 .contact-status.is-error { color: #b42318; }
 .contact-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 /* Right: only the animation, no frame: globe, postcard, fold and flight are drawn by contactScene on one canvas. */
-.contact-stage { --accent: #5b7cff; position: relative; width: 100%; max-width: 620px; aspect-ratio: 1; }
+.contact-stage { --accent: var(--brand); position: relative; width: 100%; max-width: 620px; aspect-ratio: 1; }
 .contact-globe { position: absolute; inset: 0; width: 100%; height: 100%; }
-.contact-landed { position: absolute; z-index: 2; margin: 0; padding: 7px 12px; border-radius: 999px; background: #111; color: #fff; font-size: 13px; font-weight: 600; white-space: nowrap; transform: translate(-50%, calc(-100% - 16px)); animation: contact-pop .45s cubic-bezier(.2,.8,.2,1) both; }
+.contact-landed { position: absolute; z-index: 2; margin: 0; padding: 7px 12px; border-radius: 999px; background: var(--brand); color: #fff; font-size: 13px; font-weight: 600; white-space: nowrap; transform: translate(-50%, calc(-100% - 16px)); animation: contact-pop .45s cubic-bezier(.2,.8,.2,1) both; }
 @keyframes contact-pop { from { opacity: 0; transform: translate(-50%, calc(-100% - 6px)) scale(.9); } }
 @media (max-width: 900px) {
   .contact { padding: 72px 6vw 32px; }
@@ -640,7 +643,7 @@ html[lang="ka"] .case-next strong { text-transform: none; line-height: 1.15; let
 .footer-roll { display: inline-flex; height: 1.2em; line-height: 1.2em; overflow: hidden; }
 .footer-roll > span { display: inline-block; white-space: pre; text-shadow: 0 1.6em currentColor; transition: transform .55s cubic-bezier(.65,0,.35,1) calc(var(--i) * 14ms); }
 .footer-email:hover .footer-roll > span, .footer-email:focus-visible .footer-roll > span { transform: translateY(-1.6em); }
-.footer-arrow { display: grid; place-items: center; width: 1.5em; height: 1.5em; border-radius: 50%; background: #000; color: #fff; transition: transform .5s cubic-bezier(.65,0,.35,1); }
+.footer-arrow { display: grid; place-items: center; width: 1.5em; height: 1.5em; border-radius: 50%; background: var(--brand); color: #fff; transition: transform .5s cubic-bezier(.65,0,.35,1); }
 .footer-arrow svg { width: 52%; height: 52%; }
 .footer-email:hover .footer-arrow, .footer-email:focus-visible .footer-arrow { transform: rotate(45deg) scale(1.08); }
 .footer-cols { display: flex; gap: clamp(48px, 7vw, 110px); font-size: 15px; }

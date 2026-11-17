@@ -25,8 +25,8 @@
 .admin-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border: 1px solid #d6d6d6; border-radius: 999px; background: #fff; color: #111; font: inherit; font-size: 14px; text-decoration: none; cursor: pointer; white-space: nowrap; transition: background-color .15s, border-color .15s; }
 .admin-btn:hover { border-color: #111; }
 .admin-btn:disabled { opacity: .45; cursor: not-allowed; }
-.admin-btn-primary { background: #111; border-color: #111; color: #fff; }
-.admin-btn-primary:hover { background: #333; }
+.admin-btn-primary { background: #f03c1f; border-color: #f03c1f; color: #fff; }
+.admin-btn-primary:hover { background: #d22f15; border-color: #d22f15; }
 .admin-btn-danger { color: #b42318; }
 .admin-btn-danger:hover { border-color: #b42318; }
 .admin-icon { width: 32px; height: 32px; border: 1px solid #d6d6d6; border-radius: 50%; background: #fff; font: inherit; cursor: pointer; }
@@ -97,11 +97,11 @@
   .admin-pair, .admin-grid-2, .admin-grid-3 { grid-template-columns: 1fr; }
 }
 
-.admin-badge { display: inline-grid; place-items: center; min-width: 20px; height: 20px; margin-left: 6px; padding: 0 6px; border-radius: 999px; background: #5b7cff; color: #fff; font-size: 12px; font-weight: 700; }
+.admin-badge { display: inline-grid; place-items: center; min-width: 20px; height: 20px; margin-left: 6px; padding: 0 6px; border-radius: 999px; background: #f03c1f; color: #fff; font-size: 12px; font-weight: 700; }
 .admin-messages { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .admin-messages li { display: grid; gap: 12px; padding: 18px 20px; background: #fff; border-radius: 14px; border: 1px solid transparent; }
-.admin-messages li.is-new { border-color: #5b7cff; }
-.admin-messages li.is-new strong::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 8px; border-radius: 50%; background: #5b7cff; vertical-align: 1px; }
+.admin-messages li.is-new { border-color: #f03c1f; }
+.admin-messages li.is-new strong::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 8px; border-radius: 50%; background: #f03c1f; vertical-align: 1px; }
 .admin-message-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
 .admin-message-head a { font-size: 14px; color: #555; }
 .admin-message-body { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.6; }
