@@ -9,6 +9,7 @@ export function proxy(request: NextRequest) {
   return NextResponse.redirect(url);
 }
 export const config = {
-  // Skip Next internals, API routes, the admin panel, uploaded media and any file with an extension (public/brand/*, icon.svg…).
-  matcher: ["/((?!_next|api|admin|media|.*\\..*).*)"],
+  // Skip Next internals, API routes, the admin panel, uploaded media, the standalone /presentation deck
+  // and any file with an extension (public/brand/*, icon.svg…).
+  matcher: ["/((?!_next|api|admin|media|presentation(?:/|$)|.*\\..*).*)"],
 };

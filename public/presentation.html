@@ -1,0 +1,2356 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>KAI STUDIO — Digital-студия полного цикла</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+JP:wght@700&display=swap">
+<style>
+  /* ==========================================================================
+     1. DESIGN TOKENS & BASE RESET (JAPANESE-SWISS ARCHITECTURAL MINIMALISM)
+     ========================================================================== */
+  :root {
+    --bg: #050505;
+    --fg: #FAFAFA;
+    --mut: #8A8D93;
+    --soft: #D2D4D8;
+    --red: #FF2E00;
+    --chrome: linear-gradient(135deg, #FFFFFF 0%, #9CA3AF 50%, #FFFFFF 100%);
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    user-select: none;
+  }
+
+  button, a {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mono {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .spec {
+    color: var(--mut);
+  }
+  .spec b {
+    font-weight: 500;
+    color: var(--red);
+  }
+
+  .ch {
+    background: var(--chrome);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* ==========================================================================
+     2. BACKGROUND: 60 FPS NEURAL CANVAS + 64PX ARCHITECTURAL GRID
+     ========================================================================== */
+  #bg-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .arch-grid {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.024) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.024) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  .top-line {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    width: 12.5%;
+    background: var(--red);
+    box-shadow: 0 0 14px var(--red);
+    z-index: 40;
+    transition: width 0.75s var(--ease);
+    pointer-events: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .cursor-ring {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 100;
+      transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
+      transition: width 0.3s var(--ease), height 0.3s var(--ease), border-color 0.3s, background 0.3s;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring.hover {
+      width: 54px;
+      height: 54px;
+      border-color: var(--red);
+      background: rgba(255, 46, 0, 0.14);
+    }
+  }
+  @media (hover: none), (pointer: coarse) {
+    .cursor-ring {
+      display: none !important;
+    }
+  }
+
+  /* ==========================================================================
+     3. FIXED HEADER & FLIP LOGO SLOTS
+     ========================================================================== */
+  .hd {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 30;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: calc(14px + env(safe-area-inset-top)) clamp(20px, 5vw, 72px) 16px;
+    background: linear-gradient(to bottom, rgba(5, 5, 5, 0.96) 68%, rgba(5, 5, 5, 0));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: opacity 0.45s var(--ease);
+  }
+
+  body.on-s1 .hd {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .hd .lg-slot {
+    width: 96px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: opacity 0.18s ease;
+  }
+
+  .hd .lg-slot.flip-hidden,
+  .big.flip-hidden {
+    opacity: 0 !important;
+  }
+
+  .dc {
+    position: relative;
+    padding: 10px 16px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.04);
+    transition: transform 0.35s var(--ease), background 0.3s;
+    white-space: nowrap;
+  }
+  .dc::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: 2px;
+    background: var(--chrome);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .dc:hover {
+    transform: translateY(-2px);
+    background: var(--red);
+  }
+
+  /* ==========================================================================
+     4. FIXED FOOTER & EXPLICIT NAVIGATION CONTROLS
+     ========================================================================== */
+  .ft {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 12px clamp(20px, 5vw, 72px) calc(12px + env(safe-area-inset-bottom));
+    background: linear-gradient(to top, rgba(5, 5, 5, 0.98) 74%, rgba(5, 5, 5, 0));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .sc {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .sc > span {
+    white-space: nowrap;
+  }
+  .sc > span b {
+    color: var(--fg);
+    font-weight: 500;
+  }
+
+  .nav-arrows {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-btn {
+    width: 34px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--fg);
+    font-size: 0.85rem;
+    transition: border-color 0.25s, background 0.25s, opacity 0.25s, transform 0.25s var(--ease);
+  }
+  .nav-btn:hover:not(:disabled) {
+    border-color: var(--red);
+    background: rgba(255, 46, 0, 0.16);
+  }
+  .nav-btn:active:not(:disabled) {
+    transform: scale(0.94);
+  }
+  .nav-btn:disabled {
+    opacity: 0.26;
+    cursor: default;
+  }
+
+  .bars {
+    display: flex;
+    gap: 5px;
+  }
+  .bars button {
+    width: clamp(14px, 2.8vw, 24px);
+    height: 30px;
+    position: relative;
+  }
+  .bars button::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 14px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.18);
+    transition: background 0.35s, transform 0.3s var(--ease);
+  }
+  .bars button.on::after {
+    background: var(--red);
+  }
+  .bars button:hover::after {
+    background: var(--fg);
+    transform: scaleY(1.8);
+  }
+
+  .bc {
+    text-align: right;
+    line-height: 1.45;
+    color: var(--mut);
+  }
+  .bc svg {
+    display: block;
+    margin-left: auto;
+    margin-bottom: 3px;
+  }
+
+  /* ==========================================================================
+     5. SLIDES CONTAINER & 60 FPS GPU TRANSITIONS
+     ========================================================================== */
+  main {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    overflow: hidden;
+  }
+
+  .s {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate3d(0, 0, 0) scale(1);
+    transition: transform 0.8s var(--ease), opacity 0.62s var(--ease), visibility 0s linear 0.8s;
+    will-change: transform, opacity;
+  }
+
+  .s.to-next {
+    transform: translate3d(44px, 0, 0) scale(0.985);
+  }
+  .s.to-prev {
+    transform: translate3d(-44px, 0, 0) scale(0.985);
+  }
+  .s.exit-next {
+    opacity: 0;
+    visibility: visible;
+    transform: translate3d(-44px, 0, 0) scale(0.985);
+    transition: transform 0.8s var(--ease), opacity 0.62s var(--ease), visibility 0s linear 0.8s;
+    z-index: 2;
+  }
+  .s.exit-prev {
+    opacity: 0;
+    visibility: visible;
+    transform: translate3d(44px, 0, 0) scale(0.985);
+    transition: transform 0.8s var(--ease), opacity 0.62s var(--ease), visibility 0s linear 0.8s;
+    z-index: 2;
+  }
+  .s.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate3d(0, 0, 0) scale(1);
+    transition: transform 0.8s var(--ease), opacity 0.62s var(--ease), visibility 0s;
+    z-index: 3;
+  }
+
+  .in {
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: calc(92px + env(safe-area-inset-top)) clamp(20px, 7vw, 110px) calc(102px + env(safe-area-inset-bottom));
+  }
+
+  .in.is-overflowing {
+    justify-content: flex-start;
+  }
+
+  .s1 .in {
+    padding-top: calc(48px + env(safe-area-inset-top));
+    padding-bottom: calc(112px + env(safe-area-inset-bottom));
+  }
+
+  [data-a] {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+    transition: opacity 0.74s var(--ease), transform 0.74s var(--ease);
+    will-change: transform, opacity;
+  }
+  .s.active [data-a] {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    transition-delay: calc(var(--i, 0) * 70ms + 120ms);
+  }
+
+  /* ==========================================================================
+     6. SLIDE 01: HERO LOGO, BADGE, CTA & SWIPE HINT
+     ========================================================================== */
+  .lg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .big {
+    width: min(540px, 100%);
+    margin: clamp(12px, 2.2vh, 22px) 0;
+    transition: opacity 0.18s ease;
+  }
+
+  .ls {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .s1.active .ls {
+    animation: stamp 0.95s 0.08s var(--ease) both;
+  }
+  .s1.active .lw {
+    animation: ink 1.05s 0.42s var(--ease) both;
+  }
+  @keyframes stamp {
+    0% { opacity: 0; transform: scale(2); filter: brightness(2.2); }
+    32% { opacity: 1; transform: scale(0.92); }
+    56% { transform: scale(1.03); }
+    100% { opacity: 1; transform: none; filter: none; }
+  }
+  @keyframes ink {
+    from { opacity: 0; filter: blur(8px) brightness(1.5); transform: translateX(-16px); }
+    to { opacity: 1; filter: none; transform: none; }
+  }
+
+  .badge {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 14px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: var(--fg);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+  }
+  .badge i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+    box-shadow: 0 0 10px var(--red);
+    display: inline-block;
+    animation: pulse 2.2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.75); }
+  }
+
+  h1, h2, h3 {
+    font-family: 'Unbounded', 'Inter', sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.14;
+  }
+  h1 {
+    font-size: clamp(1.32rem, 2.75vw, 2.45rem);
+    max-width: 22em;
+    margin-top: 8px;
+  }
+  h2 {
+    font-size: clamp(1.34rem, 3vw, 2.55rem);
+    margin: 10px 0 clamp(18px, 3.2vh, 30px);
+    max-width: 21em;
+  }
+
+  .sub {
+    margin-top: 14px;
+    max-width: 40em;
+    color: var(--soft);
+    font-size: clamp(0.92rem, 1.12vw, 1.04rem);
+    line-height: 1.62;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 18px;
+    margin-top: clamp(20px, 3vh, 28px);
+  }
+
+  .cta {
+    padding: 16px 28px;
+    background: var(--red);
+    border-radius: 2px;
+    font-weight: 500;
+    transition: background 0.3s, box-shadow 0.4s, transform 0.35s var(--ease);
+  }
+  .cta:hover {
+    box-shadow: 0 0 36px rgba(255, 46, 0, 0.48);
+  }
+
+  .nav-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--mut);
+    transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+  }
+  .nav-hint span {
+    display: inline-block;
+    animation: nudgeRight 1.8s infinite ease-in-out;
+  }
+  body.has-navigated .nav-hint {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(8px);
+  }
+  @keyframes nudgeRight {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(5px); }
+  }
+
+  /* 60 FPS GPU Marquee Ticker (Slide 01 only) */
+  .mq {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(58px + env(safe-area-inset-bottom));
+    overflow: hidden;
+    white-space: nowrap;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 8px 0;
+    color: var(--mut);
+    z-index: 4;
+    background: rgba(5, 5, 5, 0.82);
+  }
+  .mq-track {
+    display: inline-flex;
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+  }
+  .mq-copy {
+    display: inline-block;
+  }
+
+  /* ==========================================================================
+     7. GLASSMORPHISM PANELS & DESKTOP-ONLY 3D TILT
+     ========================================================================== */
+  .gl {
+    position: relative;
+    background: rgba(255, 255, 255, 0.028);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    [data-tilt] {
+      transition: transform 0.25s ease-out, border-color 0.3s, background 0.3s;
+      transform-style: preserve-3d;
+    }
+    [data-tilt]::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(360px circle at var(--gx, 50%) var(--gy, 50%), rgba(255, 255, 255, 0.08), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    [data-tilt]:hover::after {
+      opacity: 1;
+    }
+  }
+
+  /* ==========================================================================
+     8. SLIDE 02: CORE COMPETENCIES
+     ========================================================================== */
+  .g2 {
+    display: grid;
+    grid-template-columns: 1fr 1.22fr;
+    gap: clamp(20px, 4.5vw, 64px);
+    align-items: center;
+  }
+
+  .row {
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    width: 100%;
+    text-align: left;
+    padding: 12px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.11);
+    font: 800 clamp(0.88rem, 1.3vw, 1.12rem) 'Unbounded', 'Inter', sans-serif;
+    letter-spacing: -0.04em;
+    color: var(--mut);
+    transition: color 0.3s, padding 0.45s var(--ease);
+  }
+  .row:last-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+  }
+  .row .mono {
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
+  }
+  .row:hover, .row.on {
+    color: var(--red);
+    padding-left: clamp(8px, 1.8vw, 22px);
+  }
+
+  .pc {
+    padding: clamp(22px, 2.8vw, 38px);
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .pc h3 {
+    font-size: clamp(1.1rem, 1.85vw, 1.54rem);
+    margin: 8px 0 14px;
+  }
+  .pc p.main-desc {
+    font-size: clamp(0.95rem, 1.18vw, 1.06rem);
+    line-height: 1.62;
+    color: var(--fg);
+  }
+  .pc .stack {
+    margin-top: 20px;
+    display: inline-block;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+    color: var(--mut);
+    line-height: 1.45;
+  }
+  .sw {
+    animation: sw 0.45s var(--ease) both;
+  }
+  @keyframes sw {
+    from { opacity: 0; transform: translate3d(0, 10px, 0); }
+    to { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+
+  /* ==========================================================================
+     9. SLIDE 03 & 06: 3-COLUMN CARDS + B2B GUARANTEES BAR
+     ========================================================================== */
+  .g3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(12px, 2vw, 22px);
+    align-items: stretch;
+  }
+
+  .card {
+    padding: clamp(18px, 2.3vw, 30px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .card.clickable {
+    cursor: pointer;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .card.clickable:hover,
+  .card.selected-stage {
+    border-color: rgba(255, 46, 0, 0.75);
+    background: rgba(255, 46, 0, 0.06);
+  }
+  .card .n {
+    font: 800 clamp(1.3rem, 2.3vw, 1.95rem) 'Unbounded', 'Inter', sans-serif;
+    letter-spacing: -0.04em;
+    display: block;
+    margin: 6px 0 12px;
+  }
+  .card h3 {
+    font-size: clamp(1.02rem, 1.38vw, 1.24rem);
+    margin-bottom: 10px;
+    line-height: 1.25;
+  }
+  .card p {
+    color: var(--soft);
+    font-size: clamp(0.9rem, 1.04vw, 0.98rem);
+    line-height: 1.58;
+  }
+  .card .tag-hint {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--mut);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .card.selected-stage .tag-hint span:last-child {
+    color: var(--red);
+    font-weight: 500;
+  }
+
+  .guarantees {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(10px, 1.8vw, 20px);
+    margin-top: clamp(14px, 2.4vh, 22px);
+  }
+  .g-item {
+    padding: 14px 18px;
+    border-left: 2px solid var(--red);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 0 4px 4px 0;
+  }
+  .g-item .mono {
+    color: var(--fg);
+    font-weight: 500;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .g-item span {
+    font-size: 0.86rem;
+    color: var(--mut);
+    line-height: 1.42;
+    display: block;
+  }
+
+  /* ==========================================================================
+     10. SLIDE 04: STEPPED PROBLEM CARDS (SAFE CONTROLLED OFFSETS)
+     ========================================================================== */
+  .bl-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 820px;
+  }
+  .bl {
+    padding: clamp(14px, 2vh, 20px) clamp(16px, 2.2vw, 26px);
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 12px;
+    width: 100%;
+    max-width: 732px;
+    line-height: 1.55;
+  }
+  .bl:nth-child(1) { margin-left: 0; }
+  .bl:nth-child(2) { margin-left: 44px; }
+  .bl:nth-child(3) { margin-left: 88px; }
+  .bl .mono {
+    padding-top: 0.22em;
+    font-size: 0.82rem;
+  }
+  .bl strong {
+    display: block;
+    font-size: clamp(1rem, 1.28vw, 1.14rem);
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--fg);
+  }
+  .bl span.desc {
+    color: var(--soft);
+    font-size: clamp(0.9rem, 1.06vw, 0.98rem);
+  }
+
+  .acc {
+    margin-top: clamp(16px, 2.5vh, 26px);
+    font: 800 clamp(1rem, 1.85vw, 1.5rem) 'Unbounded', 'Inter', sans-serif;
+    letter-spacing: -0.04em;
+    line-height: 1.28;
+    padding-top: 15px;
+    position: relative;
+    max-width: 34em;
+  }
+  .acc::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 2px;
+    width: 0;
+    background: var(--red);
+    transition: width 1.1s 0.55s var(--ease);
+  }
+  .s.active .acc::before {
+    width: min(200px, 50vw);
+  }
+
+  /* ==========================================================================
+     11. SLIDE 05: WORKFLOW TABS
+     ========================================================================== */
+  .fr {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: clamp(16px, 3vh, 28px);
+    padding: 6px;
+  }
+  .fr button {
+    padding: 13px 12px;
+    text-align: left;
+    color: var(--mut);
+    border-radius: 3px;
+    transition: all 0.35s var(--ease);
+  }
+  .fr button:hover {
+    color: var(--fg);
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .fr button.on {
+    background: var(--fg);
+    color: #050505;
+    font-weight: 500;
+  }
+
+  .fb {
+    display: flex;
+    gap: clamp(18px, 4.5vw, 64px);
+    align-items: center;
+    padding: clamp(20px, 2.8vw, 38px);
+  }
+  .nm {
+    font: 800 clamp(3.6rem, 10vw, 8.5rem) / 0.85 'Unbounded', 'Inter', sans-serif;
+    letter-spacing: -0.06em;
+    flex-shrink: 0;
+  }
+  .fb h3 {
+    font-size: clamp(1.18rem, 2vw, 1.75rem);
+  }
+  .fb p {
+    margin-top: 12px;
+    color: var(--soft);
+    font-size: clamp(0.95rem, 1.18vw, 1.06rem);
+    max-width: 34em;
+    line-height: 1.6;
+  }
+
+  /* ==========================================================================
+     12. SLIDE 07: FAQ ACCORDION
+     ========================================================================== */
+  .faq-list {
+    display: grid;
+    gap: 10px;
+    max-width: 54em;
+    width: 100%;
+  }
+  .faq-item {
+    transition: border-color 0.3s;
+  }
+  .faq-item.open {
+    border-color: rgba(255, 255, 255, 0.22);
+  }
+  .faq-q {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    text-align: left;
+    font-weight: 600;
+    font-size: clamp(0.94rem, 1.22vw, 1.08rem);
+    color: var(--fg);
+  }
+  .faq-q span.q-num {
+    color: var(--red);
+    margin-right: 10px;
+  }
+  .faq-q i {
+    font-style: normal;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.15rem;
+    color: var(--red);
+    transition: transform 0.35s var(--ease);
+    flex-shrink: 0;
+  }
+  .faq-item.open .faq-q i {
+    transform: rotate(45deg);
+  }
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.45s var(--ease), padding 0.45s var(--ease);
+    padding: 0 20px;
+    color: var(--soft);
+    font-size: clamp(0.9rem, 1.06vw, 0.98rem);
+    line-height: 1.6;
+  }
+  .faq-item.open .faq-a {
+    max-height: 260px;
+    padding: 0 20px 18px;
+  }
+
+  /* ==========================================================================
+     13. SLIDE 08: REDESIGNED 2-COLUMN MODULAR CONTACT & SCOPE ARCHITECT
+     ========================================================================== */
+  .s8-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 0.92fr;
+    gap: clamp(18px, 3.2vw, 40px);
+    align-items: stretch;
+    width: 100%;
+    max-width: 1140px;
+  }
+
+  .s8-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 14px;
+  }
+
+  .s8-sub {
+    color: var(--soft);
+    font-size: clamp(0.92rem, 1.08vw, 1.02rem);
+    line-height: 1.58;
+  }
+
+  .chips-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--mut);
+    margin-top: 4px;
+  }
+
+  .chips {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 9px;
+  }
+
+  .chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.025);
+    transition: all 0.25s var(--ease);
+    text-align: left;
+    line-height: 1.35;
+  }
+  .chip-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    flex-shrink: 0;
+    transition: background 0.25s, border-color 0.25s;
+  }
+  .chip:hover {
+    border-color: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .chip.on, .chip.on:hover {
+    background: rgba(255, 46, 0, 0.14);
+    color: var(--fg);
+    border-color: var(--red);
+  }
+  .chip.on .chip-dot {
+    background: var(--red);
+    border-color: var(--red);
+    box-shadow: 0 0 8px var(--red);
+  }
+
+  .scope-box {
+    padding: 16px 20px;
+    width: 100%;
+  }
+  .scope-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .scope-title {
+    color: var(--red);
+    font-weight: 500;
+  }
+  .scope-sub {
+    font-size: 0.9rem;
+    color: var(--soft);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .scope-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .scope-step {
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.12);
+    transition: background 0.45s var(--ease), box-shadow 0.45s var(--ease);
+  }
+  .scope-step.active {
+    background: var(--red);
+    box-shadow: 0 0 10px rgba(255, 46, 0, 0.5);
+  }
+
+  /* Right Column: Direct Contact & WhatsApp Action Card */
+  .s8-right {
+    padding: clamp(22px, 2.6vw, 32px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .contact-top {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .contact-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--fg);
+  }
+  .contact-status i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22C55E;
+    box-shadow: 0 0 10px #22C55E;
+    display: inline-block;
+  }
+
+  .ph {
+    font: 400 clamp(1.25rem, 2.2vw, 1.85rem) 'JetBrains Mono', monospace;
+    letter-spacing: -0.02em;
+    color: var(--fg);
+    display: inline-block;
+    margin-top: 4px;
+    transition: color 0.25s;
+  }
+  .ph:hover {
+    color: var(--red);
+  }
+
+  .cp {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    margin-top: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--soft);
+    transition: color 0.25s, border-color 0.25s, background 0.25s;
+  }
+  .cp:hover {
+    color: var(--fg);
+    border-color: var(--red);
+    background: rgba(255, 46, 0, 0.08);
+  }
+  .cp.copied {
+    color: var(--fg);
+    border-color: var(--red);
+    background: rgba(255, 46, 0, 0.18);
+  }
+
+  .contact-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .wa {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: var(--red);
+    padding: 18px 22px;
+    border-radius: 2px;
+    font-weight: 500;
+    transition: box-shadow 0.4s, transform 0.35s var(--ease);
+  }
+  .wa:hover {
+    box-shadow: 0 0 36px rgba(255, 46, 0, 0.52);
+  }
+
+  .sla-note {
+    font-size: 0.82rem;
+    color: var(--mut);
+    text-align: center;
+    line-height: 1.45;
+  }
+
+  /* ==========================================================================
+     14. RESPONSIVE: TABLET, MOBILE PORTRAIT & MOBILE LANDSCAPE
+     ========================================================================== */
+  @media (max-width: 960px) {
+    .bl:nth-child(n) {
+      margin-left: 0;
+      max-width: 100%;
+    }
+    .s8-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-height: 540px) and (orientation: landscape) {
+    .s1 .in {
+      display: grid;
+      grid-template-columns: 0.92fr 1.18fr;
+      gap: 24px;
+      align-items: center;
+      padding-top: calc(44px + env(safe-area-inset-top));
+      padding-bottom: calc(86px + env(safe-area-inset-bottom));
+    }
+    .s1 .hero-left,
+    .s1 .hero-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .s1 .big {
+      margin: 10px 0 0;
+    }
+    .s1 h1 {
+      font-size: clamp(1.1rem, 2.3vw, 1.65rem);
+      margin-top: 0;
+    }
+    .s1 .sub {
+      font-size: 0.85rem;
+      margin-top: 8px;
+      line-height: 1.45;
+    }
+    .s1 .hero-actions {
+      margin-top: 12px;
+    }
+    .s1 .cta {
+      padding: 12px 20px;
+    }
+    .mq {
+      display: none;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .hd {
+      padding: calc(12px + env(safe-area-inset-top)) 16px 14px;
+    }
+    .hd .lg-slot {
+      width: 84px;
+    }
+    .dc {
+      padding: 9px 12px;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+    }
+    .in {
+      padding: calc(86px + env(safe-area-inset-top)) 18px calc(108px + env(safe-area-inset-bottom));
+    }
+    .g2, .g3, .guarantees, .chips {
+      grid-template-columns: 1fr;
+    }
+    .fr {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .fb {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .pc {
+      min-height: 0;
+    }
+    .mq,
+    .bc .stamp {
+      display: none;
+    }
+    .cp {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>
+</head>
+<body class="on-s1">
+
+<!-- 60 FPS Interactive Neural Background & Architectural Grid -->
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div class="arch-grid" aria-hidden="true"></div>
+<div class="top-line" id="top-line"></div>
+<div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
+
+<!-- Fixed Minimal Header (Hidden on Slide 01, Revealed on Slides 02–08) -->
+<header class="hd" id="header">
+  <div class="lg-slot" id="hl" role="button" tabindex="0" aria-label="KAI STUDIO — На первый экран"></div>
+  <button class="dc mono" id="cc" type="button">БЕСПЛАТНЫЙ РАЗБОР ↗</button>
+</header>
+
+<main id="deck">
+  <!-- SLIDE 01: HERO -->
+  <section class="s s1 active" data-hash="01">
+    <div class="in">
+      <div class="hero-left">
+        <span class="badge mono" data-a style="--i:0"><i></i> <span>DIGITAL-СТУДИЯ ПОЛНОГО ЦИКЛА</span></span>
+        <div class="big" id="bl"></div>
+      </div>
+      <div class="hero-right">
+        <h1 data-a style="--i:1">Создаём цифровые продукты, IT-архитектуру и упаковку, которая продаёт.</h1>
+        <p class="sub" data-a style="--i:2">Для фаундеров, бизнеса и CTO: от надёжной инженерной разработки и интеграций до системного маркетинга и развития продукта. Понятно для вас и ваших клиентов, безупречно для разработчиков.</p>
+        <div class="hero-actions" data-a style="--i:3">
+          <button class="cta mono mag" data-go="1" type="button">СМОТРЕТЬ РЕШЕНИЯ →</button>
+          <div class="nav-hint mono" aria-hidden="true">СКРОЛЛ ИЛИ СВАЙП <span>→</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="mq mono" id="mq1" aria-hidden="true"></div>
+  </section>
+
+  <!-- SLIDE 02: CORE COMPETENCIES -->
+  <section class="s" data-hash="02">
+    <div class="in">
+      <p class="spec mono" data-a><b>●</b> 02 // ВСЕ КОМПЕТЕНЦИИ В ОДНОМ ОКНЕ</p>
+      <h2 data-a style="--i:1">Архитектура, продукт и рост выручки</h2>
+      <div class="g2">
+        <div id="sv" data-a style="--i:2"></div>
+        <div class="pc gl" id="pc" data-tilt data-a style="--i:3"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 03: ENTRY POINTS -->
+  <section class="s" data-hash="03">
+    <div class="in">
+      <p class="spec mono" data-a><b>●</b> 03 // С ЧЕГО МОЖНО НАЧАТЬ</p>
+      <h2 data-a style="--i:1">Подключаемся на любом этапе готовности</h2>
+      <div class="g3" id="stage-cards">
+        <div class="card gl clickable" data-tilt data-stage="ИДЕЯ (Замысел и стратегия)" data-preset="Веб-платформа или сайт,Мобильное приложение (iOS / Android)" data-a style="--i:2" tabindex="0" role="button">
+          <div>
+            <span class="spec mono">ЭТАП 01</span>
+            <span class="n ch">ИДЕЯ</span>
+            <h3>Замысел и стратегия</h3>
+            <p>Превращаем концепт в чёткую бизнес-модель и техническую спецификацию. Просчитываем юнит-экономику, определяем границы MVP и запускаем первую рабочую версию.</p>
+          </div>
+          <span class="tag-hint mono"><span>ДЛЯ ОСНОВАТЕЛЕЙ И СТАРТАПОВ</span><span>ВЫБРАТЬ +</span></span>
+        </div>
+        <div class="card gl clickable" data-tilt data-stage="БИЗНЕС (Оптимизация и рост)" data-preset="Автоматизация бизнес-процессов,SEO, Google Ads и маркетинг,Ведение проекта после сдачи" data-a style="--i:3" tabindex="0" role="button">
+          <div>
+            <span class="spec mono">ЭТАП 02</span>
+            <span class="n ch">БИЗНЕС</span>
+            <h3>Оптимизация и рост</h3>
+            <p>Проводим аудит процессов, убираем рутину через кастомную автоматизацию и интеграции, усиливаем цифровую упаковку и выстраиваем стабильный поток заявок.</p>
+          </div>
+          <span class="tag-hint mono"><span>ДЛЯ ВЛАДЕЛЬЦЕВ БИЗНЕСА</span><span>ВЫБРАТЬ +</span></span>
+        </div>
+        <div class="card gl clickable" data-tilt data-stage="ГОТОВОЕ ТЗ (Экспертная разработка)" data-preset="Веб-платформа или сайт,Серверная IT-архитектура и интеграции,Ведение проекта после сдачи" data-a style="--i:4" tabindex="0" role="button">
+          <div>
+            <span class="spec mono">ЭТАП 03</span>
+            <span class="n ch">ГОТОВОЕ ТЗ</span>
+            <h3>Экспертная разработка</h3>
+            <p>Включаемся как сильная продуктовая команда: проектируем отказоустойчивую архитектуру, пишем чистый поддерживаемый код и проводим сложные интеграции.</p>
+          </div>
+          <span class="tag-hint mono"><span>ДЛЯ CTO И IT-ДИРЕКТОРОВ</span><span>ВЫБРАТЬ +</span></span>
+        </div>
+      </div>
+      <p class="acc ch" data-a style="--i:5">Не нужно разбираться в коде или терминах — мы предложим понятное решение под ваши задачи.</p>
+    </div>
+  </section>
+
+  <!-- SLIDE 04: MARKET REALITY -->
+  <section class="s" data-hash="04">
+    <div class="in">
+      <p class="spec mono" data-a><b>●</b> 04 // РЕАЛЬНОСТЬ РАЗРАБОТКИ</p>
+      <h2 class="ch" data-a style="--i:1">Почему обычные подрядчики тормозят бизнес</h2>
+      <div class="bl-wrap">
+        <div class="bl gl" data-a style="--i:2">
+          <span class="mono ch">01</span>
+          <div>
+            <strong>Пишут код «по ТЗ», не думая о продажах</strong>
+            <span class="desc">В итоге создают сложный продукт, которым неудобно пользоваться и который не окупает вложенных инвестиций.</span>
+          </div>
+        </div>
+        <div class="bl gl" data-a style="--i:3">
+          <span class="mono ch">02</span>
+          <div>
+            <strong>Разделяют разработку и маркетинг</strong>
+            <span class="desc">Сделали софт, но забыли про упаковку, конверсию и трафик. Продукт есть, а платящих клиентов на нём нет.</span>
+          </div>
+        </div>
+        <div class="bl gl" data-a style="--i:4">
+          <span class="mono ch">03</span>
+          <div>
+            <strong>Бросают проект сразу после релиза</strong>
+            <span class="desc">После сдачи компания остаётся один на один с серверами, обновлениями и развитием функционала без технической опоры.</span>
+          </div>
+        </div>
+      </div>
+      <p class="acc ch" data-a style="--i:5">Мы объединяем бизнес-мышление, инженерную надёжность и долгосрочное ведение проекта.</p>
+    </div>
+  </section>
+
+  <!-- SLIDE 05: WORKFLOW -->
+  <section class="s" data-hash="05">
+    <div class="in">
+      <p class="spec mono" data-a><b>●</b> 05 // ПРОЦЕСС РАБОТЫ</p>
+      <h2 data-a style="--i:1">Прозрачный путь от задачи до результата</h2>
+      <div class="fr gl" id="fr" data-a style="--i:2"></div>
+      <div class="fb gl" id="fb" data-a style="--i:3"></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 06: ADVANTAGES + 3 HARD B2B GUARANTEES -->
+  <section class="s" data-hash="06">
+    <div class="in">
+      <p class="spec mono" data-a><b>●</b> 06 // ПРЕИМУЩЕСТВА</p>
+      <h2 data-a style="--i:1">Что партнёрство с KAI даёт вашему проекту</h2>
+      <div class="g3">
+        <div class="card gl" data-tilt data-a style="--i:2">
+          <div>
+            <span class="spec mono">РЕЗУЛЬТАТ 01</span>
+            <span class="n ch">ЭКОНОМИЯ</span>
+            <h3>Единая команда вместо штата</h3>
+            <p>Не нужно нанимать и синхронизировать разработчиков, дизайнеров и маркетологов. Закрываем все задачи под ключ в рамках одного договора.</p>
+          </div>
+        </div>
+        <div class="card gl" data-tilt data-a style="--i:3">
+          <div>
+            <span class="spec mono">РЕЗУЛЬТАТ 02</span>
+            <span class="n ch">СКОРОСТЬ</span>
+            <h3>Прямой диалог с экспертами</h3>
+            <p>Работаете напрямую с архитекторами и руководителями направлений — без «сломанных телефонов», бюрократии и срыва сроков.</p>
+          </div>
+        </div>
+        <div class="card gl" data-tilt data-a style="--i:4">
+          <div>
+            <span class="spec mono">РЕЗУЛЬТАТ 03</span>
+            <span class="n ch">МАСШТАБ</span>
+            <h3>Инфраструктура на вырост</h3>
+            <p>Код, дизайн-система и маркетинг создаются как единая экосистема, готовая к кратному росту нагрузок, аудитории и выручки.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="guarantees" data-a style="--i:5">
+        <div class="g-item">
+          <span class="mono">MVP ОТ 14 ДНЕЙ</span>
+          <span>Быстрый вывод первой рабочей версии для проверки гипотез</span>
+        </div>
+        <div class="g-item">
+          <span class="mono">ВЕДЕНИЕ ПРОЕКТОВ ПОСЛЕ СДАЧИ</span>
+          <span>Техподдержка, развитие продукта и рост метрик по SLA</span>
+        </div>
+        <div class="g-item">
+          <span class="mono">СТАБИЛЬНОСТЬ И SLA 24/7</span>
+          <span>Мониторинг серверов и бесперебойная работа</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 07: FAQ -->
+  <section class="s" data-hash="07">
+    <div class="in">
+      <p class="spec mono" data-a><b>●</b> 07 // ВОПРОСЫ И ОТВЕТЫ</p>
+      <h2 data-a style="--i:1">Главное о сотрудничестве до старта</h2>
+      <div class="faq-list" id="faq" data-a style="--i:2"></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 08: REDESIGNED 2-COLUMN START PROJECT SCREEN -->
+  <section class="s" data-hash="08">
+    <div class="in">
+      <p class="spec mono" data-a><b>●</b> 08 // НАЧАТЬ ПРОЕКТ</p>
+      <h2 data-a style="--i:1">Обсудим вашу задачу и найдём решение</h2>
+
+      <div class="s8-grid">
+        <!-- Left Column: Interactive Scope Builder -->
+        <div class="s8-left" data-a style="--i:2">
+          <p class="s8-sub">Консультация ни к чему не обязывает. Выберите актуальные задачи или сразу напишите нам в WhatsApp.</p>
+
+          <div class="chips-label mono">
+            <span>ВЫБЕРИТЕ НАПРАВЛЕНИЯ:</span>
+            <span id="chips-count">0 ВЫБРАНО</span>
+          </div>
+          <div class="chips mono" id="ch"></div>
+
+          <div class="scope-box gl">
+            <div class="scope-head">
+              <span class="mono" style="color:var(--mut)">ФОРМАТ СОТРУДНИЧЕСТВА:</span>
+              <span class="scope-title mono" id="scope-label">01 / БЕСПЛАТНЫЙ АУДИТ И СТРАТЕГИЯ</span>
+            </div>
+            <p class="scope-sub" id="scope-desc">Разберём текущую задачу, предложим архитектуру решения и оценим сроки запуска.</p>
+            <div class="scope-steps" id="scope-steps">
+              <div class="scope-step active"></div>
+              <div class="scope-step"></div>
+              <div class="scope-step"></div>
+              <div class="scope-step"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Direct Contact & WhatsApp Action Card -->
+        <div class="s8-right gl" data-a style="--i:3">
+          <div class="contact-top">
+            <span class="contact-status mono"><i></i> <span>НА СВЯЗИ В WHATSAPP И TELEGRAM</span></span>
+            <span class="spec mono" style="margin-top:8px">ПРЯМОЙ НОМЕР СТУДИИ</span>
+            <a class="ph" href="tel:+995592112266">+995 592 11 22 66</a>
+            <button class="cp mono" id="cp" type="button" aria-label="Скопировать номер телефона">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="9" y="9" width="11" height="11"/><path d="M5 15V4h11"/></svg>
+              <span id="cpt">Скопировать номер</span>
+            </button>
+          </div>
+
+          <div class="contact-bottom">
+            <a class="wa mono mag" id="wa" target="_blank" rel="noopener noreferrer" href="https://wa.me/995592112266">ОБСУДИТЬ ЗАДАЧУ В WHATSAPP →</a>
+            <p class="sla-note">Отвечаем в течение 15 минут • Без навязывания</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Fixed Bottom Navigation Bar -->
+<footer class="ft">
+  <div class="sc mono">
+    <div class="nav-arrows">
+      <button class="nav-btn" id="btn-prev" type="button" aria-label="Предыдущий экран" disabled>←</button>
+      <button class="nav-btn" id="btn-next" type="button" aria-label="Следующий экран">→</button>
+    </div>
+    <span id="ct"><b>01</b> / 08</span>
+    <div class="bars" id="bars"></div>
+  </div>
+  <div class="bc mono">
+    <svg id="bcs" width="110" height="24" viewBox="0 0 110 24" aria-hidden="true"></svg>
+    <span class="stamp">KAI STUDIO // FULL-CYCLE DIGITAL STUDIO</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ==========================================================================
+     1. SVG BRAND LOGO & BARCODE STAMP
+     ========================================================================== */
+  const LOGO_SVG = `
+    <svg class="lg" viewBox="0 0 410 160" role="img" aria-label="KAI STUDIO">
+      <defs>
+        <linearGradient id="cg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#FFFFFF"/>
+          <stop offset="0.5" stop-color="#9CA3AF"/>
+          <stop offset="1" stop-color="#FFFFFF"/>
+        </linearGradient>
+      </defs>
+      <g class="lw">
+        <text x="0" y="104" font-family="Unbounded, Inter, Arial, sans-serif" font-weight="800" font-size="118" fill="url(#cg)" textLength="290" lengthAdjust="spacingAndGlyphs">KAI</text>
+        <text x="0" y="152" font-family="Inter, Arial, sans-serif" font-weight="300" font-size="30" fill="#FAFAFA" textLength="404" lengthAdjust="spacing">STUDIO</text>
+      </g>
+      <g class="ls">
+        <rect x="306" y="0" width="104" height="104" rx="4" fill="#FF2E00"/>
+        <text x="358" y="82" text-anchor="middle" font-family="'Noto Serif JP', serif" font-weight="700" font-size="78" fill="#FAFAFA">改</text>
+      </g>
+    </svg>
+  `;
+
+  const hl = document.getElementById('hl');
+  const bl = document.getElementById('bl');
+  if (hl) hl.innerHTML = LOGO_SVG;
+  if (bl) bl.innerHTML = LOGO_SVG;
+
+  const bcs = document.getElementById('bcs');
+  if (bcs) {
+    let h = 7;
+    let bx = '';
+    for (let i = 0, x = 0; x < 108; i++) {
+      h = (h * 31 + i * 17) % 97;
+      const w = 1 + (h % 4);
+      bx += `<rect x="${x}" y="0" width="${w}" height="24" fill="#FAFAFA"/>`;
+      x += w + 1 + (h % 3);
+    }
+    bcs.innerHTML = bx;
+  }
+
+  /* ==========================================================================
+     2. PHYSICAL FLIP LOGO MORPHING WITH GUARANTEED VISIBILITY FALLBACK
+     ========================================================================== */
+  let activeFlipClone = null;
+  let flipSafetyTimer = null;
+
+  function revealLogos() {
+    if (bl) bl.classList.remove('flip-hidden');
+    if (hl) hl.classList.remove('flip-hidden');
+    if (activeFlipClone && activeFlipClone.parentNode) {
+      activeFlipClone.remove();
+    }
+    activeFlipClone = null;
+    if (flipSafetyTimer) {
+      clearTimeout(flipSafetyTimer);
+      flipSafetyTimer = null;
+    }
+  }
+
+  function runLogoFlip(fromHeroToHeader) {
+    if (!hl || !bl) return;
+    try {
+      revealLogos();
+
+      const heroRect = bl.getBoundingClientRect();
+      const headRect = hl.getBoundingClientRect();
+      if (!heroRect.width || !headRect.width) return;
+
+      const startRect = fromHeroToHeader ? heroRect : headRect;
+      const endRect = fromHeroToHeader ? headRect : heroRect;
+
+      const clone = document.createElement('div');
+      clone.innerHTML = LOGO_SVG;
+      Object.assign(clone.style, {
+        position: 'fixed',
+        left: `${startRect.left}px`,
+        top: `${startRect.top}px`,
+        width: `${startRect.width}px`,
+        height: `${startRect.height}px`,
+        transformOrigin: 'top left',
+        zIndex: '60',
+        pointerEvents: 'none',
+        willChange: 'transform'
+      });
+
+      document.body.appendChild(clone);
+      activeFlipClone = clone;
+
+      bl.classList.add('flip-hidden');
+      hl.classList.add('flip-hidden');
+
+      flipSafetyTimer = setTimeout(revealLogos, 820);
+
+      const dx = endRect.left - startRect.left;
+      const dy = endRect.top - startRect.top;
+      const scale = endRect.width / startRect.width;
+
+      if (typeof clone.animate === 'function') {
+        const anim = clone.animate(
+          [
+            { transform: 'translate3d(0, 0, 0) scale(1)' },
+            { transform: `translate3d(${dx}px, ${dy}px, 0) scale(${scale})` }
+          ],
+          {
+            duration: 720,
+            easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+            fill: 'forwards'
+          }
+        );
+        anim.onfinish = revealLogos;
+        anim.oncancel = revealLogos;
+      } else {
+        revealLogos();
+      }
+    } catch (_) {
+      revealLogos();
+    }
+  }
+
+  /* ==========================================================================
+     3. 60 FPS INTERACTIVE NEURAL-GRID CANVAS BACKGROUND
+     ========================================================================== */
+  const canvas = document.getElementById('bg-canvas');
+  let triggerPulse = () => {};
+
+  if (canvas && canvas.getContext) {
+    const ctx = canvas.getContext('2d');
+    let cw = 0;
+    let ch = 0;
+    let nodes = [];
+    let pulses = [];
+    const pointer = { x: -9999, y: -9999 };
+
+    function resizeCanvas() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      cw = window.innerWidth;
+      ch = window.innerHeight;
+      canvas.width = Math.floor(cw * dpr);
+      canvas.height = Math.floor(ch * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const count = cw < 768 ? 24 : 46;
+      nodes = Array.from({ length: count }, () => ({
+        x: Math.random() * cw,
+        y: Math.random() * ch,
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.25,
+        r: 1.2 + Math.random() * 1.1
+      }));
+    }
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas, { passive: true });
+    window.addEventListener('pointermove', (e) => {
+      pointer.x = e.clientX;
+      pointer.y = e.clientY;
+    }, { passive: true });
+
+    triggerPulse = function (dir) {
+      for (let k = 0; k < 4; k++) {
+        pulses.push({
+          x: dir > 0 ? cw * 0.18 : cw * 0.82,
+          y: ch * (0.2 + Math.random() * 0.6),
+          vx: (dir || 1) * (5.5 + Math.random() * 4.5),
+          life: 1
+        });
+      }
+    };
+
+    function renderCanvas() {
+      ctx.clearRect(0, 0, cw, ch);
+      const maxDist = cw < 768 ? 110 : 150;
+
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        n.x += n.vx;
+        n.y += n.vy;
+
+        if (n.x < 0 || n.x > cw) n.vx *= -1;
+        if (n.y < 0 || n.y > ch) n.vy *= -1;
+
+        const dxp = pointer.x - n.x;
+        const dyp = pointer.y - n.y;
+        const distP = Math.hypot(dxp, dyp);
+        if (distP < 170 && distP > 1) {
+          n.x -= (dxp / distP) * 0.32;
+          n.y -= (dyp / distP) * 0.32;
+        }
+
+        for (let j = i + 1; j < nodes.length; j++) {
+          const m = nodes[j];
+          const d = Math.hypot(n.x - m.x, n.y - m.y);
+          if (d < maxDist) {
+            const alpha = (1 - d / maxDist) * 0.13;
+            ctx.strokeStyle = `rgba(255, 255, 255, ${alpha.toFixed(3)})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(n.x, n.y);
+            ctx.lineTo(m.x, m.y);
+            ctx.stroke();
+          }
+        }
+
+        const nearCursor = distP < 155;
+        ctx.fillStyle = nearCursor ? 'rgba(255, 46, 0, 0.78)' : 'rgba(255, 255, 255, 0.22)';
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, nearCursor ? n.r + 0.8 : n.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      for (let i = pulses.length - 1; i >= 0; i--) {
+        const p = pulses[i];
+        p.x += p.vx;
+        p.life -= 0.026;
+        if (p.life <= 0) {
+          pulses.splice(i, 1);
+          continue;
+        }
+        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 56);
+        grad.addColorStop(0, `rgba(255, 46, 0, ${(p.life * 0.25).toFixed(3)})`);
+        grad.addColorStop(1, 'rgba(255, 46, 0, 0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 56, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      requestAnimationFrame(renderCanvas);
+    }
+
+    requestAnimationFrame(renderCanvas);
+  }
+
+  /* ==========================================================================
+     4. SEAMLESS 60 FPS GPU MARQUEE TICKER (SLIDE 01 ONLY)
+     ========================================================================== */
+  const mq1 = document.getElementById('mq1');
+  if (mq1) {
+    const mqText = 'МОБИЛЬНЫЕ ПРИЛОЖЕНИЯ • ВЕБ-ПЛАТФОРМЫ • СЕРВЕРНАЯ IT-АРХИТЕКТУРА • UX/UI-ДИЗАЙН • АВТОМАТИЗАЦИЯ ПРОЦЕССОВ • ВЕДЕНИЕ ПРОЕКТОВ ПОСЛЕ СДАЧИ • SEO И GOOGLE ADS • ';
+    const copyHtml = `<span class="mq-copy">${mqText.repeat(3)}</span>`;
+    mq1.innerHTML = `<div class="mq-track">${copyHtml}${copyHtml}</div>`;
+
+    const track = mq1.firstElementChild;
+    const firstCopy = track ? track.firstElementChild : null;
+    let copyWidth = 0;
+    let offset = 0;
+    let speed = 44;
+    let targetSpeed = 44;
+    let prevTime = performance.now();
+
+    function measureMarquee() {
+      if (firstCopy) {
+        copyWidth = firstCopy.getBoundingClientRect().width || 0;
+      }
+    }
+
+    measureMarquee();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(measureMarquee).catch(() => {});
+    }
+    window.addEventListener('resize', measureMarquee, { passive: true });
+
+    mq1.addEventListener('pointerenter', () => { targetSpeed = 12; }, { passive: true });
+    mq1.addEventListener('pointerleave', () => { targetSpeed = 44; }, { passive: true });
+
+    function tickMarquee(now) {
+      const dt = Math.min(0.05, (now - prevTime) / 1000);
+      prevTime = now;
+      speed += (targetSpeed - speed) * Math.min(1, dt * 6);
+      if (copyWidth > 0) {
+        offset -= speed * dt;
+        if (offset <= -copyWidth) {
+          offset += copyWidth;
+        }
+        track.style.transform = `translate3d(${offset.toFixed(2)}px, 0, 0)`;
+      }
+      requestAnimationFrame(tickMarquee);
+    }
+    requestAnimationFrame(tickMarquee);
+  }
+
+  /* ==========================================================================
+     5. SLIDE NAVIGATION, EXPLICIT ARROWS, DEEP-LINK HASH & OVERFLOW ALIGNMENT
+     ========================================================================== */
+  const slides = Array.from(document.querySelectorAll('.s'));
+  const barsContainer = document.getElementById('bars');
+  const ct = document.getElementById('ct');
+  const topLine = document.getElementById('top-line');
+  const btnPrev = document.getElementById('btn-prev');
+  const btnNext = document.getElementById('btn-next');
+  const pad = (n) => String(n).padStart(2, '0');
+
+  let cur = 0;
+  let lock = false;
+  let wheelAcc = 0;
+  let wheelTimer = null;
+
+  function checkSlideOverflow() {
+    slides.forEach((slide) => {
+      const scroller = slide.querySelector('.in');
+      if (!scroller) return;
+      scroller.classList.remove('is-overflowing');
+      if (scroller.scrollHeight > scroller.clientHeight + 8) {
+        scroller.classList.add('is-overflowing');
+      }
+    });
+  }
+
+  checkSlideOverflow();
+  window.addEventListener('resize', checkSlideOverflow, { passive: true });
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(checkSlideOverflow).catch(() => {});
+  }
+
+  if (barsContainer) {
+    slides.forEach((_, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('aria-label', `Слайд ${i + 1}`);
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        go(i);
+      });
+      barsContainer.appendChild(btn);
+    });
+  }
+
+  function syncUrlHash(index) {
+    const targetHash = `#${pad(index + 1)}`;
+    if (window.location.hash !== targetHash && window.history && typeof window.history.replaceState === 'function') {
+      try {
+        window.history.replaceState(null, '', targetHash);
+      } catch (_) {}
+    }
+  }
+
+  function parseHashIndex() {
+    const raw = (window.location.hash || '').replace(/^#/, '').trim();
+    if (!raw) return 0;
+    const num = parseInt(raw, 10);
+    if (!Number.isNaN(num) && num >= 1 && num <= slides.length) {
+      return num - 1;
+    }
+    return 0;
+  }
+
+  function updateChrome() {
+    if (ct) ct.innerHTML = `<b>${pad(cur + 1)}</b> / ${pad(slides.length)}`;
+    if (barsContainer) {
+      Array.from(barsContainer.children).forEach((b, i) => {
+        b.classList.toggle('on', i <= cur);
+      });
+    }
+    if (btnPrev) btnPrev.disabled = cur === 0;
+    if (btnNext) btnNext.disabled = cur === slides.length - 1;
+    if (topLine) {
+      topLine.style.width = `${((cur + 1) / slides.length) * 100}%`;
+    }
+    document.body.classList.toggle('on-s1', cur === 0);
+    if (cur > 0) {
+      document.body.classList.add('has-navigated');
+    }
+    syncUrlHash(cur);
+  }
+
+  function go(nextIndex, options = {}) {
+    const instant = Boolean(options.instant);
+    if (nextIndex < 0 || nextIndex >= slides.length || nextIndex === cur) return;
+    if (lock && !instant) return;
+
+    const prevIndex = cur;
+    const dir = nextIndex > prevIndex ? 1 : -1;
+    const prevSlide = slides[prevIndex];
+    const nextSlide = slides[nextIndex];
+
+    if (instant) {
+      slides.forEach((s) => {
+        s.classList.remove('active', 'exit-next', 'exit-prev', 'to-next', 'to-prev');
+      });
+      nextSlide.classList.add('active');
+      cur = nextIndex;
+      updateChrome();
+      requestAnimationFrame(checkSlideOverflow);
+      return;
+    }
+
+    lock = true;
+
+    if (prevIndex === 0 && nextIndex > 0) {
+      runLogoFlip(true);
+    } else if (prevIndex > 0 && nextIndex === 0) {
+      runLogoFlip(false);
+    }
+
+    triggerPulse(dir);
+
+    nextSlide.style.transition = 'none';
+    nextSlide.classList.remove('exit-next', 'exit-prev', 'to-next', 'to-prev');
+    nextSlide.classList.add(dir > 0 ? 'to-next' : 'to-prev');
+    void nextSlide.offsetWidth;
+    nextSlide.style.transition = '';
+
+    prevSlide.classList.remove('active');
+    prevSlide.classList.add(dir > 0 ? 'exit-next' : 'exit-prev');
+
+    const nextScroller = nextSlide.querySelector('.in');
+    if (nextScroller) {
+      nextScroller.scrollTop = 0;
+    }
+    nextSlide.classList.remove('to-next', 'to-prev');
+    nextSlide.classList.add('active');
+
+    cur = nextIndex;
+    updateChrome();
+    requestAnimationFrame(checkSlideOverflow);
+
+    setTimeout(() => {
+      prevSlide.classList.remove('exit-next', 'exit-prev');
+      lock = false;
+    }, 800);
+  }
+
+  if (btnPrev) {
+    btnPrev.addEventListener('click', (e) => {
+      e.stopPropagation();
+      go(cur - 1);
+    });
+  }
+  if (btnNext) {
+    btnNext.addEventListener('click', (e) => {
+      e.stopPropagation();
+      go(cur + 1);
+    });
+  }
+
+  window.addEventListener('hashchange', () => {
+    const target = parseHashIndex();
+    if (target !== cur) {
+      go(target);
+    }
+  });
+
+  if (hl) {
+    hl.addEventListener('click', (e) => {
+      e.stopPropagation();
+      go(0);
+    });
+    hl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        go(0);
+      }
+    });
+  }
+
+  document.querySelectorAll('[data-go]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      go(Number(btn.dataset.go));
+    });
+  });
+
+  const cc = document.getElementById('cc');
+  if (cc) {
+    cc.addEventListener('click', (e) => {
+      e.stopPropagation();
+      go(slides.length - 1);
+    });
+  }
+
+  slides.forEach((slide) => {
+    slide.addEventListener('click', (e) => {
+      if (e.target.closest('button, a, .gl, .clickable, .chip, .row, .faq-item, .fr, .fb, .scope-box, .guarantees, .s8-right')) {
+        return;
+      }
+      if (e.target === slide || e.target.classList.contains('in') || e.target.classList.contains('hero-left') || e.target.classList.contains('hero-right')) {
+        go(cur + 1);
+      }
+    });
+  });
+
+  window.addEventListener('wheel', (e) => {
+    if (lock) return;
+    const scroller = slides[cur] && slides[cur].querySelector('.in');
+    const canScroll = scroller && scroller.scrollHeight > scroller.clientHeight + 8;
+    const atTop = !scroller || scroller.scrollTop <= 2;
+    const atBottom = !scroller || (scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 2);
+
+    if (canScroll) {
+      if (e.deltaY > 0 && !atBottom) return;
+      if (e.deltaY < 0 && !atTop) return;
+    }
+
+    wheelAcc += e.deltaY;
+    clearTimeout(wheelTimer);
+    wheelTimer = setTimeout(() => { wheelAcc = 0; }, 150);
+
+    if (Math.abs(wheelAcc) > 42) {
+      const direction = wheelAcc > 0 ? 1 : -1;
+      wheelAcc = 0;
+      go(cur + direction);
+    }
+  }, { passive: true });
+
+  window.addEventListener('keydown', (e) => {
+    if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(e.key)) {
+      if (document.activeElement && ['BUTTON', 'A'].includes(document.activeElement.tagName)) return;
+      e.preventDefault();
+      go(cur + 1);
+    } else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) {
+      e.preventDefault();
+      go(cur - 1);
+    }
+  });
+
+  let touchX = 0;
+  let touchY = 0;
+  let touchLockedHorizontal = false;
+
+  window.addEventListener('touchstart', (e) => {
+    if (!e.touches || !e.touches[0]) return;
+    touchX = e.touches[0].clientX;
+    touchY = e.touches[0].clientY;
+    touchLockedHorizontal = Boolean(e.target.closest('.bars, .chips'));
+  }, { passive: true });
+
+  window.addEventListener('touchend', (e) => {
+    if (touchLockedHorizontal || !e.changedTouches || !e.changedTouches[0]) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    const dy = e.changedTouches[0].clientY - touchY;
+    if (Math.abs(dx) > 56 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      go(cur + (dx < 0 ? 1 : -1));
+    }
+  }, { passive: true });
+
+  /* ==========================================================================
+     6. DESKTOP-ONLY 3D TILT, MAGNETIC BUTTONS & SPRING CURSOR
+     ========================================================================== */
+  const isFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const cursorRing = document.getElementById('cursor-ring');
+
+  if (isFinePointer) {
+    let cx = -100, cy = -100, tx = -100, ty = -100;
+
+    if (cursorRing) {
+      window.addEventListener('pointermove', (e) => {
+        tx = e.clientX;
+        ty = e.clientY;
+        const interactive = e.target.closest('button, a, .clickable, .chip, .row, .lg-slot');
+        cursorRing.classList.toggle('hover', Boolean(interactive));
+      }, { passive: true });
+
+      function tickCursor() {
+        cx += (tx - cx) * 0.22;
+        cy += (ty - cy) * 0.22;
+        cursorRing.style.transform = `translate3d(${cx.toFixed(1)}px, ${cy.toFixed(1)}px, 0) translate(-50%, -50%)`;
+        requestAnimationFrame(tickCursor);
+      }
+      requestAnimationFrame(tickCursor);
+    }
+
+    document.addEventListener('pointermove', (e) => {
+      const tiltCard = e.target.closest('[data-tilt]');
+      if (tiltCard) {
+        const r = tiltCard.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width;
+        const py = (e.clientY - r.top) / r.height;
+        tiltCard.style.setProperty('--gx', `${(px * 100).toFixed(1)}%`);
+        tiltCard.style.setProperty('--gy', `${(py * 100).toFixed(1)}%`);
+        tiltCard.style.transform = `perspective(900px) rotateX(${(-(py - 0.5) * 6).toFixed(2)}deg) rotateY(${((px - 0.5) * 6).toFixed(2)}deg)`;
+      }
+
+      const magBtn = e.target.closest('.mag');
+      if (magBtn) {
+        const r = magBtn.getBoundingClientRect();
+        const mx = (e.clientX - r.left - r.width / 2) * 0.14;
+        const my = (e.clientY - r.top - r.height / 2) * 0.14;
+        magBtn.style.transform = `translate3d(${mx.toFixed(1)}px, ${my.toFixed(1)}px, 0)`;
+      }
+    }, { passive: true });
+
+    document.addEventListener('pointerout', (e) => {
+      const el = e.target.closest('[data-tilt], .mag');
+      if (el && !el.contains(e.relatedTarget)) {
+        el.style.transform = '';
+      }
+    }, { passive: true });
+  }
+
+  /* ==========================================================================
+     7. SLIDE 02: CORE COMPETENCIES SELECTOR
+     ========================================================================== */
+  const COMPETENCIES = [
+    {
+      title: 'Мобильные приложения и веб-платформы',
+      desc: 'Проектируем и разрабатываем быстрые нативные и кроссплатформенные приложения под iOS и Android, корпоративные порталы и высоконагруженные веб-сервисы с публикацией в App Store и Google Play.',
+      stack: 'Swift • Kotlin • React Native • Flutter • Next.js'
+    },
+    {
+      title: 'Серверная IT-архитектура и интеграции',
+      desc: 'Выстраиваем отказоустойчивый бэкенд, проектируем базы данных и настраиваем бесшовные интеграции с CRM, ERP, платёжными шлюзами и внешними сервисами в реальном времени.',
+      stack: 'Node.js • Go • PostgreSQL • Redis • REST / GraphQL'
+    },
+    {
+      title: 'UX/UI-дизайн и сильный брендинг',
+      desc: 'Создаём интуитивные интерфейсы, дизайн-системы и айдентику, в которых пользователю всё понятно с первой секунды без инструкций, а продукт вызывает доверие и повышает конверсию.',
+      stack: 'UX/UI Design • Design Systems • Brand Identity'
+    },
+    {
+      title: 'Автоматизация процессов и AI-интеграции',
+      desc: 'Убираем ручную рутину за счёт инженерной автоматизации бизнес-логики, сквозных интеграций CRM/ERP и точечного внедрения AI-модулей там, где они реально экономят ресурсы команды.',
+      stack: 'Python • Custom Workflows • CRM/ERP API • LLM / RAG'
+    },
+    {
+      title: 'Видеопродакшн и рекламный креатив',
+      desc: 'Производим имиджевые ролики, 3D-графику, моушн-дизайн и видеоконтент для рекламных кампаний и соцсетей, которые выделяют бренд и удерживают внимание.',
+      stack: 'Commercial Video • 3D & Motion • Reels Production'
+    },
+    {
+      title: 'Performance-маркетинг, SEO и лидогенерация',
+      desc: 'Настраиваем поисковое продвижение (SEO), таргетированную и контекстную рекламу в Google Ads со сквозной аналитикой для предсказуемого потока целевых заявок.',
+      stack: 'SEO • Google Ads • SMM • Web Analytics • Growth'
+    }
+  ];
+
+  const svContainer = document.getElementById('sv');
+  const pcContainer = document.getElementById('pc');
+
+  function renderCompetency(idx) {
+    if (!svContainer || !pcContainer) return;
+    Array.from(svContainer.children).forEach((btn, i) => {
+      btn.classList.toggle('on', i === idx);
+    });
+    const item = COMPETENCIES[idx];
+    pcContainer.innerHTML = `
+      <div class="sw">
+        <span class="spec mono"><b>НАПРАВЛЕНИЕ // ${pad(idx + 1)}</b></span>
+        <h3 class="ch">${item.title}</h3>
+        <p class="main-desc">${item.desc}</p>
+        <div class="stack mono">Стек: ${item.stack}</div>
+      </div>
+    `;
+    requestAnimationFrame(checkSlideOverflow);
+  }
+
+  if (svContainer) {
+    COMPETENCIES.forEach((item, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'row';
+      btn.innerHTML = `<span class="mono">${pad(i + 1)}.</span><span>${item.title}</span>`;
+      btn.addEventListener('mouseenter', () => renderCompetency(i));
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        renderCompetency(i);
+      });
+      svContainer.appendChild(btn);
+    });
+    renderCompetency(0);
+  }
+
+  /* ==========================================================================
+     8. SLIDE 05: WORKFLOW TABS
+     ========================================================================== */
+  const WORKFLOW_STEPS = [
+    ['Аудит и стратегия', 'Погружаемся в экономику бизнеса, фиксируем KPI, проектируем логику продукта и формируем детальный roadmap без лишней воды.'],
+    ['Архитектура и прототип', 'Проектируем UX/UI-прототип и серверную архитектуру. Вы заранее видите логику и экраны будущего продукта до старта разработки.'],
+    ['Разработка и релиз', 'Пишем чистый код, выстраиваем интеграции, проводим нагрузочное тестирование и публикуем продукт в App Store, Google Play и web.'],
+    ['Ведение после сдачи', 'Берём продукт на долгосрочное сопровождение: обеспечиваем техподдержку и мониторинг серверов, развиваем функционал, подключаем аналитику и масштабируем рост бизнеса.']
+  ];
+
+  const frContainer = document.getElementById('fr');
+  const fbContainer = document.getElementById('fb');
+
+  function renderWorkflow(idx) {
+    if (!frContainer || !fbContainer) return;
+    Array.from(frContainer.children).forEach((btn, i) => {
+      btn.classList.toggle('on', i === idx);
+    });
+    const [title, desc] = WORKFLOW_STEPS[idx];
+    fbContainer.innerHTML = `
+      <div class="nm ch sw">${pad(idx + 1)}</div>
+      <div class="sw">
+        <h3>${title}</h3>
+        <p>${desc}</p>
+      </div>
+    `;
+    requestAnimationFrame(checkSlideOverflow);
+  }
+
+  if (frContainer) {
+    WORKFLOW_STEPS.forEach((step, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'mono';
+      btn.textContent = `${pad(i + 1)} / ${step[0]}`;
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        renderWorkflow(i);
+      });
+      frContainer.appendChild(btn);
+    });
+    renderWorkflow(0);
+  }
+
+  /* ==========================================================================
+     9. SLIDE 07: FAQ ACCORDION
+     ========================================================================== */
+  const FAQ_ITEMS = [
+    ['Берёте ли вы проект на ведение после сдачи?', 'Да. После релиза мы остаёмся вашим техническим и продуктовым партнёром: следим за бесперебойной работой серверов по SLA, выпускаем обновления, развиваем новый функционал и помогаем масштабировать метрики бизнеса.'],
+    ['Как формируются сроки и стоимость проекта?', 'Сроки и бюджет фиксируются в договоре после детального аудита задачи. Мы делим работу на прозрачные спринты с понятной сметой и гарантируем отсутствие скрытых доплат.'],
+    ['Сможем ли мы сами управлять контентом после релиза?', 'Да. Мы подключаем удобную систему управления контентом (CMS и админ-панель), где ваша команда сможет легко обновлять тексты, товары, цены и медиафайлы без помощи программистов.'],
+    ['Обязательно ли иметь готовое техническое задание?', 'Нет. Достаточно идеи или бизнес-задачи. Мы сами проведём аналитику, поможем составить техническое задание (ТЗ) и спроектируем архитектуру продукта с нуля.']
+  ];
+
+  const faqContainer = document.getElementById('faq');
+  if (faqContainer) {
+    FAQ_ITEMS.forEach(([question, answer], idx) => {
+      const item = document.createElement('div');
+      item.className = 'faq-item gl' + (idx === 0 ? ' open' : '');
+      item.innerHTML = `
+        <button class="faq-q" type="button">
+          <span><span class="q-num mono">${pad(idx + 1)}</span>${question}</span>
+          <i aria-hidden="true">+</i>
+        </button>
+        <div class="faq-a">${answer}</div>
+      `;
+      item.querySelector('.faq-q').addEventListener('click', (e) => {
+        e.stopPropagation();
+        item.classList.toggle('open');
+        setTimeout(checkSlideOverflow, 460);
+      });
+      faqContainer.appendChild(item);
+    });
+  }
+
+  /* ==========================================================================
+     10. SLIDE 03 & 08: SCENARIO PRESETS, COOPERATION FORMAT & WHATSAPP LINK
+     ========================================================================== */
+  const OPTIONS = [
+    'Веб-платформа или сайт',
+    'Мобильное приложение (iOS / Android)',
+    'Серверная IT-архитектура и интеграции',
+    'Автоматизация бизнес-процессов',
+    'SEO, Google Ads и маркетинг',
+    'Ведение проекта после сдачи'
+  ];
+
+  const SCOPE_LEVELS = [
+    {
+      label: '01 / БЕСПЛАТНЫЙ АУДИТ И СТРАТЕГИЯ',
+      desc: 'Разберём текущую задачу, предложим архитектуру решения и оценим сроки запуска.'
+    },
+    {
+      label: '02 / ТОЧЕЧНОЕ УСИЛЕНИЕ БИЗНЕСА',
+      desc: 'Быстро закроем выбранное направление сильной профильной командой без лишней бюрократии.'
+    },
+    {
+      label: '03 / РАЗРАБОТКА + СОПРОВОЖДЕНИЕ И РОСТ',
+      desc: 'Объединим создание продукта, привлечение клиентов и техническое ведение в единую связку.'
+    },
+    {
+      label: '04 / ПОЛНЫЙ ЦИКЛ ПОД КЛЮЧ 360°',
+      desc: 'Возьмём на себя весь контур: от проектирования и релиза до трафика, аналитики и долгосрочного развития.'
+    }
+  ];
+
+  const selectedOptions = new Set();
+  let selectedStage = '';
+  const chipsContainer = document.getElementById('ch');
+  const chipsCount = document.getElementById('chips-count');
+  const waLink = document.getElementById('wa');
+  const scopeLabel = document.getElementById('scope-label');
+  const scopeDesc = document.getElementById('scope-desc');
+  const scopeSteps = document.getElementById('scope-steps');
+
+  function syncWhatsAppAndScope() {
+    if (chipsContainer) {
+      Array.from(chipsContainer.children).forEach((chipBtn) => {
+        chipBtn.classList.toggle('on', selectedOptions.has(chipBtn.dataset.opt));
+      });
+    }
+
+    const count = selectedOptions.size;
+    if (chipsCount) {
+      chipsCount.textContent = `${count} ВЫБРАНО`;
+    }
+
+    let levelIdx = 0;
+    if (count === 1) levelIdx = 1;
+    else if (count === 2) levelIdx = 2;
+    else if (count >= 3) levelIdx = 3;
+
+    const info = SCOPE_LEVELS[levelIdx];
+    if (scopeLabel) scopeLabel.textContent = info.label;
+    if (scopeDesc) scopeDesc.textContent = info.desc;
+    if (scopeSteps) {
+      Array.from(scopeSteps.children).forEach((stepEl, i) => {
+        stepEl.classList.toggle('active', i <= levelIdx);
+      });
+    }
+
+    if (waLink) {
+      const parts = ['Здравствуйте, KAI STUDIO!'];
+      if (selectedStage) {
+        parts.push(`Точка старта: ${selectedStage}.`);
+      }
+      if (count > 0) {
+        parts.push(`Интересуют направления: ${Array.from(selectedOptions).join(', ')}.`);
+        parts.push(`Формат: ${info.label}.`);
+      } else {
+        parts.push('Хотим обсудить проект и получить бесплатный разбор задачи.');
+      }
+      waLink.href = `https://wa.me/995592112266?text=${encodeURIComponent(parts.join(' '))}`;
+    }
+
+    requestAnimationFrame(checkSlideOverflow);
+  }
+
+  if (chipsContainer) {
+    OPTIONS.forEach((opt) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'chip';
+      btn.dataset.opt = opt;
+      btn.innerHTML = `<span>${opt}</span><span class="chip-dot" aria-hidden="true"></span>`;
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (selectedOptions.has(opt)) {
+          selectedOptions.delete(opt);
+        } else {
+          selectedOptions.add(opt);
+        }
+        syncWhatsAppAndScope();
+      });
+      chipsContainer.appendChild(btn);
+    });
+  }
+
+  const stageCards = document.querySelectorAll('#stage-cards .card');
+  stageCards.forEach((card) => {
+    const activateStage = (e) => {
+      e.stopPropagation();
+      stageCards.forEach((c) => {
+        c.classList.remove('selected-stage');
+        const hint = c.querySelector('.tag-hint span:last-child');
+        if (hint) hint.textContent = 'ВЫБРАТЬ +';
+      });
+      card.classList.add('selected-stage');
+      const activeHint = card.querySelector('.tag-hint span:last-child');
+      if (activeHint) activeHint.textContent = 'ВЫБРАНО ✓';
+
+      selectedStage = card.dataset.stage || '';
+      const presets = (card.dataset.preset || '').split(',').map((s) => s.trim()).filter(Boolean);
+      selectedOptions.clear();
+      presets.forEach((p) => selectedOptions.add(p));
+      syncWhatsAppAndScope();
+      go(slides.length - 1);
+    };
+
+    card.addEventListener('click', activateStage);
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        activateStage(e);
+      }
+    });
+  });
+
+  syncWhatsAppAndScope();
+
+  // Safe clipboard copy using document.execCommand('copy')
+  const cpBtn = document.getElementById('cp');
+  const cpText = document.getElementById('cpt');
+  if (cpBtn && cpText) {
+    cpBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const phone = '+995 592 11 22 66';
+      let copied = false;
+
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = phone;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.top = '-9999px';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        copied = document.execCommand('copy');
+        ta.remove();
+      } catch (_) {}
+
+      cpBtn.classList.add('copied');
+      cpText.textContent = copied ? 'Скопировано ✓' : phone;
+      setTimeout(() => {
+        cpBtn.classList.remove('copied');
+        cpText.textContent = 'Скопировать номер';
+      }, 1800);
+    });
+  }
+
+  // Initial slide resolution (supports direct links like #02 or #08)
+  const initialSlide = parseHashIndex();
+  if (initialSlide > 0) {
+    go(initialSlide, { instant: true });
+  } else {
+    updateChrome();
+  }
+})();
+</script>
+</body>
+</html>
