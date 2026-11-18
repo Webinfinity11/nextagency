@@ -1,11 +1,11 @@
-// VERIFY_DEPS=/tmp/nextagency-verify VERIFY_URL=http://127.0.0.1:3019 node docs/verify/header-smooth-capture.mjs
+// VERIFY_DEPS=/tmp/kaistudio-verify VERIFY_URL=http://127.0.0.1:3019 node docs/verify/header-smooth-capture.mjs
 // Captures the header strip from the wipe to settled (video resampled at 30fps) and the box's transform x on every
 // rendered frame, writing header-smooth-{strip.jpg,boxx.json,plot.jpg,mobile.jpg}.
 import { createRequire } from "node:module";
 import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
-const deps = process.env.VERIFY_DEPS || "/tmp/nextagency-verify";
+const deps = process.env.VERIFY_DEPS || "/tmp/kaistudio-verify";
 const require = createRequire(path.join(deps, "package.json"));
 const { chromium } = require("playwright");
 const sharp = require("sharp");
@@ -102,7 +102,7 @@ for (const locale of ["ka", "en"]) {
 // Non-loader header (repeat visit) must match the settled loader header geometry.
 const repeat = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 await repeat.goto(`${origin}/ka`, { waitUntil: "load" });
-await repeat.evaluate(() => sessionStorage.setItem("next-agency:loaded", "1"));
+await repeat.evaluate(() => sessionStorage.setItem("kai-studio:loaded", "1"));
 await repeat.goto(`${origin}/ka`, { waitUntil: "load" });
 result.repeat = await sampleFrame(repeat);
 await repeat.close();

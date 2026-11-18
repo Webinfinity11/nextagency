@@ -2,6 +2,7 @@
 import { headers } from "next/headers";
 import { db } from "@/lib/db";
 import { clientIp } from "@/lib/login-limit";
+import { notifyContact } from "@/lib/mail";
 import { isLocale } from "@/content/locales";
 // Contact form → stored as a Message, read at /admin/messages (per-IP limit, in memory).
 export type SendResult = { ok: true } | { ok: false; error: "invalid" | "busy" | "failed" };
@@ -19,7 +20,9 @@ export async function sendMessage(form: FormData): Promise<SendResult> {
   sent.set(ip, [...recent, now]);
   if (sent.size > 5_000) for (const [k, list] of sent) if (!list.some(t => t > now - WINDOW)) sent.delete(k);
   try {
-    await db.message.create({ data: { name, email, company, body, locale: isLocale(locale) ? locale : "ka" } });
+    const loc = isLocale(locale) ? locale : "ka";
+    await db.message.create({ data: { name, email, company, body, locale: loc } });
+    await notifyContact({ name, email, company, body, locale: loc }); // never throws; the message is already saved
     return { ok: true };
   } catch (e) {
     console.error("contact message not saved", e);

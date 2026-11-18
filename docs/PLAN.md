@@ -1,4 +1,4 @@
-# NEXT AGENCY — first slice
+# KAI STUDIO — first slice
 
 ## Site plan
 
@@ -25,7 +25,7 @@ Times below are milliseconds relative to `loader:start` (client animation setup)
 | Logo travel             |  3870 | 4870 | Center to actual nav bounding box; translation and scale with `power3.inOut`. Destination recomputed on resize.                                                                                                                       |
 | Complete                |  4870 | 4870 | Overlay removed, nav logo shown, scroll resumed, hero starts.                                                                                                                                                                         |
 
-`sessionStorage['next-agency:loaded']` skips subsequent loaders in the same session. A tiny synchronous head script sets `data-loader='skip'` before paint; CSS removes the overlay immediately. Hero entrance still plays. If storage is blocked the loader plays normally.
+`sessionStorage['kai-studio:loaded']` skips subsequent loaders in the same session. A tiny synchronous head script sets `data-loader='skip'` before paint; CSS removes the overlay immediately. Hero entrance still plays. If storage is blocked the loader plays normally.
 
 Reduced motion: no flicker, no logo travel, no smooth scrolling, no phrase loop, no scroll scaling; clean logo and overlay fade away over 400ms. Text stays visible without transforms. The media section becomes a single viewport to avoid an unnecessary static 250vh hold.
 
@@ -87,7 +87,7 @@ Projects live in PostgreSQL (Prisma 7, `prisma/schema.prisma`, client generated 
 
 Uploads: `POST /api/admin/upload` (admin only; jpg/png/webp/avif/gif/mp4/webm/mov, 200 MB) writes to `UPLOAD_DIR` under a random name; `/media/[...path]` serves them with immutable caching and Range support (Safari video). Production requires an absolute `UPLOAD_DIR` (Railway volume) because the standalone server runs inside `.next/standalone`, which each build replaces.
 
-Local: Postgres 17 in Docker (`nextagency-pg`, port 5433), `.env` from `.env.example`, `pnpm prisma migrate dev`, then `pnpm db:import-projects "<folder>" [--replace]` to load the agency's web projects (one folder per project: `*_Feature.webp` cover + numbered page screenshots; texts are drafts inside `scripts/import-projects.mts`). Railway: Postgres service + `DATABASE_URL`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SESSION_SECRET`, a volume and `UPLOAD_DIR`; `pnpm start` runs `prisma migrate deploy` before the server starts (Railway skipped the preDeploy command). Deleting a project does not delete its uploaded files.
+Local: Postgres 17 in Docker (`kaistudio-pg`, port 5433), `.env` from `.env.example`, `pnpm prisma migrate dev`, then `pnpm db:import-projects "<folder>" [--replace]` to load the agency's web projects (one folder per project: `*_Feature.webp` cover + numbered page screenshots; texts are drafts inside `scripts/import-projects.mts`). Railway: Postgres service + `DATABASE_URL`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SESSION_SECRET`, a volume and `UPLOAD_DIR`; `pnpm start` runs `prisma migrate deploy` before the server starts (Railway skipped the preDeploy command). Deleting a project does not delete its uploaded files.
 
 ## Contact
 

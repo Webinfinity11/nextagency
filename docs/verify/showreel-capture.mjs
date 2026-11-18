@@ -1,4 +1,4 @@
-// VERIFY_DEPS=/tmp/nextagency-verify VERIFY_URL=http://127.0.0.1:3019 node docs/verify/showreel-capture.mjs
+// VERIFY_DEPS=/tmp/kaistudio-verify VERIFY_URL=http://127.0.0.1:3019 node docs/verify/showreel-capture.mjs
 // Showreel panel at 1440 and 390: at rest and mid-scroll, with a dummy blurred video (ffmpeg in /tmp, served by
 // route interception — public/media is never touched) and with the video 404ing (panel must stay plain black).
 // Writes docs/verify/showreel-{1440,390}-{video,missing}-{rest,mid}.jpg and prints wordmark/frame geometry.
@@ -6,7 +6,7 @@ import { createRequire } from "node:module";
 import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
-const deps = process.env.VERIFY_DEPS || "/tmp/nextagency-verify";
+const deps = process.env.VERIFY_DEPS || "/tmp/kaistudio-verify";
 const require = createRequire(path.join(deps, "package.json"));
 const { chromium } = require("playwright");
 const origin = process.env.VERIFY_URL || "http://127.0.0.1:3019";

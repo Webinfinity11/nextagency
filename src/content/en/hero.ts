@@ -1,12 +1,12 @@
 // Placeholder copy: the owner will edit all copy.
 import type { HeroContent } from "../types";
 export const hero: HeroContent = {
-  title: "NEXT AGENCY — A step beyond",
+  title: "KAI STUDIO — A step beyond",
   description:
     "Independent thinking. Clear direction. We build what comes next.",
   navLabel: "Main navigation",
   nav: ["Work", "Services", "Blog", "Contact"],
-  home: "NEXT AGENCY home",
+  home: "KAI STUDIO home",
   skip: "Skip to content",
   langLabel: "Switch to Georgian",
   langShort: "KA",

@@ -28,7 +28,7 @@ All ten exported 720px frames were viewed beside their matching read-only refere
 
 1. **01 sequence solid:** original N/X shards occupy a small grey center cluster on black. Individual frames vary because pose order/timing is intentionally random.
 2. **02 sequence distorted:** different shard placement/visibility and rough edges; a 16-frame contact sheet confirms discrete pose changes with short opacity overlaps, not smooth geometric interpolation.
-3. **03 clean mark:** full original white NEXT AGENCY mark, settled and crisp.
+3. **03 clean mark:** full original white KAI STUDIO mark, settled and crisp.
 4. **04 white wipe:** downward white field; black wordmark on white. Iteration changed independent crossfades to difference compositing so the mark inverts exactly at the moving edge.
 5. **05 nav handoff:** wordmark is smaller and moving toward the measured left navigation anchor; links are fading in. Hero words remain masked.
 6. **06 words enter:** staggered left/right word reveals and rising black media panel are visible after completion.
@@ -63,7 +63,7 @@ Production standalone server (`PORT=3019 HOSTNAME=127.0.0.1 pnpm start`), headle
 
 ## Work — 2026-11-11
 
-Production: `PORT=3021 HOSTNAME=127.0.0.1 pnpm start`. Reproduce with `VERIFY_DEPS=/tmp/nextagency-verify node scripts/verify-work.mjs` (install Playwright and sharp in that scratch directory, not the application). Chrome headless is the motion authority; the ThreadRig browser panel freezes GSAP, so it was used for detail-page navigation and viewing only.
+Production: `PORT=3021 HOSTNAME=127.0.0.1 pnpm start`. Reproduce with `VERIFY_DEPS=/tmp/kaistudio-verify node scripts/verify-work.mjs` (install Playwright and sharp in that scratch directory, not the application). Chrome headless is the motion authority; the ThreadRig browser panel freezes GSAP, so it was used for detail-page navigation and viewing only.
 
 - `pnpm build && pnpm lint` passes. `/ka`, `/en`, both Work indexes and all 12 localized project URLs return 200; an unknown slug returns 404 in both locales. Detail canonical and all three hreflang alternates are asserted.
 - Horizontal overflow is **0 px** at 1440, 1024 and 390 px in both locales on home, index and detail. Console/page errors: **0**.
@@ -91,7 +91,7 @@ Production `PORT=3031 HOSTNAME=127.0.0.1 pnpm start`; `VERIFY_URL=http://127.0.0
 
 ## Loader v2 / compact header — 2026-11-11
 
-`loader-v2-capture.mjs` captures 48 JPEG frames at a target cadence of 125ms over six seconds in headless Chrome, at 1440 × 780. Run with `VERIFY_DEPS=/tmp/nextagency-verify VERIFY_URL=http://127.0.0.1:3026 node docs/verify/loader-v2-capture.mjs`. Dependencies are external to the app. Actual sample timestamps are in `loader-v2-measurements.json`; browser screenshot latency can shift an individual frame from the target time.
+`loader-v2-capture.mjs` captures 48 JPEG frames at a target cadence of 125ms over six seconds in headless Chrome, at 1440 × 780. Run with `VERIFY_DEPS=/tmp/kaistudio-verify VERIFY_URL=http://127.0.0.1:3026 node docs/verify/loader-v2-capture.mjs`. Dependencies are external to the app. Actual sample timestamps are in `loader-v2-measurements.json`; browser screenshot latency can shift an individual frame from the target time.
 
 - `loader-v2-contact-sheet.jpg`: all 48 frames, left-to-right then top-to-bottom.
 - `loader-v2-mark-sheet.jpg`: central crops of the first 24 frames, showing the original stencil N with 12 SVG treatments and discrete whole-mark tilt changes. Compared visually with the supplied `/tmp/rec1/sheet2.jpg`; no reference bitmap assets are shipped.

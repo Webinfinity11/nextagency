@@ -47,7 +47,7 @@ export function Footer({ copy, locale }: { copy: HeroContent; locale: Locale }) 
           </nav>
         </div>
       </div>
-      <div className="footer-meta"><span>© {new Date().getFullYear()} NEXT AGENCY — {f.rights}</span><span>{f.place}</span></div>
+      <div className="footer-meta"><span>© {new Date().getFullYear()} KAI STUDIO — {f.rights}</span><span>{f.place}</span></div>
       <Link className="footer-mark" href={`/${locale}`} aria-label={copy.home}><DotMark /></Link>
     </footer>
   );

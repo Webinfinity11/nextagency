@@ -22,7 +22,7 @@ const copy: Record<Locale, Copy> = {
   ka: {
     label: "ჩვენი სერვისები",
     home: homeList(["საიტის დამზადება", "სოციალური მედიის მართვა", "SEO ოპტიმიზაცია", "ვიდეო პროდაქშენი", "CRM სისტემების დანერგვა", "AI Chatbot ინტეგრაცია"]),
-    eyebrow: "NEXT AGENCY",
+    eyebrow: "KAI STUDIO",
     title: "შენი ბიზნესის შემდეგი ეტაპი.",
     all: "ყველა",
     categories: { tech: "ტექნოლოგია", marketing: "მარკეტინგი", design: "დიზაინი" },
@@ -67,7 +67,7 @@ const copy: Record<Locale, Copy> = {
   en: {
     label: "Our services",
     home: homeList(["Website creation", "Social media management", "SEO optimization", "Video production", "CRM system implementation", "AI chatbot integration"]),
-    eyebrow: "NEXT AGENCY",
+    eyebrow: "KAI STUDIO",
     title: "Your next chapter.",
     all: "All",
     categories: { tech: "Technology", marketing: "Marketing", design: "Design" },

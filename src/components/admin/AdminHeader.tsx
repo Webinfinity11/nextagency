@@ -4,7 +4,7 @@ import { logout } from "@/app/admin/actions";
 export async function AdminHeader() {
   const unread = await db.message.count({ where: { read: false } });
   return <header className="admin-header">
-    <Link href="/admin" className="admin-brand">NEXT AGENCY <span>ადმინი</span></Link>
+    <Link href="/admin" className="admin-brand">KAI STUDIO <span>ადმინი</span></Link>
     <nav>
       <Link href="/admin">პროექტები</Link>
       <Link href="/admin/posts">ბლოგი</Link>

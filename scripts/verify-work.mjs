@@ -1,10 +1,10 @@
-// VERIFY_DEPS=/tmp/nextagency-verify VERIFY_URL=http://127.0.0.1:3021 node scripts/verify-work.mjs
-// Dependencies stay outside the app: npm install --prefix /tmp/nextagency-verify playwright sharp
+// VERIFY_DEPS=/tmp/kaistudio-verify VERIFY_URL=http://127.0.0.1:3021 node scripts/verify-work.mjs
+// Dependencies stay outside the app: npm install --prefix /tmp/kaistudio-verify playwright sharp
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
-const require = createRequire(path.join(process.env.VERIFY_DEPS || '/tmp/nextagency-verify', 'package.json'));
+const require = createRequire(path.join(process.env.VERIFY_DEPS || '/tmp/kaistudio-verify', 'package.json'));
 const { chromium } = require('playwright');
 const sharp = require('sharp');
 const origin = process.env.VERIFY_URL || 'http://127.0.0.1:3021';
@@ -17,7 +17,7 @@ async function newPage(width = 1440, reducedMotion = 'no-preference') {
   const page = await browser.newPage({ viewport: { width, height: width === 390 ? 844 : 900 }, reducedMotion });
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-  await page.addInitScript(() => sessionStorage.setItem('next-agency:loaded', '1'));
+  await page.addInitScript(() => sessionStorage.setItem('kai-studio:loaded', '1'));
   return page;
 }
 async function goto(page, route) {

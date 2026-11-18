@@ -21,7 +21,7 @@ export default async function Messages() {
           </div>
           <p className="admin-message-body">{m.body}</p>
           <div className="admin-actions">
-            <a className="admin-btn" href={`mailto:${m.email}?subject=${encodeURIComponent("Re: NEXT AGENCY")}`}>პასუხი</a>
+            <a className="admin-btn" href={`mailto:${m.email}?subject=${encodeURIComponent("Re: KAI STUDIO")}`}>პასუხი</a>
             <form action={toggleMessageRead}><input type="hidden" name="id" value={m.id} /><button className="admin-btn">{m.read ? "წაუკითხავად მონიშვნა" : "წაკითხულია"}</button></form>
             <form action={deleteMessage}><input type="hidden" name="id" value={m.id} /><ConfirmButton className="admin-btn admin-btn-danger" message={`წავშალო ${m.name}-ის შეტყობინება?`}>წაშლა</ConfirmButton></form>
           </div>

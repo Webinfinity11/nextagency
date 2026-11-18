@@ -1,5 +1,5 @@
-// npm install --prefix /tmp/nextagency-verify playwright sharp
-// VERIFY_DEPS=/tmp/nextagency-verify VERIFY_URL=http://127.0.0.1:3019 node scripts/verify.mjs
+// npm install --prefix /tmp/kaistudio-verify playwright sharp
+// VERIFY_DEPS=/tmp/kaistudio-verify VERIFY_URL=http://127.0.0.1:3019 node scripts/verify.mjs
 // VERIFY_URL is the server origin; the loader/hero pass runs on the default locale (/ka).
 import { createRequire } from "node:module";
 import fs from "node:fs";
@@ -7,7 +7,7 @@ import path from "node:path";
 import assert from "node:assert/strict";
 const require = createRequire(
   path.join(
-    process.env.VERIFY_DEPS || "/tmp/nextagency-verify",
+    process.env.VERIFY_DEPS || "/tmp/kaistudio-verify",
     "package.json",
   ),
 );
@@ -17,7 +17,7 @@ const origin = process.env.VERIFY_URL || "http://127.0.0.1:3019";
 const url = origin + "/ka";
 const out = "docs/verify";
 const raw = path.join(
-  process.env.VERIFY_DEPS || "/tmp/nextagency-verify",
+  process.env.VERIFY_DEPS || "/tmp/kaistudio-verify",
   "frames",
 );
 fs.mkdirSync(raw, { recursive: true });
@@ -197,7 +197,7 @@ for (const viewport of [
   const p = await browser.newPage({ viewport });
   watch(p);
   await p.addInitScript(() =>
-    sessionStorage.setItem("next-agency:loaded", "1"),
+    sessionStorage.setItem("kai-studio:loaded", "1"),
   );
   await p.goto(url);
   await p.waitForTimeout(2500);
@@ -305,7 +305,7 @@ for (const locale of ["ka", "en"])
     const p = await browser.newPage({ viewport });
     watch(p);
     await p.addInitScript(() =>
-      sessionStorage.setItem("next-agency:loaded", "1"),
+      sessionStorage.setItem("kai-studio:loaded", "1"),
     );
     const response = await p.goto(`${origin}/${locale}`);
     assert.equal(response.status(), 200);
@@ -404,7 +404,7 @@ for (const locale of ["ka", "en"])
   const p = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   watch(p);
   await p.addInitScript(() =>
-    sessionStorage.setItem("next-agency:loaded", "1"),
+    sessionStorage.setItem("kai-studio:loaded", "1"),
   );
   await p.goto(`${origin}/ka`);
   await p.waitForTimeout(1500);
@@ -480,7 +480,7 @@ for (const locale of ["ka", "en"])
       if (
         loader &&
         getComputedStyle(loader).display !== "none" &&
-        sessionStorage.getItem("next-agency:loaded")
+        sessionStorage.getItem("kai-studio:loaded")
       )
         window.__overlayFrames++;
       requestAnimationFrame(tick);

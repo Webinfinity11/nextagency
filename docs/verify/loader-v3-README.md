@@ -1,12 +1,12 @@
 # Loader v3 verification
 
-`pnpm build && pnpm lint` passed. `node docs/verify/loader-v3-capture.mjs` passed against the production server on port 3027. The script uses Playwright and sharp from `/tmp/nextagency-verify`; neither was added to app dependencies.
+`pnpm build && pnpm lint` passed. `node docs/verify/loader-v3-capture.mjs` passed against the production server on port 3027. The script uses Playwright and sharp from `/tmp/kaistudio-verify`; neither was added to app dependencies.
 
 Evidence:
 - `loader-v3-001.jpg` … `loader-v3-073.jpg`: 1440×900, 0–6s at 12fps, Chrome compositor frames sampled on an exact clock. Static frames repeat; `capturedAt` records the source frame time.
 - `loader-v3-contact-sheet.jpg`: all frames with timestamps.
 - `loader-v3-header-strip.jpg`: header entrance and agency reveal, 3.92–6s.
-- `loader-v3-reference-comparison.jpg`: phase comparisons; reference on the left, NEXT AGENCY on the right. Reference browser chrome is cropped. Reference is evidence only, never a site asset.
+- `loader-v3-reference-comparison.jpg`: phase comparisons; reference on the left, KAI STUDIO on the right. Reference browser chrome is cropped. Reference is evidence only, never a site asset.
 - `loader-v3-measurements.json`: animation-frame measurements, compositor times and final geometry for ka/en at 1440/390.
 - `loader-v3-header-{ka,en}-{1440,390}.jpg`, `loader-v3-menu-{ka,en}.jpg`: final headers and working mobile menus.
 

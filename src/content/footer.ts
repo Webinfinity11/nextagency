@@ -7,7 +7,7 @@ const socials = [
   { label: "Facebook", href: "https://facebook.com" },
 ];
 const copy: Record<Locale, FooterCopy> = {
-  ka: { email: "hello@nextagency.ge", siteLabel: "NEXT AGENCY", socialLabel: "გამოგვყევი", socials, rights: "ყველა უფლება დაცულია", place: "თბილისი, საქართველო" },
-  en: { email: "hello@nextagency.ge", siteLabel: "NEXT AGENCY", socialLabel: "Connect on", socials, rights: "All rights reserved", place: "Tbilisi, Georgia" },
+  ka: { email: "info@kaistudio.ge", siteLabel: "KAI STUDIO", socialLabel: "გამოგვყევი", socials, rights: "ყველა უფლება დაცულია", place: "თბილისი, საქართველო" },
+  en: { email: "info@kaistudio.ge", siteLabel: "KAI STUDIO", socialLabel: "Connect on", socials, rights: "All rights reserved", place: "Tbilisi, Georgia" },
 };
 export const footerCopy = (locale: Locale) => copy[locale];

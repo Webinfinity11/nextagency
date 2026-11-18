@@ -1,8 +1,8 @@
-// VERIFY_DEPS=/tmp/nextagency-verify VERIFY_URL=http://127.0.0.1:3027 node docs/verify/loader-v3-capture.mjs
+// VERIFY_DEPS=/tmp/kaistudio-verify VERIFY_URL=http://127.0.0.1:3027 node docs/verify/loader-v3-capture.mjs
 import { createRequire } from 'node:module';
 import fs from 'node:fs/promises';
 import assert from 'node:assert/strict';
-const require = createRequire(`${process.env.VERIFY_DEPS || '/tmp/nextagency-verify'}/package.json`);
+const require = createRequire(`${process.env.VERIFY_DEPS || '/tmp/kaistudio-verify'}/package.json`);
 const { chromium } = require('playwright');
 const sharp = require('sharp');
 const origin = process.env.VERIFY_URL || 'http://127.0.0.1:3027';
